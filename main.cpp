@@ -146,18 +146,19 @@ void TriangleWindow::render()
     QMatrix4x4 matrix;
     matrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
     matrix.translate(0, 0, -2);
-    matrix.rotate(100.0f * m_frame / screen()->refreshRate(), 0, 1, 0);
-
+    matrix.rotate(5.0f * m_frame / screen()->refreshRate(), 0, 1, 0);
     m_program->setUniformValue(m_matrixUniform, matrix);
 
     GLfloat vertices[] = {
-        0.0f, 0.707f,
+        -0.5f, 0.5f,
         -0.5f, -0.5f,
-        0.5f, -0.5f
+        0.5f, -0.5f,
+        0.5f, 0.5f
     };
 
     GLfloat colors[] = {
         1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
         0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 1.0f
     };
@@ -168,8 +169,8 @@ void TriangleWindow::render()
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-
+    glDrawArrays(GL_QUADS, 0, 4);
+        
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
 
