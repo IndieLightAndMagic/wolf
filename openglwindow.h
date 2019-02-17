@@ -72,6 +72,8 @@ public:
 
     void setAnimating(bool animating);
 
+    bool m_valid{false};
+
 public slots:
     void renderLater();
     void renderNow();
