@@ -53,12 +53,13 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <tuple>
 
 #include <QtGui/QGuiApplication>
 #include <QtGui/QMatrix4x4>
 #include <QtGui/QOpenGLShaderProgram>
 #include <QtGui/QScreen>
-
+#include <QtCore/QDir>
 #include <QtCore/qmath.h>
 
 //! [1]
@@ -70,6 +71,8 @@ public:
     std::shared_ptr<unsigned char> ptrFrgCodeBuffer{nullptr};
     TriangleWindow();
 
+    void initializeTextures();
+    void initializeShaders();
     void initialize() override;
     void render() override;
 
@@ -94,9 +97,6 @@ int main(int argc, char **argv)
 {
     QGuiApplication app(argc, argv);
 
-    
-
-
     QSurfaceFormat format;
     format.setSamples(16);
 
@@ -110,30 +110,35 @@ int main(int argc, char **argv)
     return app.exec();
     
 }
-//! [2]
 
+void TriangleWindow::initializeTextures(){
 
-//! [3]
-/*static const char *vertexShaderSource =
-    "attribute highp vec4 posAttr;\n"
-    "attribute lowp vec4 colAttr;\n"
-    "varying lowp vec4 col;\n"
-    "uniform highp mat4 matrix;\n"
-    "void main() {\n"
-    "   col = colAttr;\n"
-    "   gl_Position = matrix * posAttr;\n"
-    "}\n";
+    auto filename_texture = std::string(RESOURCES_DIR) + "/textures/Dummy.png";
+    auto testPath = QDir(QString(filename_texture.c_str()));
+    auto absoluteTestPath = testPath.cleanPath(testPath.absoluteFilePath(filename_texture.c_str()));
+    std::cout << "\n\tPath Test : " << absoluteTestPath.toStdString();
+    auto qimage = QImage(absoluteTestPath);
+    auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());
+    std::cout << std::endl << qimagewidth << std::endl << qimageheight << std::endl  << (unsigned long)qbpp << std::endl;
+    auto colorformat = qimage.pixelFormat().typeInterpretation();
+    if (colorformat  == QPixelFormat::UnsignedInteger ) std::cout << "Color is QPixelFormat::UnsignedInteger " << std::endl;     
+    if (colorformat  == QPixelFormat::UnsignedShort ) std::cout << "Color is QPixelFormat::UnsignedShort " << std::endl;     
+    if (colorformat  == QPixelFormat::UnsignedByte ) std::cout << "Color is QPixelFormat::UnsignedByte " << std::endl;     
+    if (colorformat  == QPixelFormat::FloatingPoint ) std::cout << "Color is QPixelFormat::FloatingPoint " << std::endl;     
 
-static const char *fragmentShaderSource =
-    "varying lowp vec4 col;\n"
-    "void main() {\n"
-    "   gl_FragColor = col;\n"
-    "}\n";*/
-//! [3]
+    auto colormodel = qimage.pixelFormat().colorModel();
+    if (colormodel == QPixelFormat::RGB) std::cout << "Color model is QPixelFormat::RGB" << std::endl;   ;//0   The color model is RGB.
+    if (colormodel == QPixelFormat::BGR) std::cout << "Color model is QPixelFormat::BGR" << std::endl;   ;//1   This is logically the opposite endian version of RGB. However, for ease of use it has its own model.
+    if (colormodel == QPixelFormat::Indexed) std::cout << "Color model is QPixelFormat::Indexed" << std::endl;   ;//2   The color model uses a color palette.
+    if (colormodel == QPixelFormat::Grayscale) std::cout << "Color model is QPixelFormat::Grayscale" << std::endl; ;//3   The color model is Grayscale.
+    if (colormodel == QPixelFormat::CMYK) std::cout << "Color model is QPixelFormat::CMYK" << std::endl;  ;//4   The color model is CMYK.
+    if (colormodel == QPixelFormat::HSL) std::cout << "Color model is QPixelFormat::HSL" << std::endl;   ;//5   The color model is HSL.
+    if (colormodel == QPixelFormat::HSV) std::cout << "Color model is QPixelFormat::HSV" << std::endl;   ;//6   The color model is HSV.
+    if (colormodel == QPixelFormat::YUV) std::cout << "Color model is QPixelFormat::YUV" << std::endl;   ;//7   The color model is YUV.
+    if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
+}
 
-//! [4]
-void TriangleWindow::initialize()
-{
+void TriangleWindow::initializeShaders(){
 
     auto filename_vertex_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy.vert";
     auto filename_fragment_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy.frag";
@@ -141,8 +146,7 @@ void TriangleWindow::initialize()
     auto fileptr_vertex_shader_ok = std::string( fileptr_vertex_shader != nullptr ? "[OK]" : "[FAILED]");  
     auto fileptr_fragment_shader = std::fopen(filename_fragment_shader.c_str(), "r");
     auto fileptr_fragment_shader_ok = std::string(fileptr_fragment_shader != nullptr ? "[OK]" : "[FAILED]");  
-    
-    std::cout <<"Wolfy resources:" << std::endl;
+        
 
     std::cout <<"\n\tWolfy Vert: " << filename_vertex_shader << " " << fileptr_vertex_shader_ok << std::endl;
     std::cout <<"\n\tWolfy Frag: " << filename_fragment_shader << " " << fileptr_fragment_shader_ok << std::endl;
@@ -191,6 +195,14 @@ void TriangleWindow::initialize()
             std::cout << std::endl;
         }
     }
+}
+
+void TriangleWindow::initialize()
+{
+
+    std::cout <<"Wolfy resources:" << std::endl;
+    initializeTextures();
+    initializeShaders();
 
     const auto vertexShaderSource = reinterpret_cast<char*>(ptrVtxCodeBuffer.get()); 
     const auto fragmentShaderSource = reinterpret_cast<char*>(ptrFrgCodeBuffer.get()); 
