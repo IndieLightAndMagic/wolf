@@ -69,32 +69,35 @@ public:
 
     std::shared_ptr<unsigned char> ptrVtxCodeBuffer{nullptr};
     std::shared_ptr<unsigned char> ptrFrgCodeBuffer{nullptr};
+    QImage qimage{};
+    
     TriangleWindow();
 
-    void initializeTextures();
-    void initializeShaders();
     void initialize() override;
     void render() override;
 
 private:
+
+    void initializeTextures();
+    void initializeShaders();
+    void initializeGeometry();
+
     GLuint m_posAttr;
     GLuint m_colAttr;
     GLuint m_matrixUniform;
-
-    QOpenGLShaderProgram *m_program;
-    int m_frame;
+    GLuint m_vao, m_vbo, m_ebo;
+    QOpenGLShaderProgram *m_program{nullptr};
+    int m_frame{0};
 };
 
-TriangleWindow::TriangleWindow()
-    : m_program(0)
-    , m_frame(0)
-{
+TriangleWindow::TriangleWindow(){
+
 }
 //! [1]
 
 //! [2]
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
+
     QGuiApplication app(argc, argv);
 
     QSurfaceFormat format;
@@ -110,6 +113,9 @@ int main(int argc, char **argv)
     return app.exec();
     
 }
+
+
+
 
 void TriangleWindow::initializeTextures(){
 
@@ -196,12 +202,50 @@ void TriangleWindow::initializeShaders(){
         }
     }
 }
+void TriangleWindow::initializeGeometry(){
 
-void TriangleWindow::initialize()
-{
+    float vertices[] = {
+        // positions          // colors           // texture coords
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+    };
+    unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
+    glGenVertexArrays(1, &m_vao);
+    glGenBuffers(1, &m_vbo);
+    glGenBuffers(1, &m_ebo);
+
+    glBindVertexArray(m_vao);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+
+}
+void TriangleWindow::initialize(){
+
 
     std::cout <<"Wolfy resources:" << std::endl;
+    
     initializeTextures();
+    initializeGeometry();
     initializeShaders();
 
     const auto vertexShaderSource = reinterpret_cast<char*>(ptrVtxCodeBuffer.get()); 
@@ -233,49 +277,21 @@ void TriangleWindow::initialize()
 //! [4]
 
 //! [5]
-void TriangleWindow::render()
-{
+void TriangleWindow::render(){
+
     const qreal retinaScale = devicePixelRatio();
     glViewport(0, 0, width() * retinaScale, height() * retinaScale);
 
     glClear(GL_COLOR_BUFFER_BIT);
 
     m_program->bind();
-
+    glBindVertexArray(m_vao);
     QMatrix4x4 matrix;
     matrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
     matrix.translate(0, 0, -2);
-    
-    
     matrix.rotate(0.0f * m_frame / screen()->refreshRate(), 0, 1, 0);
-    
     m_program->setUniformValue(m_matrixUniform, matrix);
-
-    GLfloat vertices[] = {
-        -0.5f, 0.5f,
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.5f, 0.5f
-    };
-
-    GLfloat colors[] = {
-        1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f
-    };
-
-    glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, vertices);
-    glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, colors);
-
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
-    glDrawArrays(GL_QUADS, 0, 4);
-        
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(0);
-
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
 
     ++m_frame;
