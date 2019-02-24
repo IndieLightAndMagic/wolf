@@ -84,9 +84,13 @@ private:
 
     GLuint m_posAttr;
     GLuint m_colAttr;
+    GLuint m_texAttr;
     GLuint m_matrixUniform;
-    GLuint m_vao, m_vbo, m_ebo;
+    GLuint m_textureUniform;
+    GLuint m_vao, m_vbo, m_ebo, m_tbo;
+
     QOpenGLShaderProgram *m_program{nullptr};
+
     int m_frame{0};
 };
 
@@ -119,13 +123,13 @@ int main(int argc, char **argv){
 
 void TriangleWindow::initializeTextures(){
 
-    auto filename_texture = std::string(RESOURCES_DIR) + "/textures/Dummy.png";
+    auto filename_texture = std::string(RESOURCES_DIR) + "/textures/pgrate.png";
     auto testPath = QDir(QString(filename_texture.c_str()));
     auto absoluteTestPath = testPath.cleanPath(testPath.absoluteFilePath(filename_texture.c_str()));
-    std::cout << "\n\tPath Test : " << absoluteTestPath.toStdString();
-    auto qimage = QImage(absoluteTestPath);
+    std::cout << "\n\tPath Test : " << absoluteTestPath.toStdString() << std::endl;
+    qimage = QImage(absoluteTestPath);
     auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());
-    std::cout << std::endl << qimagewidth << std::endl << qimageheight << std::endl  << (unsigned long)qbpp << std::endl;
+    std::cout << "Width :" << qimagewidth << std::endl << "Height: " << qimageheight << std::endl  << "Bitsperpixel: " << (unsigned long)qbpp << std::endl;
     auto colorformat = qimage.pixelFormat().typeInterpretation();
     if (colorformat  == QPixelFormat::UnsignedInteger ) std::cout << "Color is QPixelFormat::UnsignedInteger " << std::endl;     
     if (colorformat  == QPixelFormat::UnsignedShort ) std::cout << "Color is QPixelFormat::UnsignedShort " << std::endl;     
@@ -142,12 +146,29 @@ void TriangleWindow::initializeTextures(){
     if (colormodel == QPixelFormat::HSV) std::cout << "Color model is QPixelFormat::HSV" << std::endl;   ;//6   The color model is HSV.
     if (colormodel == QPixelFormat::YUV) std::cout << "Color model is QPixelFormat::YUV" << std::endl;   ;//7   The color model is YUV.
     if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
+
+    //Bind textures into opnegl.
+    glGenTextures(1, &m_tbo);
+    glBindTexture(GL_TEXTURE_2D, m_tbo); 
+     // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, qimagewidth, qimageheight, 0, GL_BGRA, GL_UNSIGNED_BYTE, qimage.bits());
+    glGenerateMipmap(GL_TEXTURE_2D);
+
 }
+
+
+
 
 void TriangleWindow::initializeShaders(){
 
-    auto filename_vertex_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy.vert";
-    auto filename_fragment_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy.frag";
+    auto filename_vertex_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert";
+    auto filename_fragment_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag";
     auto fileptr_vertex_shader = std::fopen(filename_vertex_shader.c_str(), "r");
     auto fileptr_vertex_shader_ok = std::string( fileptr_vertex_shader != nullptr ? "[OK]" : "[FAILED]");  
     auto fileptr_fragment_shader = std::fopen(filename_fragment_shader.c_str(), "r");
@@ -244,9 +265,9 @@ void TriangleWindow::initialize(){
 
     std::cout <<"Wolfy resources:" << std::endl;
     
-    initializeTextures();
     initializeGeometry();
     initializeShaders();
+    initializeTextures();
 
     const auto vertexShaderSource = reinterpret_cast<char*>(ptrVtxCodeBuffer.get()); 
     const auto fragmentShaderSource = reinterpret_cast<char*>(ptrFrgCodeBuffer.get()); 
@@ -269,7 +290,11 @@ void TriangleWindow::initialize(){
     }
     m_posAttr = m_program->attributeLocation("posAttr");
     m_colAttr = m_program->attributeLocation("colAttr");
+    m_texAttr = m_program->attributeLocation("texAttr");
     m_matrixUniform = m_program->uniformLocation("matrix");
+    
+    m_textureUniform = m_program->uniformLocation("ourTexture");
+
 
     m_valid = true;
     std::cout << "\n\tShaders [OK]" << std::endl; 
@@ -286,11 +311,18 @@ void TriangleWindow::render(){
 
     m_program->bind();
     glBindVertexArray(m_vao);
+    
     QMatrix4x4 matrix;
     matrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
     matrix.translate(0, 0, -2);
     matrix.rotate(0.0f * m_frame / screen()->refreshRate(), 0, 1, 0);
+    
     m_program->setUniformValue(m_matrixUniform, matrix);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_tbo);
+    //As texture is going to be the same always, lets attach it.
+    m_program->setUniformValue(m_textureUniform, 0);
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
 
