@@ -87,6 +87,7 @@ private:
     GLuint m_texAttr;
     GLuint m_matrixUniform;
     GLuint m_textureUniform;
+    GLuint m_timeUniform;
     GLuint m_vao, m_vbo, m_ebo, m_tbo;
 
     QOpenGLShaderProgram *m_program{nullptr};
