@@ -127,7 +127,7 @@ void TriangleWindow::initializeTextures(){
     auto testPath = QDir(QString(filename_texture.c_str()));
     auto absoluteTestPath = testPath.cleanPath(testPath.absoluteFilePath(filename_texture.c_str()));
     std::cout << "\n\tPath Test : " << absoluteTestPath.toStdString() << std::endl;
-    qimage = QImage(absoluteTestPath);
+    qimage = QImage(absoluteTestPath).mirrored(false, true);
     auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());
     std::cout << "Width :" << qimagewidth << std::endl << "Height: " << qimageheight << std::endl  << "Bitsperpixel: " << (unsigned long)qbpp << std::endl;
     auto colorformat = qimage.pixelFormat().typeInterpretation();
@@ -227,10 +227,10 @@ void TriangleWindow::initializeGeometry(){
 
     float vertices[] = {
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+         0.5000f,  0.3125f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+         0.5000f, -0.3125f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -0.5000f, -0.3125f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.5000f,  0.3125f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
     };
     unsigned int indices[] = {
         0, 1, 3, // first triangle
@@ -314,7 +314,7 @@ void TriangleWindow::render(){
     
     QMatrix4x4 matrix;
     matrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
-    matrix.translate(0, 0, -2);
+    matrix.translate(0.0f, 0.0f, -0.625f);
     matrix.rotate(0.0f * m_frame / screen()->refreshRate(), 0, 1, 0);
     
     m_program->setUniformValue(m_matrixUniform, matrix);
