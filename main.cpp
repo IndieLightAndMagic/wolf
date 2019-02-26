@@ -61,11 +61,21 @@
 #include <QtGui/QScreen>
 #include <QtCore/QDir>
 #include <QtCore/qmath.h>
+#include <QtCore/QElapsedTimer>
 
 //! [1]
 class TriangleWindow : public OpenGLWindow
 {
 public:
+
+    enum class IntroState { 
+        FADING_IN_CARNAGE, 
+        STILL_IN_CARNAGE, 
+        FADING_OUT_CARNAGE, 
+        FADING_CLASSIC_IN, 
+        STILL_IN_CLASSIC, 
+        FADING_OUT_CLASSIC 
+    };
 
     std::shared_ptr<unsigned char> ptrVtxCodeBuffer{nullptr};
     std::shared_ptr<unsigned char> ptrFrgCodeBuffer{nullptr};
@@ -93,6 +103,11 @@ private:
     QOpenGLShaderProgram *m_program{nullptr};
 
     int m_frame{0};
+
+    QElapsedTimer m_timer;
+    uint64_t m_elapsedTimeMeasurement{0};
+
+    TriangleWindow::IntroState m_state{IntroState::FADING_IN_CARNAGE};
 };
 
 TriangleWindow::TriangleWindow(){
@@ -299,6 +314,7 @@ void TriangleWindow::initialize(){
 
     m_valid = true;
     std::cout << "\n\tShaders [OK]" << std::endl; 
+    m_timer.start();
 }
 //! [4]
 
@@ -323,7 +339,12 @@ void TriangleWindow::render(){
     glBindTexture(GL_TEXTURE_2D, m_tbo);
     //As texture is going to be the same always, lets attach it.
     m_program->setUniformValue(m_textureUniform, 0);
-    m_program->setUniformValue(m_pcsSliderUniform, 0.5f);
+    m_elapsedTimeMeasurement = m_timer.elapsed();
+
+    float _10SecsFraction = m_elapsedTimeMeasurement / 10000.0f;
+    _10SecsFraction = _10SecsFraction <= 1.0f ? _10SecsFraction : 1.0f;
+
+    m_program->setUniformValue(m_pcsSliderUniform, _10SecsFraction);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
