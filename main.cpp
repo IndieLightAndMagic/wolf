@@ -87,7 +87,7 @@ private:
     GLuint m_texAttr;
     GLuint m_matrixUniform;
     GLuint m_textureUniform;
-    GLuint m_timeUniform;
+    GLuint m_pcsSliderUniform;
     GLuint m_vao, m_vbo, m_ebo, m_tbo;
 
     QOpenGLShaderProgram *m_program{nullptr};
@@ -293,8 +293,8 @@ void TriangleWindow::initialize(){
     m_colAttr = m_program->attributeLocation("colAttr");
     m_texAttr = m_program->attributeLocation("texAttr");
     m_matrixUniform = m_program->uniformLocation("matrix");
-    
     m_textureUniform = m_program->uniformLocation("ourTexture");
+    m_pcsSliderUniform = m_program->uniformLocation("pcsSlider");
 
 
     m_valid = true;
@@ -323,6 +323,7 @@ void TriangleWindow::render(){
     glBindTexture(GL_TEXTURE_2D, m_tbo);
     //As texture is going to be the same always, lets attach it.
     m_program->setUniformValue(m_textureUniform, 0);
+    m_program->setUniformValue(m_pcsSliderUniform, 0.5f);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();

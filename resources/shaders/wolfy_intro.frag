@@ -13,7 +13,5 @@ uniform float wcsSlider;
 
 void main()
 {
-    //FragColor = texture(pcsTexture, TexCoord) * pcsSlider + texture(wcsTexture, TexCoord) * wcsSlider;
-    FragColor = texture(ourTexture, TexCoord);
-
+    FragColor = texture(ourTexture, TexCoord) * pcsSlider;// + texture(wcsTexture, TexCoord) * wcsSlider;
 }
