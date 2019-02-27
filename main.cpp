@@ -113,6 +113,7 @@ private:
 
     TriangleWindow::IntroState m_state{IntroState::START};
     float m_timeToExpire{0.0f};
+    unsigned int m_activeTextureIndex{0};
 };
 
 TriangleWindow::TriangleWindow(){
@@ -305,24 +306,82 @@ void TriangleWindow::processState(){
     
     float sliderValue{0.0f};
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_tbo[0]);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, m_tbo[1]);
+    
+    
+    m_elapsedTimeMeasurement = m_timer.elapsed();
+
+    
     if (m_state == IntroState::START){
+
         m_state = IntroState::FADING_IN_CARNAGE;
         m_timer.start();
         m_timeToExpire = 1000.0f;
+        
+        //As texture is going to be the same always, lets attach it.
+        m_program->setUniformValue(m_textureUniform, 0);
 
     } else if (m_state == IntroState::FADING_IN_CARNAGE){
 
-        m_elapsedTimeMeasurement = m_timer.elapsed();
+        float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
+        _timeFraction = _timeFraction <= 1.0f ? _timeFraction : 1.0f;
+
+
+        if (_timeFraction >= 1.0f) {
+            m_state = IntroState::STILL_IN_CARNAGE;
+            m_timer.start();
+            m_timeToExpire = 3000.0f;
+        }
+        sliderValue = _timeFraction;
+    
+    } else if (m_state == IntroState::STILL_IN_CARNAGE){
+
+        float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
+        _timeFraction = _timeFraction < 1.0f ? _timeFraction : 1.0f;
+
+        if (_timeFraction >= 1.0f) {
+            m_state = IntroState::FADING_OUT_CARNAGE;
+            m_timer.start();
+            m_timeToExpire = 1000.0f;
+        }
+        sliderValue = 1.0f;
+        
+
+    } else if (m_state == IntroState::FADING_OUT_CARNAGE){
+
+        float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
+        _timeFraction = 1.0 - _timeFraction;
+        _timeFraction = _timeFraction >= 0.0f ? _timeFraction : 0.0f;
+
+        if (_timeFraction <= 0.0f) {
+            m_state = IntroState::FADING_CLASSIC_IN;
+            m_timer.start();
+            m_timeToExpire = 1000.0f;
+        }
+        sliderValue = _timeFraction;
+
+    } else if (m_state == IntroState::FADING_CLASSIC_IN){
+
         float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
         _timeFraction = _timeFraction <= 1.0f ? _timeFraction : 1.0f;
 
         if (_timeFraction >= 1.0f) {
             m_state = IntroState::IDLE;
+            m_timer.start();
+            m_timeToExpire = 3000.0f;
         }
         sliderValue = _timeFraction;
 
+        //As texture is going to be the same always, lets attach it.
+        m_program->setUniformValue(m_textureUniform, 1);
+    
     } else {
+
         sliderValue = 1.0f;
+
     }
     m_program->setUniformValue(m_pcsSliderUniform, sliderValue);    
 
@@ -371,10 +430,7 @@ void TriangleWindow::render(){
     matrix.rotate(0.0f * m_frame / screen()->refreshRate(), 0, 1, 0);
     
     m_program->setUniformValue(m_matrixUniform, matrix);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_tbo[0]);
-    //As texture is going to be the same always, lets attach it.
-    m_program->setUniformValue(m_textureUniform, 0);
+    
 
     processState();
 
