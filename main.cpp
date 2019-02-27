@@ -91,7 +91,7 @@ public:
 private:
 
     void processState();
-    void initializeTextures();
+    void initializeTextures(GLuint*, const char*);
     void initializeShaders();
     void initializeGeometry();
 
@@ -101,7 +101,8 @@ private:
     GLuint m_matrixUniform;
     GLuint m_textureUniform;
     GLuint m_pcsSliderUniform;
-    GLuint m_vao, m_vbo, m_ebo, m_tbo;
+    GLuint m_vao, m_vbo, m_ebo;
+    GLuint m_tbo[2];
 
     QOpenGLShaderProgram *m_program{nullptr};
 
@@ -141,9 +142,9 @@ int main(int argc, char **argv){
 
 
 
-void TriangleWindow::initializeTextures(){
+void TriangleWindow::initializeTextures(GLuint* ptbo, const char* ppath){
 
-    auto filename_texture = std::string(RESOURCES_DIR) + "/textures/pgrate.png";
+    auto filename_texture = std::string(RESOURCES_DIR) + ppath;
     auto testPath = QDir(QString(filename_texture.c_str()));
     auto absoluteTestPath = testPath.cleanPath(testPath.absoluteFilePath(filename_texture.c_str()));
     std::cout << "\n\tPath Test : " << absoluteTestPath.toStdString() << std::endl;
@@ -168,8 +169,8 @@ void TriangleWindow::initializeTextures(){
     if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
 
     //Bind textures into opnegl.
-    glGenTextures(1, &m_tbo);
-    glBindTexture(GL_TEXTURE_2D, m_tbo); 
+    glGenTextures(1, ptbo);
+    glBindTexture(GL_TEXTURE_2D, *ptbo); 
      // set the texture wrapping parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -333,7 +334,8 @@ void TriangleWindow::initialize(){
     
     initializeGeometry();
     initializeShaders();
-    initializeTextures();
+    initializeTextures(&m_tbo[0], "/textures/pgrate.png");
+    initializeTextures(&m_tbo[1], "/textures/classic.png");
 
 
     
@@ -370,7 +372,7 @@ void TriangleWindow::render(){
     
     m_program->setUniformValue(m_matrixUniform, matrix);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_tbo);
+    glBindTexture(GL_TEXTURE_2D, m_tbo[0]);
     //As texture is going to be the same always, lets attach it.
     m_program->setUniformValue(m_textureUniform, 0);
 
