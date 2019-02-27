@@ -189,7 +189,6 @@ void TriangleWindow::initializeShaders(){
     auto fileptr_vertex_shader_ok = std::string( fileptr_vertex_shader != nullptr ? "[OK]" : "[FAILED]");  
     auto fileptr_fragment_shader = std::fopen(filename_fragment_shader.c_str(), "r");
     auto fileptr_fragment_shader_ok = std::string(fileptr_fragment_shader != nullptr ? "[OK]" : "[FAILED]");  
-        
 
     std::cout <<"\n\tWolfy Vert: " << filename_vertex_shader << " " << fileptr_vertex_shader_ok << std::endl;
     std::cout <<"\n\tWolfy Frag: " << filename_fragment_shader << " " << fileptr_fragment_shader_ok << std::endl;
@@ -238,6 +237,27 @@ void TriangleWindow::initializeShaders(){
             std::cout << std::endl;
         }
     }
+
+    auto vertexShaderSource = reinterpret_cast<char*>(ptrVtxCodeBuffer.get()); 
+    auto fragmentShaderSource = reinterpret_cast<char*>(ptrFrgCodeBuffer.get()); 
+
+    m_program = new QOpenGLShaderProgram(this);
+    if (m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource)) std::cout << "\n\tVertex Shader [OK]";
+    else {
+        std::cout << "\n\tVertex Shader quite bad....." << std::endl;
+        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
+    }
+    if (m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource)) std::cout << "\n\tVertex Shader [OK]";
+    else {
+        std::cout << "\n\tFragment Shader quite bad....." << std::endl;
+        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
+    }
+    if (m_program->link()) std::cout << "\n\tProgram Linked [OK]" << std::endl;
+    else {
+        std::cout << "\n\tProgram linking quite bad....." << std::endl;
+        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
+    }
+
 }
 void TriangleWindow::initializeGeometry(){
 
@@ -285,25 +305,8 @@ void TriangleWindow::initialize(){
     initializeShaders();
     initializeTextures();
 
-    const auto vertexShaderSource = reinterpret_cast<char*>(ptrVtxCodeBuffer.get()); 
-    const auto fragmentShaderSource = reinterpret_cast<char*>(ptrFrgCodeBuffer.get()); 
 
-    m_program = new QOpenGLShaderProgram(this);
-    if (m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource)) std::cout << "\n\tVertex Shader [OK]";
-    else {
-        std::cout << "\n\tVertex Shader quite bad....." << std::endl;
-        return;
-    }
-    if (m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource)) std::cout << "\n\tVertex Shader [OK]";
-    else {
-        std::cout << "\n\tFragment Shader quite bad....." << std::endl;
-        return;
-    }
-    if (m_program->link()) std::cout << "\n\tProgram Linked [OK]" << std::endl;
-    else {
-        std::cout << "\n\tProgram linking quite bad....." << std::endl;
-        return;
-    }
+    
     m_posAttr = m_program->attributeLocation("posAttr");
     m_colAttr = m_program->attributeLocation("colAttr");
     m_texAttr = m_program->attributeLocation("texAttr");
@@ -345,7 +348,6 @@ void TriangleWindow::render(){
     _10SecsFraction = _10SecsFraction <= 1.0f ? _10SecsFraction : 1.0f;
 
     m_program->setUniformValue(m_pcsSliderUniform, _10SecsFraction);
-
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
 
