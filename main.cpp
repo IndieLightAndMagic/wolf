@@ -68,13 +68,15 @@ class TriangleWindow : public OpenGLWindow
 {
 public:
 
-    enum class IntroState { 
+    enum class IntroState {
+        START, 
         FADING_IN_CARNAGE, 
         STILL_IN_CARNAGE, 
         FADING_OUT_CARNAGE, 
         FADING_CLASSIC_IN, 
         STILL_IN_CLASSIC, 
-        FADING_OUT_CLASSIC 
+        FADING_OUT_CLASSIC,
+        IDLE 
     };
 
     std::shared_ptr<unsigned char> ptrVtxCodeBuffer{nullptr};
@@ -88,6 +90,7 @@ public:
 
 private:
 
+    void processState();
     void initializeTextures();
     void initializeShaders();
     void initializeGeometry();
@@ -107,7 +110,8 @@ private:
     QElapsedTimer m_timer;
     uint64_t m_elapsedTimeMeasurement{0};
 
-    TriangleWindow::IntroState m_state{IntroState::FADING_IN_CARNAGE};
+    TriangleWindow::IntroState m_state{IntroState::START};
+    float m_timeToExpire{0.0f};
 };
 
 TriangleWindow::TriangleWindow(){
@@ -296,6 +300,32 @@ void TriangleWindow::initializeGeometry(){
 
 
 }
+void TriangleWindow::processState(){
+    
+    float sliderValue{0.0f};
+
+    if (m_state == IntroState::START){
+        m_state = IntroState::FADING_IN_CARNAGE;
+        m_timer.start();
+        m_timeToExpire = 1000.0f;
+
+    } else if (m_state == IntroState::FADING_IN_CARNAGE){
+
+        m_elapsedTimeMeasurement = m_timer.elapsed();
+        float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
+        _timeFraction = _timeFraction <= 1.0f ? _timeFraction : 1.0f;
+
+        if (_timeFraction >= 1.0f) {
+            m_state = IntroState::IDLE;
+        }
+        sliderValue = _timeFraction;
+
+    } else {
+        sliderValue = 1.0f;
+    }
+    m_program->setUniformValue(m_pcsSliderUniform, sliderValue);    
+
+}
 void TriangleWindow::initialize(){
 
 
@@ -317,12 +347,13 @@ void TriangleWindow::initialize(){
 
     m_valid = true;
     std::cout << "\n\tShaders [OK]" << std::endl; 
-    m_timer.start();
+
 }
 //! [4]
 
 //! [5]
 void TriangleWindow::render(){
+
 
     const qreal retinaScale = devicePixelRatio();
     glViewport(0, 0, width() * retinaScale, height() * retinaScale);
@@ -342,12 +373,9 @@ void TriangleWindow::render(){
     glBindTexture(GL_TEXTURE_2D, m_tbo);
     //As texture is going to be the same always, lets attach it.
     m_program->setUniformValue(m_textureUniform, 0);
-    m_elapsedTimeMeasurement = m_timer.elapsed();
 
-    float _10SecsFraction = m_elapsedTimeMeasurement / 10000.0f;
-    _10SecsFraction = _10SecsFraction <= 1.0f ? _10SecsFraction : 1.0f;
+    processState();
 
-    m_program->setUniformValue(m_pcsSliderUniform, _10SecsFraction);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
 
