@@ -47,7 +47,8 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
+#ifndef _OPENGLWINDOW_H_
+#define _OPENGLWINDOW_H_
 #include <QtGui/QWindow>
 #include <QtGui/QOpenGLFunctions>
 #include <QtGui/QOpenGLFunctions_4_3_Core>
@@ -91,3 +92,4 @@ private:
 };
 //! [1]
 
+#endif /* _OPENGLWINDOW_H_ */ 
