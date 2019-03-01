@@ -1,6 +1,6 @@
 #ifndef _INTROSCENE_H_
 #define _INTROSCENE_H_
-
+#include "openglwindow.h"
 #include <memory>
 #include <QImage>
 #include <QtCore/QElapsedTimer>
