@@ -8,7 +8,7 @@
 #include <QtGui/QOpenGLFunctions>
 #include <QtGui/QOpenGLFunctions_4_3_Core>
 
-class TriangleWindow : public OpenGLWindow
+class IntroScene : public OpenGLWindow
 {
 public:
 
@@ -27,7 +27,7 @@ public:
     std::shared_ptr<unsigned char> ptrFrgCodeBuffer{nullptr};
     QImage qimage{};
     
-    TriangleWindow();
+    IntroScene();
 
     void initialize() override;
     void render() override;
@@ -55,7 +55,7 @@ private:
     QElapsedTimer m_timer;
     uint64_t m_elapsedTimeMeasurement{0};
 
-    TriangleWindow::IntroState m_state{IntroState::START};
+    IntroScene::IntroState m_state{IntroState::START};
     float m_timeToExpire{0.0f};
     unsigned int m_activeTextureIndex{0};
 };

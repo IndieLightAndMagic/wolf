@@ -63,7 +63,7 @@
 
 #include "introscene.h"
 
-TriangleWindow::TriangleWindow(){
+IntroScene::IntroScene(){
 
 }
 //! [1]
@@ -76,7 +76,7 @@ int main(int argc, char **argv){
     QSurfaceFormat format;
     format.setSamples(16);
 
-    TriangleWindow window;
+    IntroScene window;
     window.setFormat(format);
     window.resize(640, 480);
     window.show();
@@ -90,7 +90,7 @@ int main(int argc, char **argv){
 
 
 
-void TriangleWindow::initializeTextures(GLuint* ptbo, const char* ppath){
+void IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
 
     auto filename_texture = std::string(RESOURCES_DIR) + ppath;
     auto testPath = QDir(QString(filename_texture.c_str()));
@@ -134,7 +134,7 @@ void TriangleWindow::initializeTextures(GLuint* ptbo, const char* ppath){
 
 
 
-void TriangleWindow::initializeShaders(){
+void IntroScene::initializeShaders(){
 
     auto filename_vertex_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert";
     auto filename_fragment_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag";
@@ -212,7 +212,7 @@ void TriangleWindow::initializeShaders(){
     }
 
 }
-void TriangleWindow::initializeGeometry(){
+void IntroScene::initializeGeometry(){
 
     float vertices[] = {
         // positions          // colors           // texture coords
@@ -249,7 +249,7 @@ void TriangleWindow::initializeGeometry(){
 
 
 }
-void TriangleWindow::processState(){
+void IntroScene::processState(){
     
     float sliderValue{0.0f};
 
@@ -333,7 +333,7 @@ void TriangleWindow::processState(){
     m_program->setUniformValue(m_pcsSliderUniform, sliderValue);    
 
 }
-void TriangleWindow::initialize(){
+void IntroScene::initialize(){
 
 
     std::cout <<"Wolfy resources:" << std::endl;
@@ -360,7 +360,7 @@ void TriangleWindow::initialize(){
 //! [4]
 
 //! [5]
-void TriangleWindow::render(){
+void IntroScene::render(){
 
 
     const qreal retinaScale = devicePixelRatio();
