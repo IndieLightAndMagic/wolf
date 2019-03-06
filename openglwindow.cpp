@@ -49,7 +49,7 @@
 ****************************************************************************/
 
 #include "openglwindow.h"
-
+#include <iostream>
 #include <QtCore/QCoreApplication>
 
 #include <QtGui/QOpenGLContext>
@@ -130,8 +130,19 @@ void OpenGLWindow::renderNow()
     bool needsInitialize = false;
 
     if (!m_context) {
+
         m_context = new QOpenGLContext(this);
+
+#ifdef __APPLE__
+        //This needs to be set for Opengl 3.2 and higher. See https://wiki.qt.io/Using-QOpenGLFunctions-and-QOpenGLContext
+        QSurfaceFormat surfaceFormat;
+        surfaceFormat.setVersion(3,3);
+        surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
+        m_context->setFormat(surfaceFormat);
+#elif
         m_context->setFormat(requestedFormat());
+#endif
+
         m_context->create();
 
         needsInitialize = true;

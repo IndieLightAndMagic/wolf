@@ -51,7 +51,11 @@
 #define _OPENGLWINDOW_H_
 #include <QtGui/QWindow>
 #include <QtGui/QOpenGLFunctions>
+#ifdef __APPLE__
+#include <QtGui/QOpenGLFunctions_3_3_Core>
+#else
 #include <QtGui/QOpenGLFunctions_4_3_Core>
+#endif
 QT_BEGIN_NAMESPACE
 class QPainter;
 class QOpenGLContext;
@@ -59,7 +63,11 @@ class QOpenGLPaintDevice;
 QT_END_NAMESPACE
 
 //! [1]
+#ifdef __APPLE__
+class OpenGLWindow : public QWindow, protected QOpenGLFunctions_3_3_Core
+#else
 class OpenGLWindow : public QWindow, protected QOpenGLFunctions_4_3_Core
+#endif
 {
     Q_OBJECT
 public:
