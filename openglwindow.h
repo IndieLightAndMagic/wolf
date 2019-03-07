@@ -56,6 +56,9 @@
 #else
 #include <QtGui/QOpenGLFunctions_4_3_Core>
 #endif
+
+#include "inputmanager.h"
+
 QT_BEGIN_NAMESPACE
 class QPainter;
 class QOpenGLContext;

@@ -38,6 +38,7 @@ private:
     void initializeTextures(GLuint*, const char*);
     void initializeShaders();
     void initializeGeometry();
+    void handleEscape();
 
     GLuint m_posAttr;
     GLuint m_colAttr;
@@ -58,5 +59,7 @@ private:
     IntroScene::IntroState m_state{IntroState::START};
     float m_timeToExpire{0.0f};
     unsigned int m_activeTextureIndex{0};
+
+    bool running{true};
 };
 #endif /* _INTROSCENE_H_ */

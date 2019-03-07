@@ -13,7 +13,11 @@
 
 
 IntroScene::IntroScene(){
-
+    auto im = new InputManager();
+    installEventFilter(im);
+    connect(im, &InputManager::escape,
+            this, &IntroScene::handleEscape);
+    
 }
 
 void IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
@@ -306,4 +310,7 @@ void IntroScene::render(){
     m_program->release();
 
     ++m_frame;
+}
+void IntroScene::handleEscape(){
+    std::cout << "ESC!" << std::endl;
 }
