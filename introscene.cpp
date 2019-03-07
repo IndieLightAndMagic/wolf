@@ -9,6 +9,7 @@
 #include <QtGui/QScreen>
 #include <QtGui/QMatrix4x4>
 #include <QtCore/QElapsedTimer>
+#include <QtGui/QGuiApplication>
 #include <QtGui/QOpenGLShaderProgram>
 
 
@@ -252,6 +253,10 @@ void IntroScene::processState(){
         //As texture is going to be the same always, lets attach it.
         m_program->setUniformValue(m_textureUniform, 1);
     
+    } else if(m_state == IntroState::FINISH){
+
+        QGuiApplication::exit();
+
     } else {
 
         sliderValue = 1.0f;
@@ -312,5 +317,6 @@ void IntroScene::render(){
     ++m_frame;
 }
 void IntroScene::handleEscape(){
-    std::cout << "ESC!" << std::endl;
+    std::cout << "Finishing Scene....." << std::endl;
+    m_state = IntroState::FINISH;
 }

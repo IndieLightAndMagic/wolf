@@ -20,7 +20,8 @@ public:
         FADING_CLASSIC_IN, 
         STILL_IN_CLASSIC, 
         FADING_OUT_CLASSIC,
-        IDLE 
+        IDLE,
+        FINISH
     };
 
     std::shared_ptr<unsigned char> ptrVtxCodeBuffer{nullptr};
@@ -60,6 +61,5 @@ private:
     float m_timeToExpire{0.0f};
     unsigned int m_activeTextureIndex{0};
 
-    bool running{true};
 };
 #endif /* _INTROSCENE_H_ */
