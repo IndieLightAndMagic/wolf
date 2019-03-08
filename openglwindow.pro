@@ -7,7 +7,8 @@ include(openglwindow.pri)
 SOURCES += \
     main.cpp \
     introscene.cpp \
-    inputmanager.cpp
+    inputmanager.cpp \
+    texturemanager.cpp
     
 GIT_COMMIT_NUMBER=$$system(git rev-parse --short=7 HEAD) 
 message(At the moment of qmake execution git number is $$GIT_COMMIT_NUMBER)
