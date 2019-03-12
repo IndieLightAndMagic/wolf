@@ -1,0 +1,498 @@
+{
+  "file"  : "walls.png",
+  "data"  : [
+    {
+      "rock_wall0_l" : {
+        "offset" : [0, 0],
+        "size" : [64, 64]
+      },
+      "rock_wall0_d" : {
+        "offset" : [64,0],
+        "size" : [64, 64]
+      },
+      "rock_wall1_l" : {
+        "offset" : [128, 0],
+        "size" : [64, 64]
+      },
+      "rock_wall1_d" : {
+        "offset" : [192,0],
+        "size" : [64, 64]
+      },
+      "swastika_flag_l" : {
+        "offset" : [256, 0],
+        "size" : [64, 64]
+      },
+      "swastika_flag_d" : {
+        "offset" : [320,0],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "fuhrer_wall_l" : {
+        "offset" : [0, 64],
+        "size" : [64, 64]
+      },
+      "fuhrer_wall_d" : {
+        "offset" : [64,64],
+        "size" : [64, 64]
+      },
+      "empty_cell_l" : {
+        "offset" : [128, 64],
+        "size" : [64, 64]
+      },
+      "empty_cell_d" : {
+        "offset" : [192,64],
+        "size" : [64, 64]
+      },
+      "reichsadler_wall_l" : {
+        "offset" : [256, 64],
+        "size" : [64, 64]
+      },
+      "reichsadler_wall_d" : {
+        "offset" : [320,64],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "corpse_cell_l" : {
+        "offset" : [0, 128],
+        "size" : [64, 64]
+      },
+      "corpse_cell_d" : {
+        "offset" : [64,128],
+        "size" : [64, 64]
+      },
+      "blue_wall0_l" : {
+        "offset" : [128, 128],
+        "size" : [64, 64]
+      },
+      "blue_wall0_d" : {
+        "offset" : [192,128],
+        "size" : [64, 64]
+      },
+      "blue_wall1_l" : {
+        "offset" : [256, 128],
+        "size" : [64, 64]
+      },
+      "blue_wall1_d" : {
+        "offset" : [320,128],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "reichsadler_portrait_l" : {
+        "offset" : [0, 192],
+        "size" : [64, 64]
+      },
+      "reichsadler_portrait_d" : {
+        "offset" : [64,192],
+        "size" : [64, 64]
+      },
+      "fuhrer_portrait_l" : {
+        "offset" : [128, 192],
+        "size" : [64, 64]
+      },
+      "fuhrer_portrait_d" : {
+        "offset" : [192,192],
+        "size" : [64, 64]
+      },
+      "wooden_wall_l" : {
+        "offset" : [256, 192],
+        "size" : [64, 64]
+      },
+      "wooden_wall_d" : {
+        "offset" : [320,192],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "gray_metal_door_l" : {
+        "offset" : [0, 256],
+        "size" : [64, 64]
+      },
+      "gray_metal_door_d" : {
+        "offset" : [64,256],
+        "size" : [64, 64]
+      },
+      "blue_metal_wall_sign_l" : {
+        "offset" : [128, 256],
+        "size" : [64, 64]
+      },
+      "blue_metal_wall_sign_d" : {
+        "offset" : [192,256],
+        "size" : [64, 64]
+      },
+      "blue_metal_wall_l" : {
+        "offset" : [256, 256],
+        "size" : [64, 64]
+      },
+      "blue_metal_wall_d" : {
+        "offset" : [320,256],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "skyline_l" : {
+        "offset" : [0, 320],
+        "size" : [64, 64]
+      },
+      "skyline_d" : {
+        "offset" : [64,320],
+        "size" : [64, 64]
+      },
+      "brick_wall_l" : {
+        "offset" : [128, 320],
+        "size" : [64, 64]
+      },
+      "brick_wall_d" : {
+        "offset" : [192,320],
+        "size" : [64, 64]
+      },
+      "brick_wall_swastika_l" : {
+        "offset" : [256, 320],
+        "size" : [64, 64]
+      },
+      "brick_wall_swastika_d" : {
+        "offset" : [320,320],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "slime_cave0_l" : {
+        "offset" : [0, 384],
+        "size" : [64, 64]
+      },
+      "slime_cave0_d" : {
+        "offset" : [64,384],
+        "size" : [64, 64]
+      },
+      "riechsadler_banner_l" : {
+        "offset" : [128, 384],
+        "size" : [64, 64]
+      },
+      "riechsadler_banner_d" : {
+        "offset" : [192,384],
+        "size" : [64, 64]
+      },
+      "handle_wall" : {
+        "offset" : [256, 384],
+        "size" : [64, 64]
+      },
+      "handle_switch_down" : {
+        "offset" : [320,384],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "bluevoid" : {
+        "offset" : [0, 448],
+        "size" : [64, 64]
+      },
+      "handle_switch_up" : {
+        "offset" : [64,448],
+        "size" : [64, 64]
+      },
+      "iron_cross_l" : {
+        "offset" : [128, 448],
+        "size" : [64, 64]
+      },
+      "iron_cross_d" : {
+        "offset" : [192,448],
+        "size" : [64, 64]
+      },
+      "slime_stone_wall0_l" : {
+        "offset" : [128, 448],
+        "size" : [64, 64]
+      },
+      "slime_stone_wall0_d" : {
+        "offset" : [192,448],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "slime_cave1_l" : {
+        "offset" : [0, 512],
+        "size" : [64, 64]
+      },
+      "slime_cave1_d" : {
+        "offset" : [64, 512],
+        "size" : [64, 64]
+      },
+      "slime_stone_wall1_l" : {
+        "offset" : [128, 512],
+        "size" : [64, 64]
+      },
+      "slime_stone_wall1_d" : {
+        "offset" : [192,512],
+        "size" : [64, 64]
+      },
+      "stone_wall_l" : {
+        "offset" : [256, 512],
+        "size" : [64, 64]
+      },
+      "stone_wall_d" : {
+        "offset" : [320,512],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "stone_wall_sign_l" : {
+        "offset" : [0, 576],
+        "size" : [64, 64]
+      },
+      "stone_wall_sign_d" : {
+        "offset" : [64,576],
+        "size" : [64, 64]
+      },
+      "cave_l" : {
+        "offset" : [128, 576],
+        "size" : [64, 64]
+      },
+      "cave_d" : {
+        "offset" : [192,576],
+        "size" : [64, 64]
+      },
+      "cave_blood_decal0_l" : {
+        "offset" : [256, 576],
+        "size" : [64, 64]
+      },
+      "cave_blood_decal0_d" : {
+        "offset" : [320,576],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "cave_blood_decal1_l" : {
+        "offset" : [0, 640],
+        "size" : [64, 64]
+      },
+      "cave_blood_decal1_d" : {
+        "offset" : [64,640],
+        "size" : [64, 64]
+      },
+      "cave_blood_decal2_l" : {
+        "offset" : [128, 640],
+        "size" : [64, 64]
+      },
+      "cave_blood_decal2_d" : {
+        "offset" : [192,640],
+        "size" : [64, 64]
+      },
+      "fuhrer_glas_l" : {
+        "offset" : [256, 640],
+        "size" : [64, 64]
+      },
+      "fuhrer_glas_d" : {
+        "offset" : [320, 640],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "skull_wall_l" : {
+        "offset" : [0, 704],
+        "size" : [64, 64]
+      },
+      "skull_wall_d" : {
+        "offset" : [64,704],
+        "size" : [64, 64]
+      },
+      "clean_wall_l" : {
+        "offset" : [128, 704],
+        "size" : [64, 64]
+      },
+      "clean_wall_d" : {
+        "offset" : [192,704],
+        "size" : [64, 64]
+      },
+      "swastika_wall_l" : {
+        "offset" : [256, 704],
+        "size" : [64, 64]
+      },
+      "swastika_wall_d" : {
+        "offset" : [320,704],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "clean_wall_hole_l" : {
+        "offset" : [0, 768],
+        "size" : [64, 64]
+      },
+      "clean_wall_hole_d" : {
+        "offset" : [64,768],
+        "size" : [64, 64]
+      },
+      "brick_patched_wall_l" : {
+        "offset" : [128, 768],
+        "size" : [64, 64]
+      },
+      "brick_patched_wall_d" : {
+        "offset" : [192,768],
+        "size" : [64, 64]
+      },
+      "cracked_wall_l" : {
+        "offset" : [256, 768],
+        "size" : [64, 64]
+      },
+      "cracked_wall_d" : {
+        "offset" : [320,768],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "blue_corridor_wall_l" : {
+        "offset" : [0, 832],
+        "size" : [64, 64]
+      },
+      "blue_corridor_wall_d" : {
+        "offset" : [64, 832],
+        "size" : [64, 64]
+      },
+      "blue_wall_sign_l" : {
+        "offset" : [128, 832],
+        "size" : [64, 64]
+      },
+      "blue_wall_sign_d" : {
+        "offset" : [192, 832],
+        "size" : [64, 64]
+      },
+      "tiled_wall0_l" : {
+        "offset" : [256, 832],
+        "size" : [64, 64]
+      },
+      "tiled_wall0_d" : {
+        "offset" : [320, 832],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "clean_wall_portrait_l" : {
+        "offset" : [0, 896],
+        "size" : [64, 64]
+      },
+      "clean_wall_portrait_d" : {
+        "offset" : [64,896],
+        "size" : [64, 64]
+      },
+      "rocky_mosaic_wall0_l" : {
+        "offset" : [128, 896],
+        "size" : [64, 64]
+      },
+      "rocky_mosaic_wall0_d" : {
+        "offset" : [192,896],
+        "size" : [64, 64]
+      },
+      "rocky_mosaic_wall1_l" : {
+        "offset" : [256, 896],
+        "size" : [64, 64]
+      },
+      "rocky_mosaic_wall1_d" : {
+        "offset" : [320,896],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "tiled_wall1_l" : {
+        "offset" : [0, 960],
+        "size" : [64, 64]
+      },
+      "tiled_wall1_d" : {
+        "offset" : [64,960],
+        "size" : [64, 64]
+      },
+      "tiled_wall_flag_l" : {
+        "offset" : [128, 960],
+        "size" : [64, 64]
+      },
+      "tiled_wall_flag_d" : {
+        "offset" : [192,960],
+        "size" : [64, 64]
+      },
+      "wooden_frame_wall_l" : {
+        "offset" : [256, 960],
+        "size" : [64, 64]
+      },
+      "wooden_frame_wall_d" : {
+        "offset" : [320,960],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "reichsfuhrer_wall_l" : {
+        "offset" : [0, 1024],
+        "size" : [64, 64]
+      },
+      "reichsfuhrer_wall_d" : {
+        "offset" : [64,1024],
+        "size" : [64, 64]
+      },
+      "blue_metal_door_l" : {
+        "offset" : [128, 1024],
+        "size" : [64, 64]
+      },
+      "blue_metal_door_d" : {
+        "offset" : [192,1024],
+        "size" : [64, 64]
+      },
+      "blue_metal_door_frame_l" : {
+        "offset" : [256, 1024],
+        "size" : [64, 64]
+      },
+      "blue_metal_door_frame_d" : {
+        "offset" : [320,1024],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "metal_door_button_l" : {
+        "offset" : [0,  1088],
+        "size" : [64, 64]
+      },
+      "metal_door_button_d" : {
+        "offset" : [64, 1088],
+        "size" : [64, 64]
+      },
+      "metal_door_handle_l" : {
+        "offset" : [128,  1088],
+        "size" : [64, 64]
+      },
+      "metal_door_handle_d" : {
+        "offset" : [192, 1088],
+        "size" : [64, 64]
+      },
+      "niet_handle_wall_l" : {
+        "offset" : [256,  1088],
+        "size" : [64, 64]
+      },
+      "niet_handle_switch_down" : {
+        "offset" : [320, 1088],
+        "size" : [64, 64]
+      }
+    },
+    {
+      "greyvoid" : {
+        "offset" : [0, 1152],
+        "size" : [64, 64]
+      },
+      "niet_handle_switch_up" : {
+        "offset" : [64,1152],
+        "size" : [64, 64]
+      },
+      "credit0" : {
+        "offset" : [128, 1152],
+        "size" : [64, 64]
+      },
+      "credt1" : {
+        "offset" : [192,1152],
+        "size" : [64, 64]
+      },
+      "credit2" : {
+        "offset" : [128, 1152],
+        "size" : [64, 64]
+      },
+      "credit3" : {
+        "offset" : [192,1152],
+        "size" : [64, 64]
+      }
+    }]
+}
