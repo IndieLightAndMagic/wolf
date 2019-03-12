@@ -1,5 +1,6 @@
 {
   "file"  : "walls.png",
+  "size"  : [384, 1216], 
   "data"  : [
     {
       "rock_wall0_l" : {
