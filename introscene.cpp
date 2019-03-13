@@ -24,10 +24,13 @@ IntroScene::IntroScene(){
 void IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
 
     qimage = TextureManagerQT::initializeTexture(ptbo, TextureManager::solvePath(ppath));
-
+    auto filename_atlas = std::string(RESOURCES_DIR) + "/atlases/walls.at.json";
+    auto filename_textures = std::string(RESOURCES_DIR) + "/atlases/walls.json";
+    auto atlas = TextureAtlas(filename_textures, filename_atlas);
 }
 
 void IntroScene::initializeShaders(){
+
 
     auto filename_vertex_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert";
     auto filename_fragment_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag";

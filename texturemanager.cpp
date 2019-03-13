@@ -1,10 +1,20 @@
 #include "texturemanager.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QString>
+#include <QFile>
+
+QString getAbsolutePath(std::string filename){
+
+    auto path = QDir(QString(filename.c_str()));
+    auto absoluteTestPath = path.cleanPath(path.absoluteFilePath(filename.c_str()));
+    return absoluteTestPath;
+}
 
 QImage TextureManagerQT::initializeTexture(GLuint* ptbo, const std::string filename_texture){
 
-    
-    auto testPath = QDir(QString(filename_texture.c_str()));
-    auto absoluteTestPath = testPath.cleanPath(testPath.absoluteFilePath(filename_texture.c_str()));
+    auto absoluteTestPath = getAbsolutePath(filename_texture);
     std::cout << "\n\tPath Test : " << absoluteTestPath.toStdString() << std::endl;
     auto qimage = QImage(absoluteTestPath).mirrored(false, true);
     auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());
@@ -40,5 +50,36 @@ QImage TextureManagerQT::initializeTexture(GLuint* ptbo, const std::string filen
     glGenerateMipmap(GL_TEXTURE_2D);
 
     return qimage;
+
+}
+
+TextureAtlas::TextureAtlas(const std::string filename_texture, const std::string filename_atlas){
+
+    QFile loadFile(QString::fromStdString(filename_atlas));
+    loadFile.open(QIODevice::ReadOnly);
+
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(loadFile.readAll()));
+
+    auto jsonObj = jsonDocument.object();
+    auto jsonObjKeys = jsonObj.keys();
+
+    for (auto jsonObjKey : jsonObjKeys){
+        if (jsonObjKey != QString("data")) continue;
+        std::cout << jsonObjKey.toStdString() << std::endl;
+        auto dataList = jsonObj[jsonObjKey].toArray();
+        auto dataListSize = dataList.count();
+        for (auto index = 0; index < dataListSize; ++index){
+            auto rectanglesDictionary = dataList[index].toObject();
+            for (auto key : rectanglesDictionary.keys()){
+                auto rectangleDictionary = rectanglesDictionary[key].toObject();
+                auto offsetList = rectangleDictionary["offset"].toArray();
+                auto sizeList = rectangleDictionary["size"].toArray();
+            }
+        }
+
+    }
+
+    m_image = QImage(getAbsolutePath(filename_texture));
+
 
 }
