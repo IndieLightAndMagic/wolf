@@ -11,21 +11,15 @@ QString getAbsolutePath(std::string filename){
     auto absoluteTestPath = path.cleanPath(path.absoluteFilePath(filename.c_str()));
     return absoluteTestPath;
 }
+void printTextureInformation(const QImage& crqimage){
 
-QImage TextureManagerQT::initializeTexture(GLuint* ptbo, const std::string filename_texture){
-
-    auto absoluteTestPath = getAbsolutePath(filename_texture);
-    std::cout << "\n\tPath Test : " << absoluteTestPath.toStdString() << std::endl;
-    auto qimage = QImage(absoluteTestPath).mirrored(false, true);
-    auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());
-    std::cout << "Width :" << qimagewidth << std::endl << "Height: " << qimageheight << std::endl  << "Bitsperpixel: " << (unsigned long)qbpp << std::endl;
-    auto colorformat = qimage.pixelFormat().typeInterpretation();
+    auto colorformat = crqimage.pixelFormat().typeInterpretation();
     if (colorformat  == QPixelFormat::UnsignedInteger ) std::cout << "Color is QPixelFormat::UnsignedInteger " << std::endl;     
     if (colorformat  == QPixelFormat::UnsignedShort ) std::cout << "Color is QPixelFormat::UnsignedShort " << std::endl;     
     if (colorformat  == QPixelFormat::UnsignedByte ) std::cout << "Color is QPixelFormat::UnsignedByte " << std::endl;     
     if (colorformat  == QPixelFormat::FloatingPoint ) std::cout << "Color is QPixelFormat::FloatingPoint " << std::endl;     
 
-    auto colormodel = qimage.pixelFormat().colorModel();
+    auto colormodel = crqimage.pixelFormat().colorModel();
     if (colormodel == QPixelFormat::RGB) std::cout << "Color model is QPixelFormat::RGB" << std::endl;   ;//0   The color model is RGB.
     if (colormodel == QPixelFormat::BGR) std::cout << "Color model is QPixelFormat::BGR" << std::endl;   ;//1   This is logically the opposite endian version of RGB. However, for ease of use it has its own model.
     if (colormodel == QPixelFormat::Indexed) std::cout << "Color model is QPixelFormat::Indexed" << std::endl;   ;//2   The color model uses a color palette.
@@ -35,6 +29,13 @@ QImage TextureManagerQT::initializeTexture(GLuint* ptbo, const std::string filen
     if (colormodel == QPixelFormat::HSV) std::cout << "Color model is QPixelFormat::HSV" << std::endl;   ;//6   The color model is HSV.
     if (colormodel == QPixelFormat::YUV) std::cout << "Color model is QPixelFormat::YUV" << std::endl;   ;//7   The color model is YUV.
     if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
+
+}
+QImage TextureManagerQT::initializeTexture(GLuint* ptbo, const std::string filename_texture){
+
+    auto qimage = QImage(getAbsolutePath(filename_texture)).mirrored(false, true);
+    auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());
+    std::cout << "Width :" << qimagewidth << std::endl << "Height: " << qimageheight << std::endl  << "Bitsperpixel: " << (unsigned long)qbpp << std::endl;
 
     //Bind textures into opnegl.
     glGenTextures(1, ptbo);
@@ -87,5 +88,12 @@ TextureAtlas::TextureAtlas(const std::string filename_texture, const std::string
     m_image = QImage(getAbsolutePath(filename_texture));
     std::cout << "Texture Atlas Created with " << m_atlas.size() << " textures." << std::endl;
 
+}
+
+QImage TextureAtlas::getTexture(const std::string& atlasEntryName){
+
+    return m_atlas.find(atlasEntryName) == m_atlas.end() ?
+                QImage() :
+                m_image.copy(m_atlas[atlasEntryName]);
 
 }
