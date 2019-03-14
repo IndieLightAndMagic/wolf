@@ -55,7 +55,7 @@ QImage TextureManagerQT::initializeTexture(GLuint* ptbo, const std::string filen
 
 TextureAtlas::TextureAtlas(const std::string filename_texture, const std::string filename_atlas){
 
-    QFile loadFile(QString::fromStdString(filename_atlas));
+    QFile loadFile(getAbsolutePath(filename_atlas));
     loadFile.open(QIODevice::ReadOnly);
 
     QJsonDocument jsonDocument(QJsonDocument::fromJson(loadFile.readAll()));
@@ -74,12 +74,18 @@ TextureAtlas::TextureAtlas(const std::string filename_texture, const std::string
                 auto rectangleDictionary = rectanglesDictionary[key].toObject();
                 auto offsetList = rectangleDictionary["offset"].toArray();
                 auto sizeList = rectangleDictionary["size"].toArray();
+                QRect r{
+                    offsetList[0].toInt(),  offsetList[1].toInt(),
+                    sizeList[0].toInt(),    sizeList[1].toInt()
+                };
+                m_atlas[key.toStdString()] = r;
             }
         }
 
     }
 
     m_image = QImage(getAbsolutePath(filename_texture));
+    std::cout << "Texture Atlas Created with " << m_atlas.size() << " textures." << std::endl;
 
 
 }
