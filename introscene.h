@@ -1,6 +1,7 @@
 #ifndef _INTROSCENE_H_
 #define _INTROSCENE_H_
-#include "openglwindow.h"
+#include "scene.h"
+#include "camera.h"
 #include <memory>
 #include <QImage>
 #include <QtCore/QElapsedTimer>
@@ -8,10 +9,10 @@
 #include <QtGui/QOpenGLFunctions>
 #include <QtGui/QOpenGLFunctions_4_3_Core>
 
-class IntroScene : public OpenGLWindow
+class IntroScene : public Scene
 {
 public:
-
+    Camera m_cam;
     enum class IntroState {
         START, 
         FADING_IN_CARNAGE, 
@@ -52,7 +53,6 @@ private:
 
     QOpenGLShaderProgram *m_program{nullptr};
 
-    int m_frame{0};
 
     QElapsedTimer m_timer;
     uint64_t m_elapsedTimeMeasurement{0};

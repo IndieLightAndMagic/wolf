@@ -256,33 +256,21 @@ void IntroScene::initialize(){
     m_valid = true;
     std::cout << "\n\tShaders [OK]" << std::endl; 
 
+
+    m_cam.SetCamera();
 }
 
 void IntroScene::render(){
 
-
-    const qreal retinaScale = devicePixelRatio();
-    glViewport(0, 0, width() * retinaScale, height() * retinaScale);
-
-    glClear(GL_COLOR_BUFFER_BIT);
+    Scene::render();
 
     m_program->bind();
     glBindVertexArray(m_vao);
-    
-    QMatrix4x4 matrix;
-    matrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
-    matrix.translate(0.0f, 0.0f, -0.625f);
-    matrix.rotate(0.0f * m_frame / screen()->refreshRate(), 0, 1, 0);
-    
-    m_program->setUniformValue(m_matrixUniform, matrix);
-    
-
+    m_program->setUniformValue(m_matrixUniform, m_cam.GetCamera());
     processState();
-
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
 
-    ++m_frame;
 }
 void IntroScene::handleEscape(){
     std::cout << "Finishing Scene....." << std::endl;

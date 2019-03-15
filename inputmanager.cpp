@@ -6,6 +6,7 @@ InputManager::InputManager( QObject *parent ) : QObject( parent ) {
 
 bool InputManager::eventFilter( QObject *dist, QEvent *event )
 {
+    Q_UNUSED(dist);
     if( event->type() == QEvent::KeyPress)
     {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>( event );
