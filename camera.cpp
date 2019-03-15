@@ -1,6 +1,6 @@
 #include "camera.h"
 
-void Camera::SetCamera(
+void Camera::setCamera(
     float verticalFov,
     float aspectRatio,
     float nearPlane,
@@ -31,11 +31,11 @@ void Camera::SetCamera(
     m_z = z;
 }
 
-const QMatrix4x4& Camera::GetCamera(){
+const QMatrix4x4& Camera::getCamera(){
     return m_camera;
 }
 
-void Camera::SetCameraPosition(float x, float y, float z){
+void Camera::setCameraPosition(float x, float y, float z){
 
     m_camera.setToIdentity();
     
@@ -49,6 +49,22 @@ void Camera::SetCameraPosition(float x, float y, float z){
     m_x = x;
     m_y = y;
     m_z = z;
+
+}
+void Camera::setCameraPositionDelta(float x, float y, float z){
+
+    m_camera.setToIdentity();
+    
+    m_camera.perspective(
+        m_verticalFov,
+        m_aspectRatio,
+        m_nearPlane,
+        m_farPlane);
+    m_x += x;
+    m_y += y;
+    m_z += z;
+    m_camera.translate(m_x,m_y,m_z);
+
 
 }
 

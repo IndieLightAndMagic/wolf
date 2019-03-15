@@ -15,6 +15,7 @@ class Scene : public OpenGLWindow
     int m_frame{0};
 
 public:
+    InputManager m_im;
 
     Scene();
 

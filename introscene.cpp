@@ -14,10 +14,6 @@
 
 
 IntroScene::IntroScene(){
-    auto im = new InputManager();
-    installEventFilter(im);
-    connect(im, &InputManager::escape,
-            this, &IntroScene::handleEscape);
     
 }
 
@@ -257,7 +253,17 @@ void IntroScene::initialize(){
     std::cout << "\n\tShaders [OK]" << std::endl; 
 
 
-    m_cam.SetCamera();
+    m_cam.setCamera();
+
+
+    installEventFilter(&m_im);
+    connect(&m_im, &InputManager::escape,
+            this, &IntroScene::handleEscape);
+    connect(&m_im, &InputManager::up_arrow,
+            this, &IntroScene::handleUp);
+    connect(&m_im, &InputManager::down_arrow,
+            this, &IntroScene::handleDown);
+
 }
 
 void IntroScene::render(){
@@ -266,7 +272,7 @@ void IntroScene::render(){
 
     m_program->bind();
     glBindVertexArray(m_vao);
-    m_program->setUniformValue(m_matrixUniform, m_cam.GetCamera());
+    m_program->setUniformValue(m_matrixUniform, m_cam.getCamera());
     processState();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
@@ -275,4 +281,10 @@ void IntroScene::render(){
 void IntroScene::handleEscape(){
     std::cout << "Finishing Scene....." << std::endl;
     m_state = IntroState::FINISH;
+}
+void IntroScene::handleUp(){
+    m_cam.setCameraPositionDelta(0.0f, 0.0f, 0.1f);
+}
+void IntroScene::handleDown(){
+    m_cam.setCameraPositionDelta(0.0f, 0.0f, -0.1f);
 }

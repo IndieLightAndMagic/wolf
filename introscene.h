@@ -41,6 +41,8 @@ private:
     void initializeShaders();
     void initializeGeometry();
     void handleEscape();
+    void handleUp();
+    void handleDown();
 
     GLuint m_posAttr;
     GLuint m_colAttr;

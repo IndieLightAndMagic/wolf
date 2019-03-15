@@ -1,4 +1,4 @@
-#ifndef __CAMERA_H__
+        #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
 #include <QMatrix4x4>
@@ -15,13 +15,13 @@ class Camera {
     float m_aspectRatio {16.0f / 9.0f};
     float m_nearPlane {0.1f};
     float m_farPlane {100.0f};
-    float m_x {0.0f};
-    float m_y {0.0f};
-    float m_z {-0.625f};
 
 public:
 
-    void SetCamera(
+    float m_x {0.0f};
+    float m_y {0.0f};
+    float m_z {-0.625f};
+    void setCamera(
         float verticalFov = 60.0f,
         float aspectRatio = 4.0f / 3.0f,
         float nearPlane = 0.1f,
@@ -30,9 +30,10 @@ public:
         float y = 0.0f,
         float z = -0.625f);
 
-    const QMatrix4x4& GetCamera();
+    const QMatrix4x4& getCamera();
 
-    void SetCameraPosition(float x = 0.0f, float y = 0.0f, float z = -0.625);
+    void setCameraPosition(float x = 0.0f, float y = 0.0f, float z = -0.625f);
+    void setCameraPositionDelta(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 
 
 };
