@@ -16,6 +16,7 @@ bool InputManager::eventFilter( QObject *dist, QEvent *event )
         else if ( keyEvent->key() == Qt::Key_Left ) {emit left_arrow(); return true;}
         else if ( keyEvent->key() == Qt::Key_Right ) {emit right_arrow(); return true;}
         else if ( keyEvent->key() == Qt::Key_Escape ) {emit escape(); return true;}
+        
     }
 
     return false;
