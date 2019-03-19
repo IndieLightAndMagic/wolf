@@ -1,0 +1,73 @@
+{
+  "file"  : "level1.png",
+  "size"  : [192, 192], 
+  "data"  : [
+    {
+      "rock_wall0" : {
+        "offset" : [0, 0],
+        "size" : [64, 64]
+      },
+      
+      "rock_wall1" : {
+        "offset" : [64, 0],
+        "size" : [64, 64]
+      },
+      
+      "swastika_flag" : {
+        "offset" : [128, 0],
+        "size" : [64, 64]
+      },
+      
+    },
+    {
+      "fuhrer_wall" : {
+        "offset" : [0, 64],
+        "size" : [64, 64]
+      },
+      
+      "empty_cell" : {
+        "offset" : [64, 64],
+        "size" : [64, 64]
+      },
+      
+      "reichsadler_wall" : {
+        "offset" : [128, 64],
+        "size" : [64, 64]
+      },
+      
+    },
+    {
+      "corpse_cell" : {
+        "offset" : [0, 128],
+        "size" : [64, 64]
+      },
+      
+      "blue_wall0" : {
+        "offset" : [64, 128],
+        "size" : [64, 64]
+      },
+      
+      "blue_wall1" : {
+        "offset" : [128, 128],
+        "size" : [64, 64]
+      },
+      
+    },
+    {
+      "reichsadler_portrait" : {
+        "offset" : [0, 192],
+        "size" : [64, 64]
+      },
+      
+      "fuhrer_portrait" : {
+        "offset" : [64, 192],
+        "size" : [64, 64]
+      },
+      
+      "wooden_wall" : {
+        "offset" : [128, 192],
+        "size" : [64, 64]
+      },
+      
+    }]
+}
