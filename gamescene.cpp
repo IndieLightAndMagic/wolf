@@ -17,7 +17,6 @@
 GameScene::GameScene(){
     
 }
-static QOpenGLShaderProgram* m_program{nullptr};
 void GameScene::initializeShaders(QOpenGLShader::ShaderType type, const char* path ){
 
     auto filename_shader = std::string(RESOURCES_DIR) + std::string{path};
@@ -117,9 +116,9 @@ void GameScene::initializeGeometry(){
 
 void GameScene::initialize(){
 
-
-    initializeShaders(QOpeFragment::Vertex, "shaders/level1.vert");
-    initializeShaders(QOpeFragment::Fragment, "shaders/level1.frag");
+    initializeGeometry();
+    initializeShaders(QOpenGLShader::Vertex, "/shaders/level1.vert");
+    initializeShaders(QOpenGLShader::Fragment, "/shaders/level1.frag");
 
     m_posAttr = m_program->attributeLocation("posAttr");
     m_colAttr = m_program->attributeLocation("colAttr");
@@ -142,12 +141,11 @@ void GameScene::render(){
     m_program->bind();
     glBindVertexArray(m_vao);
     m_program->setUniformValue(m_matrixUniform, m_cam.getCamera());
-    processState();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
 
 }
 void GameScene::handleEscape(){
     std::cout << "Finishing Scene....." << std::endl;
-    m_state = IntroState::FINISH;
+    QCoreApplication::exit(0);
 }

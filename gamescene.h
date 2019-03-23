@@ -23,15 +23,13 @@ public:
 
 private:
 
-    void initializeTexturesAtlas(GLuint*, const char*);
-    void initializeShaders();
+    void initializeShaders(QOpenGLShader::ShaderType type, const char* path);
     void initializeGeometry();
     void handleEscape();
-    void handleUp();
-    void handleDown();
-
+    
     GLuint m_posAttr;
     GLuint m_colAttr;
+    GLuint m_texAttr;
     GLuint m_matrixUniform;
     GLuint m_vao, m_vbo, m_ebo;
 
