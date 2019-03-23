@@ -5,3 +5,4 @@ HEADERS += $$PWD/inputmanager.h
 HEADERS += $$PWD/introscene.h
 HEADERS += $$PWD/texturemanager.h
 HEADERS += $$PWD/camera.h
+HEADERS += $$PWD/gamescene.h

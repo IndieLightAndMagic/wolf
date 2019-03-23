@@ -1,5 +1,6 @@
 QMAKE_CXXFLAGS += -std=c++17
-QMAKE_CXXFLAGS -= -std=gnu++11
+QMAKE_CFLAGS_RELEASE    = -O2 -MT
+QMAKE_CFLAGS_DEBUG -= -std=gnu++11
 
 
 message("Wolfenstein 3D clone. 100 Days of Code by JG")
@@ -8,6 +9,7 @@ SOURCES += \
     main.cpp \
     scene.cpp \
     camera.cpp \
+    gamescene.cpp \
     introscene.cpp \
     inputmanager.cpp \
     texturemanager.cpp \

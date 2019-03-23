@@ -14,8 +14,7 @@ class GameScene : public Scene
 public:
     Camera m_cam;
     
-    std::shared_ptr<unsigned char> ptrVtxCodeBuffer{nullptr};
-    std::shared_ptr<unsigned char> ptrFrgCodeBuffer{nullptr};
+    std::shared_ptr<unsigned char> ptrCodeBuffer{nullptr};
     
     GameScene();
 
