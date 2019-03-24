@@ -109,7 +109,7 @@ void GameScene::initializeGeometry(){
 
     // color attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(1);    
+    glEnableVertexAttribArray(2);    
 
 
 }
@@ -123,6 +123,7 @@ void GameScene::initialize(){
     m_posAttr = m_program->attributeLocation("posAttr");
     m_colAttr = m_program->attributeLocation("colAttr");
     m_texAttr = m_program->attributeLocation("texAttr");
+    m_matrixUniform = m_program->uniformLocation("matrix");
     
     m_valid = true;
     std::cout << "\n\tShaders [OK]" << std::endl; 
