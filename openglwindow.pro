@@ -1,7 +1,7 @@
 QMAKE_CXXFLAGS += -std=c++17
 QMAKE_CFLAGS_RELEASE    = -O2 -MT
-QMAKE_CFLAGS_DEBUG -= -std=gnu++11
-
+QMAKE_CXXFLAGS_GNUCXX11 -= -std=gnu++11
+QMAKE_CXXFLAGS_CXX11 -= -std=c++11
 
 message("Wolfenstein 3D clone. 100 Days of Code by JG")
 include(openglwindow.pri)
