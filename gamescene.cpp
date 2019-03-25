@@ -78,10 +78,10 @@ void GameScene::initializeGeometry(){
 
     float vertices[] = {
         // positions                // colors           
-         0.5000f,  0.3125f, 0.0f,   1.0f, 0.0f, 0.0f,    0.5,  0.5,// top right
-         0.5000f, -0.3125f, 0.0f,   0.0f, 1.0f, 0.0f,    0.5, -0.5,// bottom right
-        -0.5000f, -0.3125f, 0.0f,   0.0f, 0.0f, 1.0f,   -0.5, -0.5,// bottom left
-        -0.5000f,  0.3125f, 0.0f,   1.0f, 1.0f, 0.0f    -0.5,  0.5 // top left 
+         0.5000f,  0.3125f, -1.0f,   1.0f, 0.0f, 0.0f,    1.0f,  1.0f,// top right
+         0.5000f, -0.3125f, -1.0f,   0.0f, 1.0f, 0.0f,    1.0f,  0.0f,// bottom right
+        -0.5000f, -0.3125f, -1.0f,   0.0f, 0.0f, 1.0f,    0.0f,  0.0f,// bottom left
+        -0.5000f,  0.3125f, -1.0f,   1.0f, 1.0f, 0.0f,    0.0f,  1.0f // top left 
     };
     unsigned int indices[] = {
         0, 1, 3, // first triangle
