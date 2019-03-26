@@ -111,7 +111,12 @@ void GameScene::initializeGeometry(){
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);    
 
-
+    //Atlas
+    auto calculateSizeOfAtlas = 1 << 10;
+    glGenBuffers(1, &m_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
+    glBufferData(GL_UNIFORM_BUFFER, calculateSizeOfAtlas, NULL, GL_STATIC_DRAW);
+    
 }
 
 void GameScene::initialize(){

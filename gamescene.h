@@ -31,7 +31,7 @@ private:
     GLuint m_colAttr;
     GLuint m_texAttr;
     GLuint m_matrixUniform;
-    GLuint m_vao, m_vbo, m_ebo;
+    GLuint m_vao, m_vbo, m_ebo, m_ubo;
 
     QOpenGLShaderProgram *m_program{nullptr};
 
