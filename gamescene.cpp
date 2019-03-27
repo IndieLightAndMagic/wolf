@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <vector>
 
 #include <QtCore/QDir>
 #include <QtGui/QScreen>
@@ -13,6 +14,7 @@
 #include <QtGui/QGuiApplication>
 #include <QtGui/QOpenGLShaderProgram>
 
+//static std::vector<float> x{};
 
 GameScene::GameScene(){
     
@@ -65,6 +67,8 @@ void GameScene::initializeShaders(QOpenGLShader::ShaderType type, const char* pa
                 std::cout << "\n\tProgram linking quite bad....." << std::endl;
                 std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
             }
+            auto shader_id = m_program->programId();
+            m_ubo_uniformblockindex = glGetUniformBlockIndex(shader_id, "Atlas");
         }
     
     } else {
@@ -88,7 +92,7 @@ void GameScene::initializeGeometry(){
         1, 2, 3  // second triangle
     };
     glGenVertexArrays(1, &m_vao);
-    glGenBuffers(1, &m_vbo);
+    glGenBuffers(1, &m_vbo);    
     glGenBuffers(1, &m_ebo);
 
     glBindVertexArray(m_vao);
@@ -111,11 +115,23 @@ void GameScene::initializeGeometry(){
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);    
 
-    //Atlas
-    auto calculateSizeOfAtlas = 1 << 10;
+    //Atlas 100x100
+    auto maxAtlasElements = 3.0f * 10000.0f;
+    auto calculateSizeOfAtlas = maxAtlasElements;
+    std::vector<float> xvector{};
+    while (calculateSizeOfAtlas--){
+        
+        auto colorx = static_cast<float>(calculateSizeOfAtlas);
+        colorx = xvector.size() / maxAtlasElements;
+        xvector.push_back(1.0f);
+    }
+
+
     glGenBuffers(1, &m_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
-    glBufferData(GL_UNIFORM_BUFFER, calculateSizeOfAtlas, NULL, GL_STATIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, 61440, NULL, GL_STATIC_DRAW);
+
+
     
 }
 
