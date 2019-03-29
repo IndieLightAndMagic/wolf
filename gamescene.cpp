@@ -14,10 +14,12 @@
 #include <QtGui/QGuiApplication>
 #include <QtGui/QOpenGLShaderProgram>
 
-//static std::vector<float> x{};
+char vertBuffer[4096];
+char fragBuffer[4096];
+
 
 GameScene::GameScene(){
-    
+    m_atlas_data = m_atlas.GetAtlasData();
 }
 void GameScene::initializeShaders(QOpenGLShader::ShaderType type, const char* path ){
 
@@ -35,11 +37,9 @@ void GameScene::initializeShaders(QOpenGLShader::ShaderType type, const char* pa
     
     std::cout << "\n\tWolfey Size : " << shaderFileSize << std::endl;
 
-    ptrCodeBuffer = std::shared_ptr<unsigned char>(new unsigned char[shaderFileSize], std::default_delete<unsigned char[]>());
-        
-    if (ptrCodeBuffer == nullptr) return;
-
-    std::size_t bytesRead = std::fread(ptrCodeBuffer.get(), 1, shaderFileSize, fileptr_shader);
+    auto ptrCodeBuffer = (type == QOpenGLShader::Fragment) ? fragBuffer : vertBuffer;
+    
+    std::size_t bytesRead = std::fread(ptrCodeBuffer, 1, shaderFileSize, fileptr_shader);
     
     if (bytesRead != shaderFileSize)
         std::cout << "Warning :\n\tBytes read from shader file : " << bytesRead << "\n\tshader file size : " << shaderFileSize << std::endl; 
@@ -48,13 +48,13 @@ void GameScene::initializeShaders(QOpenGLShader::ShaderType type, const char* pa
 
     std::cout << "Wolfey shader :" << std::endl;
     for (std::size_t index = 0; index < bytesRead; ++index){
-        std::cout << ptrCodeBuffer.get()[index];
+        std::cout << ptrCodeBuffer[index];
         if ( (index + 1) == shaderFileSize ){
             std::cout << std::endl;
         }
     }
 
-    auto shaderSource = reinterpret_cast<char*>(ptrCodeBuffer.get()); 
+    auto shaderSource = reinterpret_cast<char*>(ptrCodeBuffer); 
 
     if (!m_program) m_program = new QOpenGLShaderProgram(this);
 
@@ -129,8 +129,8 @@ void GameScene::initializeGeometry(){
 
     glGenBuffers(1, &m_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
-    glBufferData(GL_UNIFORM_BUFFER, 61440, NULL, GL_STATIC_DRAW);
-
+    glBufferData(GL_UNIFORM_BUFFER, m_atlas.atlas.size(), m_atlas_data, GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);    
 
     
 }

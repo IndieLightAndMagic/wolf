@@ -9,13 +9,15 @@
 #include <QtGui/QOpenGLFunctions>
 #include <QtGui/QOpenGLFunctions_4_3_Core>
 
+#include "resources/atlases/level_compressed.png.h"
+
 class GameScene : public Scene
 {
 public:
     Camera m_cam;
     
-    std::shared_ptr<unsigned char> ptrCodeBuffer{nullptr};
-    
+    __level_compressed_png_level1 m_atlas;
+    unsigned char* m_atlas_data;
     GameScene();
 
     void initialize() override;
