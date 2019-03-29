@@ -6,3 +6,4 @@ HEADERS += $$PWD/introscene.h
 HEADERS += $$PWD/texturemanager.h
 HEADERS += $$PWD/camera.h
 HEADERS += $$PWD/gamescene.h
+HEADERS += $$PWD/resources/atlases/level_compressed.png.h
