@@ -49,12 +49,13 @@
 ****************************************************************************/
 #ifndef _OPENGLWINDOW_H_
 #define _OPENGLWINDOW_H_
-#include <QtGui/QWindow>
-#include <QtGui/QOpenGLFunctions>
+#include <QWindow>
+#include <QGuiApplication>
+#include <QOpenGLFunctions>
 #ifdef __APPLE__
-#include <QtGui/QOpenGLFunctions_3_3_Core>
+#include <QOpenGLFunctions_3_3_Core>
 #else
-#include <QtGui/QOpenGLFunctions_4_3_Core>
+#include <QOpenGLFunctions_4_3_Core>
 #endif
 
 #include "inputmanager.h"
