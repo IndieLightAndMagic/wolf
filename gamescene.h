@@ -2,6 +2,7 @@
 #define __GAMESCENE_H__
 #include "scene.h"
 #include "camera.h"
+#include "resources/atlases/level_compressed.png.h"
 #include <memory>
 #include <QtGui/QOpenGLShaderProgram>
 
@@ -11,9 +12,9 @@ class GameScene : public Scene
 {
 public:
     Camera m_cam;
-    
+    __level_compressed_png_level1 level1_data;
     unsigned char* m_atlas_data;
-    float selector{0.0f};
+    float selector{0.0};
     GameScene();
 
     void initialize() override;
