@@ -1,6 +1,6 @@
 #include "level_compressed.png.h"  
 
-__level_compressed_png_level1::__level_compressed_png_level1():__level_compressed_png(0, 1024, 130, 45056){
+__level_compressed_png_level1::__level_compressed_png_level1():__level_compressed_png(0, 1024, 130, 45056, 11){
   
   atlas = std::vector<unsigned char>{
   0x04, 0x02, 0x04, 0xff, 	/*Color of index 0*/

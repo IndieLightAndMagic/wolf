@@ -90,7 +90,7 @@ void GameScene::initialize(){
     initializeGeometry();
 
     m_matrixUniform = m_program->uniformLocation("matrix");
-    m_p_selector = m_program->uniformLocation("selector");
+    m_p_selector = m_program->uniformLocation("spriteselector");
 
     /*auto shaderid = m_program->programId();
     unsigned int uniformBlockIndex = glGetUniformBlockIndex(shaderid, "TUMADREENBOLA");
@@ -129,10 +129,7 @@ void GameScene::render(){
     m_program->bind();
     glBindVertexArray(m_vao);
     m_program->setUniformValue(m_matrixUniform, m_cam.getCamera());
-
-
     m_program->setUniformValue(m_p_selector, selector);
-    
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
 
@@ -141,12 +138,12 @@ void GameScene::render(){
 
 void GameScene::handleRight(){
     selector+=1;
-    if (selector >= level1_data.palette_entries) selector = 0;
+    if (selector >= level1_data.sprites_entries) selector = 0;
     std::cout << "Selector: " << (int)selector << std::endl;
 }
 void GameScene::handleLeft(){
     selector -= 1;
-    if (selector < 0) selector = level1_data.palette_entries - 1;
+    if (selector < 0) selector = level1_data.sprites_entries - 1;
     std::cout << "Selector: " << (int)selector << std::endl;
 }
 
