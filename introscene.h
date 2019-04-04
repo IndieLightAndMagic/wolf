@@ -38,12 +38,15 @@ private:
 
     void processState();
     void initializeTextures(GLuint*, const char*);
-    void initializeShaders();
+    void initializeShaders(QOpenGLShader::ShaderType type, const char* path);
+    void bakeShader();
     void initializeGeometry();
     void handleEscape();
     void handleUp();
     void handleDown();
 
+    char fragBuffer[1024];
+    char vertBuffer[1024];
     GLuint m_posAttr;
     GLuint m_colAttr;
     GLuint m_texAttr;

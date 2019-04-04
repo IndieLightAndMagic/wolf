@@ -5,16 +5,16 @@
 #include <string>
 #include <tuple>
 
-#include <QtCore/QDir>
-#include <QtGui/QScreen>
-#include <QtGui/QMatrix4x4>
-#include <QtCore/QElapsedTimer>
-#include <QtGui/QGuiApplication>
-#include <QtGui/QOpenGLShaderProgram>
+#include <QDir>
+#include <QScreen>
+#include <QMatrix4x4>
+#include <QElapsedTimer>
+#include <QGuiApplication>
+#include <QOpenGLShaderProgram>
 
 
 IntroScene::IntroScene(){
-    
+    m_program = new QOpenGLShaderProgram();
 }
 
 void IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
@@ -25,78 +25,27 @@ void IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
     auto atlas = TextureAtlas(filename_textures, filename_atlas);
 }
 
-void IntroScene::initializeShaders(){
+void IntroScene::initializeShaders(QOpenGLShader::ShaderType type, const char* path ){
 
+    auto filename_shader = std::string(RESOURCES_DIR) + std::string{path};
+    auto fileptr_shader = std::fopen(filename_shader.c_str(), "r");
+    auto ptrCodeBuffer = (type == QOpenGLShader::Fragment) ? fragBuffer : vertBuffer;
+    std::size_t bytesRead = std::fread(ptrCodeBuffer, 1, 4096, fileptr_shader);
+    std::fclose(fileptr_shader);
+    auto shaderSource = reinterpret_cast<char*>(ptrCodeBuffer); 
 
-    auto filename_vertex_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert";
-    auto filename_fragment_shader = std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag";
-    auto fileptr_vertex_shader = std::fopen(filename_vertex_shader.c_str(), "r");
-    auto fileptr_vertex_shader_ok = std::string( fileptr_vertex_shader != nullptr ? "[OK]" : "[FAILED]");  
-    auto fileptr_fragment_shader = std::fopen(filename_fragment_shader.c_str(), "r");
-    auto fileptr_fragment_shader_ok = std::string(fileptr_fragment_shader != nullptr ? "[OK]" : "[FAILED]");  
-
-    std::cout <<"\n\tWolfy Vert: " << filename_vertex_shader << " " << fileptr_vertex_shader_ok << std::endl;
-    std::cout <<"\n\tWolfy Frag: " << filename_fragment_shader << " " << fileptr_fragment_shader_ok << std::endl;
-
-    if (fileptr_vertex_shader == nullptr || fileptr_fragment_shader == nullptr) return;
-
-    std::fseek(fileptr_vertex_shader, 0, SEEK_END);
-    std::size_t vtxShaderFileSize = std::ftell(fileptr_vertex_shader);
-    std::fseek(fileptr_vertex_shader, 0, SEEK_SET);
+    if (m_program->addShaderFromSourceCode(type, shaderSource)){
     
-    std::fseek(fileptr_fragment_shader, 0, SEEK_END);
-    std::size_t frgShaderFileSize = std::ftell(fileptr_fragment_shader);
-    std::fseek(fileptr_fragment_shader, 0, SEEK_SET);
-
-    std::cout << "\n\tWolfey Vert Size : " << vtxShaderFileSize << "\n\tWolfey Frag Size : " << frgShaderFileSize << std::endl;
-
-    ptrVtxCodeBuffer = std::shared_ptr<unsigned char>(new unsigned char[vtxShaderFileSize], std::default_delete<unsigned char[]>());
-    ptrFrgCodeBuffer = std::shared_ptr<unsigned char>(new unsigned char[frgShaderFileSize], std::default_delete<unsigned char[]>());
-        
-    if (ptrVtxCodeBuffer == nullptr || ptrFrgCodeBuffer == nullptr) return;
-
-    std::size_t vtxBytesRead = std::fread(ptrVtxCodeBuffer.get(), 1, vtxShaderFileSize, fileptr_vertex_shader);
-    std::size_t frgBytesRead = std::fread(ptrFrgCodeBuffer.get(), 1, frgShaderFileSize, fileptr_fragment_shader);
-
-    if (vtxBytesRead != vtxShaderFileSize)
-        std::cout << "Warning :\n\tBytes read from vertex shader file : " << vtxBytesRead << "\n\tshader file size : " << vtxShaderFileSize << std::endl; 
-
-    if (frgBytesRead != frgShaderFileSize)
-        std::cout << "Warning :\n\tBytes read from vertex shader file : " << frgBytesRead << "\n\tshader file size : " << frgShaderFileSize << std::endl; 
-
-    std::fclose(fileptr_vertex_shader);
-    std::fclose(fileptr_fragment_shader);
-
-    std::cout << "Wolfey vertex shader :" << std::endl;
-    for (std::size_t index = 0; index < vtxBytesRead; ++index){
-        std::cout << ptrVtxCodeBuffer.get()[index];
-        if ( (index + 1) == vtxShaderFileSize ){
-            std::cout << std::endl;
-        }
-    }
-
-    std::cout << "Wolfey fragment shader :" << std::endl;
-    for (std::size_t index = 0; index < frgBytesRead; ++index){
-        std::cout << ptrFrgCodeBuffer.get()[index];
-        if ( (index + 1) == frgShaderFileSize ){
-            std::cout << std::endl;
-        }
-    }
-
-    auto vertexShaderSource = reinterpret_cast<char*>(ptrVtxCodeBuffer.get()); 
-    auto fragmentShaderSource = reinterpret_cast<char*>(ptrFrgCodeBuffer.get()); 
-
-    m_program = new QOpenGLShaderProgram(this);
-    if (m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource)) std::cout << "\n\tVertex Shader [OK]";
-    else {
-        std::cout << "\n\tVertex Shader quite bad....." << std::endl;
+        std::cout << "\n\tShader [OK]";
+    
+    } else {
+        std::cout << "\n\t" << path << " Shader quite bad....." << std::endl;
         std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
     }
-    if (m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource)) std::cout << "\n\tVertex Shader [OK]";
-    else {
-        std::cout << "\n\tFragment Shader quite bad....." << std::endl;
-        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
-    }
+
+}
+void IntroScene::bakeShader(){
+
     if (m_program->link()) std::cout << "\n\tProgram Linked [OK]" << std::endl;
     else {
         std::cout << "\n\tProgram linking quite bad....." << std::endl;
@@ -235,7 +184,9 @@ void IntroScene::initialize(){
     std::cout <<"Wolfy resources:" << std::endl;
     
     initializeGeometry();
-    initializeShaders();
+    initializeShaders(QOpenGLShader::Vertex, "/shaders/wolfy_intro.vert");
+    initializeShaders(QOpenGLShader::Fragment, "/shaders/wolfy_intro.frag");
+    bakeShader();
     initializeTextures(&m_tbo[0], "/textures/pgrate.png");
     initializeTextures(&m_tbo[1], "/textures/classic.png");
 
