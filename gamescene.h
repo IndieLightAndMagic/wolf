@@ -1,18 +1,40 @@
 #ifndef __GAMESCENE_H__
 #define __GAMESCENE_H__
+
 #include "scene.h"
 #include "camera.h"
-#include "resources/atlases/level_compressed.png.h"
-#include <memory>
-#include <QtGui/QOpenGLShaderProgram>
 
+#include <tuple>
+#include <vector>
+
+#include <QImage>
+#include <QRectF>
+#include <QOpenGLShaderProgram>
+
+
+
+class TextureAtlas : public QImage {
+
+    unsigned int m_gridWidth{1u};
+    unsigned int m_gridHeight{1u};
+
+    std::vector<unsigned int> m_tbos;
+
+public:
+    TextureAtlas(const QImage& rimage, unsigned int gridWidth, unsigned int gridHeight) : QImage(rimage){
+        m_gridWidth = gridWidth;
+        m_gridHeight = gridHeight; 
+    }
+    TextureAtlas(){}
+
+};
 
 
 class GameScene : public Scene
 {
 public:
     Camera m_cam;
-    __level_compressed_png_level1 level1_data;
+    
     unsigned char* m_atlas_data;
     float selector{0.0};
     GameScene();
@@ -36,7 +58,7 @@ private:
 
     QOpenGLShaderProgram *m_program{nullptr};
 
-
+    QImage qimage;
 
 
 };

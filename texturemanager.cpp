@@ -5,11 +5,16 @@
 #include <QString>
 #include <QFile>
 
+#include <tuple>
+#include <map>
+#include <utility>
+
 QString getAbsolutePath(std::string filename){
 
     auto path = QDir(QString(filename.c_str()));
     auto absoluteTestPath = path.cleanPath(path.absoluteFilePath(filename.c_str()));
     return absoluteTestPath;
+
 }
 void printTextureInformation(const QImage& crqimage){
 
@@ -31,25 +36,56 @@ void printTextureInformation(const QImage& crqimage){
     if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
 
 }
-QImage TextureManagerQT::initializeTexture(GLuint* ptbo, const std::string filename_texture){
+void TextureData::configureTextures(){
+
+    for (auto tbo_image : tbo_image_map.toStdMap()){
+        auto tbo = tbo_image.first;
+
+
+        glBindTexture(GL_TEXTURE_2D, tbo); 
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        auto& qimage = tbo_image.second;
+        auto [qimagewidth, qimageheight] = std::make_tuple(qimage.width(), qimage.height());
+        auto imagedata = qimage.bits();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, qimagewidth, qimageheight, 0, GL_BGRA, GL_UNSIGNED_BYTE, imagedata);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+    }
+
+}
+
+TextureData::TextureData(const QImage& rimage){
+
+    unsigned int tbo{0}; 
+    glGenTextures(1, &tbo);
+    tbo_image_map[tbo] = rimage;
+    configureTextures();
+
+}
+
+TextureData::TextureData(QVector<QImage> rimages){
+    
+    auto images_count = rimages.size();
+    QVector<unsigned int> tbos(images_count, 0);
+    glGenTextures(images_count, tbos.data());
+    for (auto index = 0; index < tbos.size(); ++index){
+        tbo_image_map[tbos[index]] = rimages[index]; 
+    }
+    configureTextures();
+
+}
+
+QImage TextureManagerQT::initializeTexture(const std::string filename_texture){
 
     auto qimage = QImage(getAbsolutePath(filename_texture)).mirrored(false, true);
     auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());
     std::cout << "Width :" << qimagewidth << std::endl << "Height: " << qimageheight << std::endl  << "Bitsperpixel: " << (unsigned long)qbpp << std::endl;
-
-    //Bind textures into opnegl.
-    glGenTextures(1, ptbo);
-    glBindTexture(GL_TEXTURE_2D, *ptbo); 
-     // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, qimagewidth, qimageheight, 0, GL_BGRA, GL_UNSIGNED_BYTE, qimage.bits());
-    glGenerateMipmap(GL_TEXTURE_2D);
-
     return qimage;
 
 }

@@ -11,8 +11,14 @@ char fragBuffer[4096];
 
 
 GameScene::GameScene(){
-    m_atlas_data = level1_data.GetAtlasData();
+    m_program = new QOpenGLShaderProgram();
 }
+
+void GameScene::initializeAtlas(GLuint* ptbo, const char* ppath){
+
+    
+}
+
 void GameScene::initializeShaders(QOpenGLShader::ShaderType type, const char* path ){
 
     auto filename_shader = std::string(RESOURCES_DIR) + std::string{path};
@@ -83,35 +89,16 @@ void GameScene::initializeGeometry(){
 void GameScene::initialize(){
 
     if (!m_program) m_program = new QOpenGLShaderProgram(this);
+    initializeGeometry();
     initializeShaders(QOpenGLShader::Vertex, "/shaders/level1.vert");
     initializeShaders(QOpenGLShader::Fragment, "/shaders/level1.frag");
     bakeShader();
+    qimage = TextureManagerQT::initializeTexture(TextureManager::solvePath(ppath));
 
-    initializeGeometry();
-
-    m_matrixUniform = m_program->uniformLocation("matrix");
-    m_p_selector = m_program->uniformLocation("spriteselector");
-
-    /*auto shaderid = m_program->programId();
-    unsigned int uniformBlockIndex = glGetUniformBlockIndex(shaderid, "TUMADREENBOLA");
-    glUniformBlockBinding(shaderid, uniformBlockIndex, 0);*/
-
-    glGenBuffers(1, &m_ubo);
-    glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(unsigned char)*46080, nullptr, GL_STATIC_DRAW);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);    
-
-    // define the range of the buffer that links to a uniform binding point
-    glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_ubo, 0, sizeof(unsigned char)*46080);
-
-
-    glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(unsigned char)*46080, (unsigned char*)m_atlas_data);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     
-    m_valid = true;
-    std::cout << "\n\tShaders [OK]" << std::endl; 
+    m_matrixUniform = m_program->uniformLocation("matrix");
+    m_p_selector = m_program->uniformLocation("spriteselector");
 
     m_cam.setCamera();
 
@@ -129,7 +116,6 @@ void GameScene::render(){
     m_program->bind();
     glBindVertexArray(m_vao);
     m_program->setUniformValue(m_matrixUniform, m_cam.getCamera());
-    m_program->setUniformValue(m_p_selector, selector);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_program->release();
 

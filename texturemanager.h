@@ -3,14 +3,30 @@
 
 #include <iostream>
 #include <string>
-#include <map>
 
+#include <QMap>
 #include <QDir>
 #include <QImage>
-#include <QtGui/QOpenGLShaderProgram>
+#include <QVector>
+#include <QOpenGLShaderProgram>
 
 
+class TextureData {
 
+
+protected:
+    void configureTextures();
+    QMap<unsigned int, QImage> tbo_image_map{}; 
+
+public:
+
+    TextureData() = delete;
+    TextureData(const QImage& rimage);
+    TextureData(QVector<QImage> rimages);
+
+    
+
+};
 class TextureManager {
 
 
@@ -24,8 +40,7 @@ public:
 class TextureManagerQT : public TextureManager {
 
 public:
-    static QImage initializeTexture(GLuint* ptbo, const std::string filename_texture);
-    static QImage initializeTexture(GLuint* ptbo, const QImage& atlas, QRect targetRect);
+    static QImage initializeTexture(const std::string filename_texture);
 
 }; 
 
