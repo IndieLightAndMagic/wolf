@@ -11,11 +11,6 @@ char fragBuffer[4096];
 
 
 GameScene::GameScene(){
-    m_program = new QOpenGLShaderProgram();
-}
-
-void GameScene::initializeAtlas(GLuint* ptbo, const char* ppath){
-
     
 }
 
