@@ -60,7 +60,7 @@ int main(int argc, char **argv){
     QSurfaceFormat format;
     format.setSamples(16);
 
-    IntroScene window;
+    HDC::IntroScene window;
     window.setFormat(format);
     window.resize(640, 480);
     window.show();

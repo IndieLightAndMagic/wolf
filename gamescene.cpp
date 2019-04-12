@@ -92,12 +92,12 @@ void HDC::GameScene::render(){
 
 void HDC::GameScene::handleRight(){
     selector+=1;
-    if (selector >= level1_data.sprites_entries) selector = 0;
+    if (selector >= 10) selector = 0;
     std::cout << "Selector: " << (int)selector << std::endl;
 }
 void HDC::GameScene::handleLeft(){
     selector -= 1;
-    if (selector < 0) selector = level1_data.sprites_entries - 1;
+    if (selector < 0) selector = 10;
     std::cout << "Selector: " << (int)selector << std::endl;
 }
 

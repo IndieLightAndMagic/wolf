@@ -13,47 +13,19 @@
 #include <QOpenGLShaderProgram>
 
 
-IntroScene::IntroScene(){
-    m_program = new QOpenGLShaderProgram();
+HDC::IntroScene::IntroScene(){
+    
 }
 
-void IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
+void HDC::IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
 
-    qimage = TextureManagerQT::initializeTexture(ptbo, TextureManager::solvePath(ppath));
+    qimage = TextureManagerQT::initializeTexture(TextureManager::solvePath(ppath));
     auto filename_atlas = std::string(RESOURCES_DIR) + "/atlases/walls.at.json";
     auto filename_textures = std::string(RESOURCES_DIR) + "/atlases/walls.json";
     auto atlas = TextureAtlas(filename_textures, filename_atlas);
 }
 
-void IntroScene::initializeShaders(QOpenGLShader::ShaderType type, const char* path ){
-
-    auto filename_shader = std::string(RESOURCES_DIR) + std::string{path};
-    auto fileptr_shader = std::fopen(filename_shader.c_str(), "r");
-    auto ptrCodeBuffer = (type == QOpenGLShader::Fragment) ? fragBuffer : vertBuffer;
-    std::size_t bytesRead = std::fread(ptrCodeBuffer, 1, 4096, fileptr_shader);
-    std::fclose(fileptr_shader);
-    auto shaderSource = reinterpret_cast<char*>(ptrCodeBuffer); 
-
-    if (m_program->addShaderFromSourceCode(type, shaderSource)){
-    
-        std::cout << "\n\tShader [OK]";
-    
-    } else {
-        std::cout << "\n\t" << path << " Shader quite bad....." << std::endl;
-        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
-    }
-
-}
-void IntroScene::bakeShader(){
-
-    if (m_program->link()) std::cout << "\n\tProgram Linked [OK]" << std::endl;
-    else {
-        std::cout << "\n\tProgram linking quite bad....." << std::endl;
-        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
-    }
-
-}
-void IntroScene::initializeGeometry(){
+void HDC::IntroScene::initializeGeometry(){
 
     float vertices[] = {
         // positions          // colors           // texture coords
@@ -90,7 +62,7 @@ void IntroScene::initializeGeometry(){
 
 
 }
-void IntroScene::processState(){
+void HDC::IntroScene::processState(){
     
     float sliderValue{0.0f};
 
@@ -102,7 +74,7 @@ void IntroScene::processState(){
     
     m_elapsedTimeMeasurement = m_timer.elapsed();
 
-    
+    auto m_program = shaderProgram.GetProgram();    
     if (m_state == IntroState::START){
 
         m_state = IntroState::FADING_IN_CARNAGE;
@@ -178,20 +150,22 @@ void IntroScene::processState(){
     m_program->setUniformValue(m_pcsSliderUniform, sliderValue);    
 
 }
-void IntroScene::initialize(){
+void HDC::IntroScene::initialize(){
 
 
     std::cout <<"Wolfy resources:" << std::endl;
     
     initializeGeometry();
-    initializeShaders(QOpenGLShader::Vertex, "/shaders/wolfy_intro.vert");
-    initializeShaders(QOpenGLShader::Fragment, "/shaders/wolfy_intro.frag");
-    bakeShader();
+    
+    shaderProgram.AddShader(ShaderProgram::ShaderType::VTX, (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert").c_str());
+    shaderProgram.AddShader(ShaderProgram::ShaderType::FRG, (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag").c_str());
+    
     initializeTextures(&m_tbo[0], "/textures/pgrate.png");
     initializeTextures(&m_tbo[1], "/textures/classic.png");
 
 
     
+    auto m_program = shaderProgram.GetProgram();    
     m_posAttr = m_program->attributeLocation("posAttr");
     m_colAttr = m_program->attributeLocation("colAttr");
     m_texAttr = m_program->attributeLocation("texAttr");
@@ -209,18 +183,18 @@ void IntroScene::initialize(){
 
     installEventFilter(&m_im);
     connect(&m_im, &InputManager::escape,
-            this, &IntroScene::handleEscape);
+            this, &HDC::IntroScene::handleEscape);
     connect(&m_im, &InputManager::up_arrow,
-            this, &IntroScene::handleUp);
+            this, &HDC::IntroScene::handleUp);
     connect(&m_im, &InputManager::down_arrow,
-            this, &IntroScene::handleDown);
+            this, &HDC::IntroScene::handleDown);
 
 }
 
-void IntroScene::render(){
+void HDC::IntroScene::render(){
 
+    auto m_program = shaderProgram.GetProgram();    
     Scene::render();
-
     m_program->bind();
     glBindVertexArray(m_vao);
     m_program->setUniformValue(m_matrixUniform, m_cam.getCamera());
@@ -229,13 +203,13 @@ void IntroScene::render(){
     m_program->release();
 
 }
-void IntroScene::handleEscape(){
+void HDC::IntroScene::handleEscape(){
     std::cout << "Finishing Scene....." << std::endl;
     m_state = IntroState::FINISH;
 }
-void IntroScene::handleUp(){
+void HDC::IntroScene::handleUp(){
     m_cam.setCameraPositionDelta(0.0f, 0.0f, 0.1f);
 }
-void IntroScene::handleDown(){
+void HDC::IntroScene::handleDown(){
     m_cam.setCameraPositionDelta(0.0f, 0.0f, -0.1f);
 }
