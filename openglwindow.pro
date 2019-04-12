@@ -7,8 +7,10 @@ message("Wolfenstein 3D clone. 100 Days of Code by JG")
 include(openglwindow.pri)
 SOURCES += \
     main.cpp \
+    util.cpp \
     scene.cpp \
     camera.cpp \
+    shader.cpp \
     gamescene.cpp \
     introscene.cpp \
     inputmanager.cpp \

@@ -1,44 +1,50 @@
+
+#include "util.h"
 #include "shader.h"
-class Shader {
-        QOpenGLShader* m_qshader{nullptr};
-        unsigned int m_shader{0};
-    public:
-        enum class ShaderType{
-            VTX,
-            FRG,
-            GMT
-        };
-        Shader(ShaderType shaderType, const char* path);
-        bool Compile();
-        unsigned int GetId();
-    };
-    class ShaderProgram {
-        unsigned int m_program{0};
-        QOpenGLShaderProgram* m_qprogram{nullptr};
-    public:
-        ShaderProgram(){
-            m_qprogram = new QOpenGLShaderProgram();
-        }
-        AddShader(const Shader& shader);
-        bool Link();
-        unsigned int GetId();
-    }; 
 
-HDC::Shader::Shader(Shader::ShaderType shaderType, const char* path){
 
-	auto filename_shader = std::string{path};
-    auto fileptr_shader = std::fopen(filename_shader.c_str(), "r");
-    auto ptrCodeBuffer = (type == ShaderType::FRG) ? fragBuffer : vertBuffer;
-    std::size_t bytesRead = std::fread(ptrCodeBuffer, 1, 4096, fileptr_shader);
-    std::fclose(fileptr_shader);
-    auto shaderSource = reinterpret_cast<char*>(ptrCodeBuffer); 
+#include <utility>
 
-    if (m_program->addShaderFromSourceCode(type, shaderSource)){
+#include <QMap>
+#include <QList>
+
+HDC::ShaderProgram::ShaderProgram():ObjId([&](bool isValid){
     
-        std::cout << "\n\tShader [OK]";
+    if (!isValid) {
+        std::cout << "\n\tThere was a problem with the shader program!" << std::endl;
+        if (m_qprogram) std::cout << "\n\tInfo: " <<  m_qprogram->log().toStdString() << std::endl;
+        else std::cout << "\n\tShader Program object was not created" << std::endl;
+    }
+
+}){
+    m_qprogram = new QOpenGLShaderProgram();
+    if (m_qprogram){
+        m_valid = true;
+        m_value = m_qprogram->programId();
+    } else { Invalidate(); }
+}
+
+bool HDC::ShaderProgram::AddShader(const ShaderProgram::ShaderType shaderType, const char* filename){
+
+    if (!IsValid()) return false;
+    
+    auto addShaderOk = m_qprogram->addShaderFromSourceFile(stype_stype_map[shaderType],
+        HDC::Utility::GetAbsolutePath(filename));
+
+    if (!addShaderOk){
+    
+        Invalidate();
+        return false;
     
     } else {
-        std::cout << "\n\t" << path << " Shader quite bad....." << std::endl;
-        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
+    
+        return true;
+    
     }
-}    
+
+}
+HDC::ShaderProgram::~ShaderProgram(){
+
+    m_qprogram->removeAllShaders();
+
+}

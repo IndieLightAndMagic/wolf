@@ -1,6 +1,8 @@
 #ifndef __SHADER_H__
 #define __SHADER_H__
 
+#include "objid.h"
+
 #include <QImage>
 #include <QRectF>
 #include <QOpenGLShader>
@@ -9,28 +11,28 @@
 
 namespace HDC {
     
-    class Shader {
-        QOpenGLShader* m_qshader{nullptr};
-        unsigned int m_shader{0};
+    class ShaderProgram : public ObjId{
+
+        QOpenGLShaderProgram* m_qprogram{nullptr};
     public:
         enum class ShaderType{
             VTX,
             FRG,
             GMT
         };
-        Shader(ShaderType shaderType, const char* path);
-        unsigned int GetId();
+        QMap<ShaderProgram::ShaderType, QOpenGLShader::ShaderType> stype_stype_map {
+            std::make_pair(ShaderProgram::ShaderType::VTX, QOpenGLShader::Vertex),
+            std::make_pair(ShaderProgram::ShaderType::FRG, QOpenGLShader::Fragment),
+        };
+        QMap<QOpenGLShader::ShaderType, QString> stype_string_map {
+            std::make_pair(QOpenGLShader::Vertex, QString("Vertex Shader")),
+            std::make_pair(QOpenGLShader::Fragment, QString("Fragment Shader")),
+        };
+        ShaderProgram();
+        bool AddShader(const ShaderProgram::ShaderType, const char*);
+        ~ShaderProgram();
+            
     };
-    class ShaderProgram {
-        unsigned int m_program{0};
-        QOpenGLShaderProgram* m_qprogram{nullptr};
-    public:
-        ShaderProgram(){
-            m_qprogram = new QOpenGLShaderProgram();
-        }
-        AddShader(const Shader& shader);
-        unsigned int GetId();
-    }; 
 }
 
 #endif //__SHADER_H__

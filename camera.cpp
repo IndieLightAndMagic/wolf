@@ -1,6 +1,6 @@
 #include "camera.h"
 
-void Camera::setCamera(
+void HDC::Camera::setCamera(
     float verticalFov,
     float aspectRatio,
     float nearPlane,
@@ -31,11 +31,11 @@ void Camera::setCamera(
     m_z = z;
 }
 
-const QMatrix4x4& Camera::getCamera(){
+const QMatrix4x4& HDC::Camera::getCamera(){
     return m_camera;
 }
 
-void Camera::setCameraPosition(float x, float y, float z){
+void HDC::Camera::setCameraPosition(float x, float y, float z){
 
     m_camera.setToIdentity();
     
@@ -51,7 +51,7 @@ void Camera::setCameraPosition(float x, float y, float z){
     m_z = z;
 
 }
-void Camera::setCameraPositionDelta(float x, float y, float z){
+void HDC::Camera::setCameraPositionDelta(float x, float y, float z){
 
     m_camera.setToIdentity();
     
