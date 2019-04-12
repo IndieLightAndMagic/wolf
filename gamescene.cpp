@@ -1,4 +1,5 @@
 #include "gamescene.h"
+#include "shader.h"
 
 #include <iostream>
 #include <memory>
@@ -10,39 +11,12 @@ char vertBuffer[4096];
 char fragBuffer[4096];
 
 
-GameScene::GameScene(){
+HDC::GameScene::GameScene(){
     
 }
 
-void GameScene::initializeShaders(QOpenGLShader::ShaderType type, const char* path ){
 
-    auto filename_shader = std::string(RESOURCES_DIR) + std::string{path};
-    auto fileptr_shader = std::fopen(filename_shader.c_str(), "r");
-    auto ptrCodeBuffer = (type == QOpenGLShader::Fragment) ? fragBuffer : vertBuffer;
-    std::size_t bytesRead = std::fread(ptrCodeBuffer, 1, 4096, fileptr_shader);
-    std::fclose(fileptr_shader);
-    auto shaderSource = reinterpret_cast<char*>(ptrCodeBuffer); 
-
-    if (m_program->addShaderFromSourceCode(type, shaderSource)){
-    
-        std::cout << "\n\tShader [OK]";
-    
-    } else {
-        std::cout << "\n\t" << path << " Shader quite bad....." << std::endl;
-        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
-    }
-
-}
-void GameScene::bakeShader(){
-
-    if (m_program->link()) std::cout << "\n\tProgram Linked [OK]" << std::endl;
-    else {
-        std::cout << "\n\tProgram linking quite bad....." << std::endl;
-        std::cout << "\n\tInfo: " <<  m_program->log().toStdString() << std::endl;
-    }
-
-}
-void GameScene::initializeGeometry(){
+void HDC::GameScene::initializeGeometry(){
 
     float vertices[] = {
         // positions                // colors           
@@ -81,54 +55,53 @@ void GameScene::initializeGeometry(){
 
 }
 
-void GameScene::initialize(){
+void HDC::GameScene::initialize(){
 
-    if (!m_program) m_program = new QOpenGLShaderProgram(this);
     initializeGeometry();
-    initializeShaders(QOpenGLShader::Vertex, "/shaders/level1.vert");
-    initializeShaders(QOpenGLShader::Fragment, "/shaders/level1.frag");
-    bakeShader();
-    qimage = TextureManagerQT::initializeTexture(TextureManager::solvePath(ppath));
+    auto bOk = shaderProgram.AddShader(HDC::ShaderProgram::ShaderType::VTX, "/shaders/level1.vert");
+    if (bOk) bOk = shaderProgram.AddShader(HDC::ShaderProgram::ShaderType::FRG, "/shaders/level1.frag");
+    if (!bOk) return;
+    //qimage = TextureManagerQT::initializeTexture(TextureManager::solvePath(ppath));
 
-
+    auto program = shaderProgram.GetProgram();
     
-    m_matrixUniform = m_program->uniformLocation("matrix");
-    m_p_selector = m_program->uniformLocation("spriteselector");
+    m_matrixUniform = program->uniformLocation("matrix");
+    m_p_selector = program->uniformLocation("spriteselector");
 
     m_cam.setCamera();
 
     installEventFilter(&m_im);
-    connect(&m_im, &InputManager::escape, this, &GameScene::handleEscape);
-    connect(&m_im, &InputManager::right_arrow, this, &GameScene::handleRight);
-    connect(&m_im, &InputManager::left_arrow, this, &GameScene::handleLeft);
+    connect(&m_im, &InputManager::escape, this, &HDC::GameScene::handleEscape);
+    connect(&m_im, &InputManager::right_arrow, this, &HDC::GameScene::handleRight);
+    connect(&m_im, &InputManager::left_arrow, this, &HDC::GameScene::handleLeft);
 
 }
 
-void GameScene::render(){
+void HDC::GameScene::render(){
 
     Scene::render();
 
-    m_program->bind();
+    shaderProgram.GetProgram()->bind();
     glBindVertexArray(m_vao);
-    m_program->setUniformValue(m_matrixUniform, m_cam.getCamera());
+    shaderProgram.GetProgram()->setUniformValue(m_matrixUniform, m_cam.getCamera());
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    m_program->release();
+    shaderProgram.GetProgram()->release();
 
 }
 
 
-void GameScene::handleRight(){
+void HDC::GameScene::handleRight(){
     selector+=1;
     if (selector >= level1_data.sprites_entries) selector = 0;
     std::cout << "Selector: " << (int)selector << std::endl;
 }
-void GameScene::handleLeft(){
+void HDC::GameScene::handleLeft(){
     selector -= 1;
     if (selector < 0) selector = level1_data.sprites_entries - 1;
     std::cout << "Selector: " << (int)selector << std::endl;
 }
 
-void GameScene::handleEscape(){
+void HDC::GameScene::handleEscape(){
     std::cout << "Finishing Scene....." << std::endl;
     QCoreApplication::exit(0);
 }

@@ -1,5 +1,7 @@
 #include "camera.h"
 
+HDC::Camera::Camera(){}
+
 void HDC::Camera::setCamera(
     float verticalFov,
     float aspectRatio,

@@ -7,7 +7,7 @@
 
 namespace HDC{
 
-    class Camera : public ObjId{
+    class Camera {
 
         bool m_dirty{true};
 
@@ -21,7 +21,7 @@ namespace HDC{
         float m_farPlane {100.0f};
 
     public:
-
+        Camera();
         float m_x {0.0f};
         float m_y {0.0f};
         float m_z {-0.625f};

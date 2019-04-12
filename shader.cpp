@@ -48,3 +48,7 @@ HDC::ShaderProgram::~ShaderProgram(){
     m_qprogram->removeAllShaders();
 
 }
+QOpenGLShaderProgram* HDC::ShaderProgram::GetProgram() const{
+    if (!IsValid()) return nullptr;
+    return m_qprogram;    
+}

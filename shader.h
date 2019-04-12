@@ -31,6 +31,11 @@ namespace HDC {
         ShaderProgram();
         bool AddShader(const ShaderProgram::ShaderType, const char*);
         ~ShaderProgram();
+
+        QOpenGLShaderProgram* GetProgram() const;
+
+
+
             
     };
 }
