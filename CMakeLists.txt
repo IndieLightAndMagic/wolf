@@ -1,27 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-function(checkqtversion)
-    
-    find_package(Qt5 COMPONENTS 
-        Core
-        Gui
-    REQUIRED)
-    message(STATUS "Qt5 cmake files path: ${Qt5_DIR}")
-    set(Qt5_DIR ${Qt5_DIR} PARENT_SCOPE)
-    
-    message(STATUS "Qt5 path: $ENV{Qt5_PATH}")
-    
-    message(STATUS "Qt5 Core include directories path: ${Qt5Core_INCLUDE_DIRS}")
-    message(STATUS "Qt5 Gui include directories path: ${Qt5Gui_INCLUDE_DIRS}")
-    
-    set(Qt5Core_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS} PARENT_SCOPE)
-    set(Qt5Gui_INCLUDE_DIRS ${Qt5Gui_INCLUDE_DIRS} PARENT_SCOPE)
-    set(Qt5Dummy_MOC_FILE $ENV{Qt5_PATH}/clang_64/mkspecs/features/data/dummy.cpp PARENT_SCOPE) 
-    set(CMAKE_AUTOMOC ON)
 
-endfunction()
-
+set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 
@@ -31,14 +16,10 @@ function(generatecustommacros)
         add_compile_definitions(GL_SILENCE_DEPRECATION)
     endif()
 endfunction()
-
-checkqtversion()
 generatecustommacros()
 
 
-
 set(target wolf)
-set(CMAKE_VERBOSE_MAKEFILE TRUE)
 add_executable(${target} 
     main.cpp
     util.cpp
@@ -47,29 +28,30 @@ add_executable(${target}
     shader.cpp
     introscene.cpp
     inputmanager.cpp
+    openglwindow.cpp
     texturemanager.cpp
     )
 
-target_include_directories(${target} PUBLIC
-    ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Gui_INCLUDE_DIRS}
-)
-
-target_link_libraries(${target}
-    Qt5::Core
-    Qt5::Gui
-)
 
 if (APPLE)
     message(STATUS "Yes, Apple")
-    target_link_libraries(${target} 
+    target_link_libraries(${target} PRIVATE
+        Qt5::Core
+        Qt5::Gui
         "-framework DiskArbitration"
         "-framework IOKit" 
         "-framework OpenGL" 
         "-framework AGL"
         )
 else()
+    target_link_libraries(${target} PRIVATE
+        Qt5::Core
+        Qt5::Gui
+    )
 endif()
+find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+target_compile_definitions(wolf PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+
 
 
 
