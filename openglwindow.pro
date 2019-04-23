@@ -14,6 +14,7 @@ SOURCES += \
     gamescene.cpp \
     introscene.cpp \
     inputmanager.cpp \
+    openglwindow.cpp \
     texturemanager.cpp \
     resources/atlases/level1_compressed.png.cpp
     
