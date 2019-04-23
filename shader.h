@@ -14,6 +14,9 @@ namespace HDC {
     class ShaderProgram : public ObjId{
 
         QOpenGLShaderProgram* m_qprogram{nullptr};
+        QOpenGLShader* m_vtxShader{nullptr};
+        QOpenGLShader* m_frgShader{nullptr};
+
     public:
         enum class ShaderType{
             VTX,

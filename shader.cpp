@@ -18,7 +18,10 @@ HDC::ShaderProgram::ShaderProgram():ObjId([&](bool isValid){
 
 }){
     m_qprogram = new QOpenGLShaderProgram();
-    if (m_qprogram){
+    m_vtxShader = new QOpenGLShader(QOpenGLShader::Vertex);
+    m_frgShader = new QOpenGLShader(QOpenGLShader::Fragment);
+
+    if (m_qprogram && m_vtxShader && m_frgShader){
         m_valid = true;
         m_value = m_qprogram->programId();
     } else { Invalidate(); }
@@ -27,10 +30,18 @@ HDC::ShaderProgram::ShaderProgram():ObjId([&](bool isValid){
 bool HDC::ShaderProgram::AddShader(const ShaderProgram::ShaderType shaderType, const char* filename){
 
     if (!IsValid()) return false;
-    
-    auto addShaderOk = m_qprogram->addShaderFromSourceFile(stype_stype_map[shaderType],
-        HDC::Utility::GetAbsolutePath(filename));
 
+
+    auto qtShaderType = stype_stype_map[shaderType];
+    auto qtPath = HDC::Utility::GetAbsolutePath(filename);
+    auto addShaderOk = true;
+    if (qtShaderType == QOpenGLShader::Vertex){
+        addShaderOk = m_vtxShader->compileSourceFile(qtPath);
+        if (!addShaderOk) {
+            auto msg = m_vtxShader->log().toStdString();
+            std::cout << msg << std::endl;
+        }
+    }
     if (!addShaderOk){
     
         Invalidate();
