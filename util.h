@@ -19,7 +19,7 @@ namespace HDC {
 		protected:
 		bool m_valid{false};	
 		public:
-		ABuffer(const T* pBuffer = nullptr, long size = 0){
+		ABuffer(const T* pBuffer = nullptr, long size = 0): ObjId(){
 			if (!pBuffer || !size) return;
 			for (auto index = 0; index < size; ++index)
 				this->push_back(pBuffer[index]);

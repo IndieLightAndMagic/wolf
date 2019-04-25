@@ -8,6 +8,7 @@ include(openglwindow.pri)
 SOURCES += \
     main.cpp \
     util.cpp \
+    objid.cpp \
     scene.cpp \
     camera.cpp \
     shader.cpp \

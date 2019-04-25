@@ -18,24 +18,14 @@ namespace HDC {
     protected:
         unsigned int m_value{0};
     public:
-        ObjId(std::function<void(bool)> invalid_handler = (std::function<void(bool)>)[](bool){}) : invalid_object_handle (invalid_handler), m_value(++ObjId::__id__) {}
         bool m_valid{false};
-        unsigned int GetId() const{
-            return m_value * static_cast<unsigned int>(m_valid == true);
-        }
-        bool IsValid() const{
+        
+        ObjId(std::function<void(bool)> invalid_handler = (std::function<void(bool)>)[](bool){});
+        unsigned int GetId() const;
 
-            invalid_object_handle(m_valid);
-            return m_valid;
-        }
-        void Invalidate() {
-            m_valid = false;
-            invalid_object_handle(m_valid);
-            IsValid();
-        }
-        void set_invalid_object_handle(std::function<void(bool)> ioh){
-            invalid_object_handle = ioh;
-        }
+        bool IsValid() const;
+        void Invalidate();
+        void set_invalid_object_handle(std::function<void(bool)> ioh);
 
     };
 

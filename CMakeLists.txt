@@ -23,6 +23,7 @@ set(target wolf)
 add_executable(${target} 
     main.cpp
     util.cpp
+    objid.cpp
     scene.cpp
     camera.cpp
     shader.cpp
