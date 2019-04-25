@@ -27,7 +27,7 @@ HDC::ShaderProgram::ShaderProgram():ObjId([&](bool isValid){
     } else { Invalidate(); }
 }
 
-bool HDC::ShaderProgram::AddShader(const ShaderProgram::ShaderType shaderType, const char* filename){
+bool HDC::ShaderProgram::AddShader(const HDC::ShaderType shaderType, const char* filename){
 
     if (!IsValid()) return false;
 

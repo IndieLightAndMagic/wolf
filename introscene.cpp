@@ -157,8 +157,8 @@ void HDC::IntroScene::initialize(){
     
     initializeGeometry();
     
-    shaderProgram.AddShader(ShaderProgram::ShaderType::VTX, (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert").c_str());
-    shaderProgram.AddShader(ShaderProgram::ShaderType::FRG, (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag").c_str());
+    shaderProgram.AddShader(HDC::ShaderType::VTX, (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert").c_str());
+    shaderProgram.AddShader(HDC::ShaderType::FRG, (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag").c_str());
     
     initializeTextures(&m_tbo[0], "/textures/pgrate.png");
     initializeTextures(&m_tbo[1], "/textures/classic.png");

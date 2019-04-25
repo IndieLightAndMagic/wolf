@@ -58,8 +58,8 @@ void HDC::GameScene::initializeGeometry(){
 void HDC::GameScene::initialize(){
 
     initializeGeometry();
-    auto bOk = shaderProgram.AddShader(HDC::ShaderProgram::ShaderType::VTX, "/shaders/level1.vert");
-    if (bOk) bOk = shaderProgram.AddShader(HDC::ShaderProgram::ShaderType::FRG, "/shaders/level1.frag");
+    auto bOk = shaderProgram.AddShader(HDC::ShaderType::VTX, "/shaders/level1.vert");
+    if (bOk) bOk = shaderProgram.AddShader(HDC::ShaderType::FRG, "/shaders/level1.frag");
     if (!bOk) return;
     //qimage = TextureManagerQT::initializeTexture(TextureManager::solvePath(ppath));
 
