@@ -7,7 +7,7 @@
 namespace HDC {
 
     class ObjId {
-
+        static unsigned int __id__;
         std::function<void(bool)> invalid_object_handle {
             [&](bool isValid){ 
                 if (!isValid){
@@ -15,11 +15,11 @@ namespace HDC {
                 } 
             }
         };
-
-    public:
-        ObjId(std::function<void(bool)> invalid_handler) : invalid_object_handle (invalid_handler) {}
-        bool m_valid{false};
+    protected:
         unsigned int m_value{0};
+    public:
+        ObjId(std::function<void(bool)> invalid_handler = (std::function<void(bool)>)[](bool){}) : invalid_object_handle (invalid_handler), m_value(++ObjId::__id__) {}
+        bool m_valid{false};
         unsigned int GetId() const{
             return m_value * static_cast<unsigned int>(m_valid == true);
         }
