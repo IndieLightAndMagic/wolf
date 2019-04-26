@@ -74,7 +74,7 @@ void HDC::IntroScene::processState(){
     
     m_elapsedTimeMeasurement = m_timer.elapsed();
 
-    auto m_program = shaderProgram.GetProgram();    
+    auto m_program = shaderProgram.get()[0]();    
     if (m_state == IntroState::START){
 
         m_state = IntroState::FADING_IN_CARNAGE;
@@ -156,16 +156,17 @@ void HDC::IntroScene::initialize(){
     std::cout <<"Wolfy resources:" << std::endl;
     
     initializeGeometry();
-    
-    shaderProgram.AddShader(HDC::ShaderType::VTX, (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert").c_str());
-    shaderProgram.AddShader(HDC::ShaderType::FRG, (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag").c_str());
-    
+    shaderProgram = std::make_shared<ShaderProgram>(
+        (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert").c_str(),    
+        (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag").c_str()
+        );
+    fastShaderProgram = shaderProgram.get()[0]();
     initializeTextures(&m_tbo[0], "/textures/pgrate.png");
     initializeTextures(&m_tbo[1], "/textures/classic.png");
 
 
     
-    auto m_program = shaderProgram.GetProgram();    
+    auto m_program = shaderProgram.get()[0]();    
     m_posAttr = m_program->attributeLocation("posAttr");
     m_colAttr = m_program->attributeLocation("colAttr");
     m_texAttr = m_program->attributeLocation("texAttr");
@@ -193,14 +194,13 @@ void HDC::IntroScene::initialize(){
 
 void HDC::IntroScene::render(){
 
-    auto m_program = shaderProgram.GetProgram();    
     Scene::render();
-    m_program->bind();
+    fastShaderProgram->bind();
     glBindVertexArray(m_vao);
-    m_program->setUniformValue(m_matrixUniform, m_cam.getCamera());
+    fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
     processState();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    m_program->release();
+    fastShaderProgram->release();
 
 }
 void HDC::IntroScene::handleEscape(){

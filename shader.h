@@ -17,37 +17,41 @@ namespace HDC {
         GMT
     };
     
+    static QMap<HDC::ShaderType, QOpenGLShader::ShaderType> stype_stype_map {
+        std::make_pair(HDC::ShaderType::VTX, QOpenGLShader::Vertex),
+        std::make_pair(HDC::ShaderType::FRG, QOpenGLShader::Fragment),
+    };
+    static QMap<QOpenGLShader::ShaderType, QString> stype_string_map {
+        std::make_pair(QOpenGLShader::Vertex, QString("Vertex Shader")),
+        std::make_pair(QOpenGLShader::Fragment, QString("Fragment Shader")),
+    };
+    
     class ShaderSource : public HDC::AFile{
-
+        
+        std::shared_ptr<QOpenGLShader>  m_shader{nullptr};
+        unsigned int    m_shaderid; 
+    
     public:
         ShaderSource(const char* path, ShaderType shaderType = ShaderType::VTX);
-
+        QOpenGLShader* operator()(){
+            return m_shader.get();
+        }
     };
 
     class ShaderProgram : public ObjId{
 
-        QOpenGLShaderProgram* m_qprogram{nullptr};
-        QOpenGLShader* m_vtxShader{nullptr};
-        QOpenGLShader* m_frgShader{nullptr};
+        std::shared_ptr<ShaderSource> m_vtx_shader{};
+        std::shared_ptr<ShaderSource> m_frg_shader{};
+        std::shared_ptr<QOpenGLShaderProgram> m_program_shader{};
 
     public:
         
-        QMap<HDC::ShaderType, QOpenGLShader::ShaderType> stype_stype_map {
-            std::make_pair(HDC::ShaderType::VTX, QOpenGLShader::Vertex),
-            std::make_pair(HDC::ShaderType::FRG, QOpenGLShader::Fragment),
-        };
-        QMap<QOpenGLShader::ShaderType, QString> stype_string_map {
-            std::make_pair(QOpenGLShader::Vertex, QString("Vertex Shader")),
-            std::make_pair(QOpenGLShader::Fragment, QString("Fragment Shader")),
-        };
-        ShaderProgram();
-        bool AddShader(const HDC::ShaderType, const char*);
+        ShaderProgram(const char* vertexshaderpath = nullptr, const char* fragmentshaderpath = nullptr);
         ~ShaderProgram();
-
-        QOpenGLShaderProgram* GetProgram() const;
-
-
-
+        QOpenGLShaderProgram* operator()(){
+            return m_program_shader.get();
+        }
+        
             
     };
 }

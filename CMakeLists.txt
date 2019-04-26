@@ -30,6 +30,7 @@ add_executable(${target}
     introscene.cpp
     inputmanager.cpp
     openglwindow.cpp
+    shadersource.cpp
     texturemanager.cpp
     )
 

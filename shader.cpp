@@ -8,58 +8,24 @@
 #include <QMap>
 #include <QList>
 
-HDC::ShaderProgram::ShaderProgram():ObjId([&](bool isValid){
-    
-    if (!isValid) {
-        std::cout << "\n\tThere was a problem with the shader program!" << std::endl;
-        if (m_qprogram) std::cout << "\n\tInfo: " <<  m_qprogram->log().toStdString() << std::endl;
-        else std::cout << "\n\tShader Program object was not created" << std::endl;
-    }
+HDC::ShaderProgram::ShaderProgram(const char* vertexshaderpath, const char* fragmentshaderpath):ObjId(){
 
-}){
-    m_qprogram = new QOpenGLShaderProgram();
-    m_vtxShader = new QOpenGLShader(QOpenGLShader::Vertex);
-    m_frgShader = new QOpenGLShader(QOpenGLShader::Fragment);
+    m_vtx_shader = std::make_shared<ShaderSource>(vertexshaderpath, HDC::ShaderType::VTX);
+    m_frg_shader = std::make_shared<ShaderSource>(fragmentshaderpath, HDC::ShaderType::FRG);
 
-    if (m_qprogram && m_vtxShader && m_frgShader){
-        m_valid = true;
-        m_value = m_qprogram->programId();
-    } else { Invalidate(); }
-}
-
-bool HDC::ShaderProgram::AddShader(const HDC::ShaderType shaderType, const char* filename){
-
-    if (!IsValid()) return false;
-
-
-    auto qtShaderType = stype_stype_map[shaderType];
-    auto qtPath = HDC::Utility::GetAbsolutePath(filename);
-    auto addShaderOk = true;
-    if (qtShaderType == QOpenGLShader::Vertex){
-        addShaderOk = m_vtxShader->compileSourceFile(qtPath);
-        if (!addShaderOk) {
-            auto msg = m_vtxShader->log().toStdString();
-            std::cout << msg << std::endl;
-        }
-    }
-    if (!addShaderOk){
-    
+    if (!m_vtx_shader && !m_frg_shader) {
         Invalidate();
-        return false;
-    
-    } else {
-    
-        return true;
-    
+        return;
     }
 
+    auto program = (*this)();
+    program->addShader(m_vtx_shader.get()[0]());
+    program->addShader(m_frg_shader.get()[0]());
+
 }
+
 HDC::ShaderProgram::~ShaderProgram(){
 
-    m_qprogram->removeAllShaders();
 
 }
-QOpenGLShaderProgram* HDC::ShaderProgram::GetProgram() const{
-    if (!IsValid()) return nullptr;
-    return m_qprogram;    
-}
+

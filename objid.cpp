@@ -1,9 +1,4 @@
-
-
-
 #include "objid.h"
-
-
 
 unsigned int HDC::ObjId::__id__ = 0;
 HDC::ObjId::ObjId(std::function<void(bool)> invalid_handler):

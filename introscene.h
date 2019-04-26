@@ -30,8 +30,6 @@ namespace HDC{
             FINISH
         };
 
-        std::shared_ptr<unsigned char> ptrVtxCodeBuffer{nullptr};
-        std::shared_ptr<unsigned char> ptrFrgCodeBuffer{nullptr};
         QImage qimage{};
 
         IntroScene();
@@ -61,8 +59,8 @@ namespace HDC{
         GLuint m_vao, m_vbo, m_ebo;
         GLuint m_tbo[2];
 
-        ShaderProgram shaderProgram;
-
+        std::shared_ptr<HDC::ShaderProgram> shaderProgram;
+        QOpenGLShaderProgram* fastShaderProgram;
 
         QElapsedTimer m_timer;
         uint64_t m_elapsedTimeMeasurement{0};

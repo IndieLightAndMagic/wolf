@@ -41,11 +41,12 @@ namespace HDC {
 				std::fclose(fp);
 				return;
 			}
-			this->resize(sz);
+			this->resize(sz+1);
 			if(std::fread(this->data(), 1, sz, fp)) {
 				filename = std::string{path};
 				m_valid = true;
 			}
+			this->data()[sz] = 0;
 			std::fclose(fp);
 			return;
 		}	
