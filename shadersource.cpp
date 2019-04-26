@@ -9,7 +9,7 @@ HDC::ShaderSource::ShaderSource(const char* path, HDC::ShaderType shaderType):
 
     auto source = this->data();
     auto ok     = m_shader.get()->compileSourceCode(source);
-
+    
     if (!ok){
         set_invalid_object_handle([&, this](bool isValid){
                 if (!isValid) {

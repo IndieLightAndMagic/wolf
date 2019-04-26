@@ -7,7 +7,14 @@
 namespace HDC {
 
     class ObjId {
+    private:
+
+        //+
         static unsigned int __id__;
+        //
+
+
+        bool m_valid{false};
         std::function<void(bool)> invalid_object_handle {
             [&](bool isValid){ 
                 if (!isValid){
@@ -15,15 +22,18 @@ namespace HDC {
                 } 
             }
         };
+
     protected:
+
         unsigned int m_value{0};
+
     public:
-        bool m_valid{false};
-        
+
         ObjId(std::function<void(bool)> invalid_handler = (std::function<void(bool)>)[](bool){});
         unsigned int GetId() const;
 
         bool IsValid() const;
+        void Validate();
         void Invalidate();
         void set_invalid_object_handle(std::function<void(bool)> ioh);
 

@@ -17,13 +17,12 @@ namespace HDC {
     template <typename T>
 	class ABuffer : public std::vector<T>, public ObjId{
 		protected:
-		bool m_valid{false};	
 		public:
 		ABuffer(const T* pBuffer = nullptr, long size = 0): ObjId(){
 			if (!pBuffer || !size) return;
 			for (auto index = 0; index < size; ++index)
 				this->push_back(pBuffer[index]);
-			m_valid = true;
+			Validate();
 		}
 	};
 
@@ -44,7 +43,7 @@ namespace HDC {
 			this->resize(sz+1);
 			if(std::fread(this->data(), 1, sz, fp)) {
 				filename = std::string{path};
-				m_valid = true;
+				Validate();
 			}
 			this->data()[sz] = 0;
 			std::fclose(fp);

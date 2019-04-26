@@ -13,12 +13,11 @@ unsigned int HDC::ObjId::GetId() const{
 }
 
 bool HDC::ObjId::IsValid() const{
-
-	invalid_object_handle(m_valid);
-    return m_valid;
-
+	return m_valid;
 }
-
+void HDC::ObjId::Validate() {
+    m_valid = true;
+}
 void HDC::ObjId::Invalidate() {
 	m_valid = false;
     invalid_object_handle(m_valid);
