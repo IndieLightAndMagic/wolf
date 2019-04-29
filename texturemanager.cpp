@@ -6,7 +6,6 @@
 #include <QFile>
 
 #include <tuple>
-#include <map>
 #include <utility>
 
 QString getAbsolutePath(std::string filename){
@@ -36,9 +35,9 @@ void printTextureInformation(const QImage& crqimage){
     if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
 
 }
-void TextureData::configureTextures(){
+void HDC::TextureData::configureTextures(){
 
-    for (auto tbo_image : tbo_image_map.toStdMap()){
+    for (auto tbo_image : tbo_image_map){
         auto tbo = tbo_image.first;
 
 
@@ -60,28 +59,29 @@ void TextureData::configureTextures(){
 
 }
 
-TextureData::TextureData(const QImage& rimage){
+bool HDC::TextureData::addImage(const QImage& rimage){
 
     unsigned int tbo{0}; 
     glGenTextures(1, &tbo);
     tbo_image_map[tbo] = rimage;
     configureTextures();
+    return true;
 
 }
 
-TextureData::TextureData(QVector<QImage> rimages){
+unsigned int HDC::TextureData::addImages(std::vector<QImage>& rimages){
     
     auto images_count = rimages.size();
-    QVector<unsigned int> tbos(images_count, 0);
+    std::vector<unsigned int> tbos(images_count, 0u);
     glGenTextures(images_count, tbos.data());
     for (auto index = 0; index < tbos.size(); ++index){
         tbo_image_map[tbos[index]] = rimages[index]; 
     }
     configureTextures();
-
+    return images_count;
 }
 
-QImage TextureManagerQT::initializeTexture(const std::string filename_texture){
+QImage HDC::TextureManagerQT::initializeTexture(const std::string filename_texture){
 
     auto qimage = QImage(getAbsolutePath(filename_texture)).mirrored(false, true);
     auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());
@@ -90,7 +90,7 @@ QImage TextureManagerQT::initializeTexture(const std::string filename_texture){
 
 }
 
-TextureAtlas::TextureAtlas(const std::string filename_texture, const std::string filename_atlas){
+HDC::TextureAtlas::TextureAtlas(const std::string filename_texture, const std::string filename_atlas){
 
     QFile loadFile(getAbsolutePath(filename_atlas));
     loadFile.open(QIODevice::ReadOnly);
@@ -126,7 +126,7 @@ TextureAtlas::TextureAtlas(const std::string filename_texture, const std::string
 
 }
 
-QImage TextureAtlas::getTexture(const std::string& atlasEntryName){
+QImage HDC::TextureAtlas::getTexture(const std::string& atlasEntryName){
 
     return m_atlas.find(atlasEntryName) == m_atlas.end() ?
                 QImage() :

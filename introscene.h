@@ -4,6 +4,7 @@
 #include "scene.h"
 #include "camera.h"
 #include "shader.h"
+#include "texturemanager.h"
 
 #include <memory>
 #include <QImage>
@@ -31,6 +32,8 @@ namespace HDC{
         };
 
         QImage qimage{};
+        std::vector<QImage> qimages{};
+        HDC::TextureData txdata;
 
         IntroScene();
 

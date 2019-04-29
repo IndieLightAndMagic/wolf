@@ -19,10 +19,8 @@ HDC::IntroScene::IntroScene(){
 
 void HDC::IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
 
-    qimage = TextureManagerQT::initializeTexture(TextureManager::solvePath(ppath));
-    auto filename_atlas = std::string(RESOURCES_DIR) + "/atlases/walls.at.json";
-    auto filename_textures = std::string(RESOURCES_DIR) + "/atlases/walls.json";
-    auto atlas = TextureAtlas(filename_textures, filename_atlas);
+    qimages.push_back(TextureManagerQT::initializeTexture(TextureManager::solvePath(ppath)));
+    
 }
 
 void HDC::IntroScene::initializeGeometry(){
@@ -161,9 +159,8 @@ void HDC::IntroScene::initialize(){
         (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag").c_str()
         );
     fastShaderProgram = shaderProgram.get()[0]();
-    initializeTextures(&m_tbo[0], "/textures/pgrate.png");
-    initializeTextures(&m_tbo[1], "/textures/classic.png");
-
+    initializeTextures(&m_tbo[0], "/textures/fibacourt.png");
+    txdata.addImages(qimages);
 
     
     auto m_program = shaderProgram.get()[0]();    
