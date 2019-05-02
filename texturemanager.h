@@ -8,41 +8,27 @@
 #include <QDir>
 #include <QImage>
 #include <vector>
+#include <utility>
 #include <QOpenGLShaderProgram>
 
 namespace HDC {
-
-    class TextureData {
-
-
-    protected:
-        void configureTextures();
-        std::map<unsigned int, QImage> tbo_image_map{}; 
-
-    public:
-        TextureData() = default;
-        bool addImage(const QImage& rimage);
-        unsigned int addImages(std::vector<QImage>& rimages);
-
-
-
-    };
     class TextureManager {
 
-
+        static QImage initializeTexture(const std::string filename_texture);
+        static std::map<std::string, unsigned int> filename_index_map;
+        static std::map<unsigned int, void*> index_ptrimage_map; 
+        static bool configureTexture(unsigned int);
     public:
-        static const std::string solvePath(const char* ppath){
+        static const std::string solvePath(std::string ppath){
             return std::string(RESOURCES_DIR) + ppath; 
         }
+        static unsigned int registerImage(std::string ppath);
+        static std::vector<unsigned int> registerImages(std::vector<std::string> ppaths);
+        static void stageTextures(std::vector<unsigned int> textureids);
+        static void unstageTextures();
 
     };
 
-    class TextureManagerQT : public TextureManager {
-
-    public:
-        static QImage initializeTexture(const std::string filename_texture);
-
-    }; 
 
     class TextureAtlas {
 

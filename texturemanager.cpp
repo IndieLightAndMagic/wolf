@@ -3,9 +3,11 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QString>
+#include <QImage>
 #include <QFile>
 
 #include <tuple>
+#include <cassert>
 #include <utility>
 
 QString getAbsolutePath(std::string filename){
@@ -35,53 +37,149 @@ void printTextureInformation(const QImage& crqimage){
     if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
 
 }
-void HDC::TextureData::configureTextures(){
+std::map<std::string, unsigned int> HDC::TextureManager::filename_index_map{};
+std::map<unsigned int, void*> HDC::TextureManager::index_ptrimage_map{}; 
+        
+void HDC::TextureManager::stageTextures(std::vector<unsigned int> textureids){
 
-    for (auto tbo_image : tbo_image_map){
-        auto tbo = tbo_image.first;
-
-
-        glBindTexture(GL_TEXTURE_2D, tbo); 
-        // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        auto& qimage = tbo_image.second;
-        auto [qimagewidth, qimageheight] = std::make_tuple(qimage.width(), qimage.height());
-        auto imagedata = qimage.bits();
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, qimagewidth, qimageheight, 0, GL_BGRA, GL_UNSIGNED_BYTE, imagedata);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
+    std::vector<unsigned int> textures_enumeration{
+        GL_TEXTURE0,                       
+        GL_TEXTURE1,                       
+        GL_TEXTURE2,                       
+        GL_TEXTURE3,                       
+        GL_TEXTURE4,                       
+        GL_TEXTURE5,                       
+        GL_TEXTURE6,                       
+        GL_TEXTURE7,                       
+        GL_TEXTURE8,                       
+        GL_TEXTURE9,                       
+        GL_TEXTURE10,                      
+        GL_TEXTURE11,                      
+        GL_TEXTURE12,                      
+        GL_TEXTURE13,                      
+        GL_TEXTURE14,                      
+        GL_TEXTURE15,                      
+        GL_TEXTURE16,                      
+        GL_TEXTURE17,                      
+        GL_TEXTURE18,                      
+        GL_TEXTURE19,                      
+        GL_TEXTURE20,                      
+        GL_TEXTURE21,                      
+        GL_TEXTURE22,                      
+        GL_TEXTURE23,                      
+        GL_TEXTURE24,                      
+        GL_TEXTURE25,                      
+        GL_TEXTURE26,                      
+        GL_TEXTURE27,                      
+        GL_TEXTURE28,                      
+        GL_TEXTURE29,                      
+        GL_TEXTURE30,                      
+        GL_TEXTURE31,                      
+    };
+    auto size = textureids.size();
+    assert(size>0);
+    for (auto index = 0; index < size; ++index){
+        glActiveTexture(textures_enumeration[index]);
+        glBindTexture(GL_TEXTURE_2D, textureids[index]);
     }
+}
+void HDC::TextureManager::unstageTextures(){
+    std::vector<unsigned int> textures_enumeration{
+        GL_TEXTURE0,                       
+        GL_TEXTURE1,                       
+        GL_TEXTURE2,                       
+        GL_TEXTURE3,                       
+        GL_TEXTURE4,                       
+        GL_TEXTURE5,                       
+        GL_TEXTURE6,                       
+        GL_TEXTURE7,                       
+        GL_TEXTURE8,                       
+        GL_TEXTURE9,                       
+        GL_TEXTURE10,                      
+        GL_TEXTURE11,                      
+        GL_TEXTURE12,                      
+        GL_TEXTURE13,                      
+        GL_TEXTURE14,                      
+        GL_TEXTURE15,                      
+        GL_TEXTURE16,                      
+        GL_TEXTURE17,                      
+        GL_TEXTURE18,                      
+        GL_TEXTURE19,                      
+        GL_TEXTURE20,                      
+        GL_TEXTURE21,                      
+        GL_TEXTURE22,                      
+        GL_TEXTURE23,                      
+        GL_TEXTURE24,                      
+        GL_TEXTURE25,                      
+        GL_TEXTURE26,                      
+        GL_TEXTURE27,                      
+        GL_TEXTURE28,                      
+        GL_TEXTURE29,                      
+        GL_TEXTURE30,                      
+        GL_TEXTURE31,                      
+    };
+    for(auto texture_enumeration : textures_enumeration){
+        glActiveTexture(texture_enumeration);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+}
+unsigned int HDC::TextureManager::registerImage(std::string ppath){
+
+    auto path = solvePath(ppath);
+    //check the texture filename and texture target are not created/used yet.
+
+    assert(filename_index_map.find(path) == filename_index_map.end());
+    unsigned int tbo{0};
+    glGenTextures(1, &tbo);
+    assert(index_ptrimage_map.find(tbo) == index_ptrimage_map.end());
+    assert(glIsTexture(tbo));
+
+    //Create image and check it is good.
+    auto pqimage = new QImage(initializeTexture(path));
+    assert(pqimage->isNull() == false);
+    
+    filename_index_map[path] = tbo;
+    index_ptrimage_map[tbo] = pqimage;
+    assert(configureTexture(tbo));
+    return tbo;
 
 }
 
-bool HDC::TextureData::addImage(const QImage& rimage){
+std::vector<unsigned int> HDC::TextureManager::registerImages(std::vector<std::string> ppaths){
 
-    unsigned int tbo{0}; 
-    glGenTextures(1, &tbo);
-    tbo_image_map[tbo] = rimage;
-    configureTextures();
+    std::vector<unsigned int> textureTargets{};
+    for (const auto ppath : ppaths) textureTargets.push_back(HDC::TextureManager::registerImage(ppath));
+    return textureTargets;
+
+}
+
+bool HDC::TextureManager::configureTexture(unsigned int textureIndex){
+
+    auto found = index_ptrimage_map.find(textureIndex) != index_ptrimage_map.end();
+    assert(found);
+    auto pqimage = static_cast<QImage*>(index_ptrimage_map[textureIndex]);
+    auto& qimage = pqimage[0];
+    glBindTexture(GL_TEXTURE_2D, textureIndex); 
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    auto [qimagewidth, qimageheight, imagedata] = std::make_tuple(qimage.width(), qimage.height(), qimage.bits());
+    assert(qimagewidth>0);
+    assert(qimageheight>0);
+    assert(imagedata!=nullptr);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, qimagewidth, qimageheight, 0, GL_BGRA, GL_UNSIGNED_BYTE, imagedata);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    
     return true;
 
 }
 
-unsigned int HDC::TextureData::addImages(std::vector<QImage>& rimages){
-    
-    auto images_count = rimages.size();
-    std::vector<unsigned int> tbos(images_count, 0u);
-    glGenTextures(images_count, tbos.data());
-    for (auto index = 0; index < tbos.size(); ++index){
-        tbo_image_map[tbos[index]] = rimages[index]; 
-    }
-    configureTextures();
-    return images_count;
-}
-
-QImage HDC::TextureManagerQT::initializeTexture(const std::string filename_texture){
+QImage HDC::TextureManager::initializeTexture(const std::string filename_texture){
 
     auto qimage = QImage(getAbsolutePath(filename_texture)).mirrored(false, true);
     auto [qimagewidth, qimageheight, qbpp] = std::make_tuple(qimage.width(), qimage.height(), qimage.pixelFormat().bitsPerPixel());

@@ -17,11 +17,6 @@ HDC::IntroScene::IntroScene(){
     
 }
 
-void HDC::IntroScene::initializeTextures(GLuint* ptbo, const char* ppath){
-
-    qimages.push_back(TextureManagerQT::initializeTexture(TextureManager::solvePath(ppath)));
-    
-}
 
 void HDC::IntroScene::initializeGeometry(){
 
@@ -76,6 +71,7 @@ void HDC::IntroScene::processState(){
     if (m_state == IntroState::START){
 
         m_state = IntroState::FADING_IN_CARNAGE;
+        std::cout << "CARNAGE\n";
         m_timer.start();
         m_timeToExpire = 1000.0f;
         
@@ -89,6 +85,7 @@ void HDC::IntroScene::processState(){
 
 
         if (_timeFraction >= 1.0f) {
+            std::cout << "STILL IN CARNAGE\n";
             m_state = IntroState::STILL_IN_CARNAGE;
             m_timer.start();
             m_timeToExpire = 3000.0f;
@@ -101,6 +98,7 @@ void HDC::IntroScene::processState(){
         _timeFraction = _timeFraction < 1.0f ? _timeFraction : 1.0f;
 
         if (_timeFraction >= 1.0f) {
+            std::cout << "FADING_OUT_CARNAGE\n";
             m_state = IntroState::FADING_OUT_CARNAGE;
             m_timer.start();
             m_timeToExpire = 1000.0f;
@@ -115,6 +113,8 @@ void HDC::IntroScene::processState(){
         _timeFraction = _timeFraction >= 0.0f ? _timeFraction : 0.0f;
 
         if (_timeFraction <= 0.0f) {
+            std::cout << "FADING IN CLASSIC\n";
+
             m_state = IntroState::FADING_CLASSIC_IN;
             m_timer.start();
             m_timeToExpire = 1000.0f;
@@ -159,9 +159,9 @@ void HDC::IntroScene::initialize(){
         (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag").c_str()
         );
     fastShaderProgram = shaderProgram.get()[0]();
-    initializeTextures(&m_tbo[0], "/textures/fibacourt.png");
-    txdata.addImages(qimages);
 
+    //Register Textures
+    //Stage Textures
     
     auto m_program = shaderProgram.get()[0]();    
     m_posAttr = m_program->attributeLocation("posAttr");

@@ -33,8 +33,7 @@ namespace HDC{
 
         QImage qimage{};
         std::vector<QImage> qimages{};
-        HDC::TextureData txdata;
-
+        
         IntroScene();
 
         void initialize() override;
@@ -43,7 +42,6 @@ namespace HDC{
     private:
 
         void processState();
-        void initializeTextures(GLuint*, const char*);
         void initializeShaders(QOpenGLShader::ShaderType type, const char* path);
         void bakeShader();
         void initializeGeometry();
