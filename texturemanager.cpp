@@ -132,7 +132,7 @@ unsigned int HDC::TextureManager::registerImage(std::string ppath){
     unsigned int tbo{0};
     glGenTextures(1, &tbo);
     assert(index_ptrimage_map.find(tbo) == index_ptrimage_map.end());
-    assert(glIsTexture(tbo));
+    //assert(glIsTexture(tbo));
 
     //Create image and check it is good.
     auto pqimage = new QImage(initializeTexture(path));
@@ -167,7 +167,8 @@ bool HDC::TextureManager::configureTexture(unsigned int textureIndex){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    auto [qimagewidth, qimageheight, imagedata] = std::make_tuple(qimage.width(), qimage.height(), qimage.bits());
+    auto [qimagewidth, qimageheight] = std::make_tuple(qimage.width(), qimage.height());
+    auto imagedata = qimage.bits();
     assert(qimagewidth>0);
     assert(qimageheight>0);
     assert(imagedata!=nullptr);

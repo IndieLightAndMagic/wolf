@@ -59,12 +59,6 @@ void HDC::IntroScene::processState(){
     
     float sliderValue{0.0f};
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_tbo[0]);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, m_tbo[1]);
-    
-    
     m_elapsedTimeMeasurement = m_timer.elapsed();
 
     auto m_program = shaderProgram.get()[0]();    
@@ -134,7 +128,7 @@ void HDC::IntroScene::processState(){
         sliderValue = _timeFraction;
 
         //As texture is going to be the same always, lets attach it.
-        m_program->setUniformValue(m_textureUniform, 1);
+        m_program->setUniformValue(m_textureUniform, 0);
     
     } else if(m_state == IntroState::FINISH){
 
@@ -162,7 +156,9 @@ void HDC::IntroScene::initialize(){
 
     //Register Textures
     //Stage Textures
-    
+    auto evil = HDC::TextureManager::registerImage("/textures/classic.png");
+    HDC::TextureManager::stageTextures(std::vector<unsigned int>{evil});
+
     auto m_program = shaderProgram.get()[0]();    
     m_posAttr = m_program->attributeLocation("posAttr");
     m_colAttr = m_program->attributeLocation("colAttr");
