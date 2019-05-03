@@ -156,7 +156,7 @@ void HDC::IntroScene::initialize(){
 
     //Register Textures
     //Stage Textures
-    auto evil = HDC::TextureManager::registerImage("/textures/classic.png");
+    auto evil = HDC::TextureManager::registerImage("/textures/soccerfieldgrass.png");
     HDC::TextureManager::stageTextures(std::vector<unsigned int>{evil});
 
     auto m_program = shaderProgram.get()[0]();    
