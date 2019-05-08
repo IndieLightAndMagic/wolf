@@ -59,7 +59,7 @@ namespace HDC{
         GLuint m_pcsSliderUniform;
         
         GLuint m_soccer_court_texture;
-        HDC::TexturedPlane m_soccer_court{HDC::TexturedPlane::getplane()};
+        HDC::TexturedPlane* m_soccer_court{nullptr};
 
         std::shared_ptr<HDC::ShaderProgram> shaderProgram;
         QOpenGLShaderProgram* fastShaderProgram;

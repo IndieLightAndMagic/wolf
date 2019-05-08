@@ -34,9 +34,8 @@ namespace HDC {
             0, 1, 3, // first triangle
             1, 2, 3  // second triangle
         };
-        Plane();
     public:
-    	static const Plane& getplane();
+        Plane();
     };
 
     class TexturedPlane : public HDC::Plane {
@@ -51,9 +50,8 @@ namespace HDC {
             -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
 
-        TexturedPlane();
     public:
-    	static const TexturedPlane& getplane();
+        TexturedPlane();
 
 
     };

@@ -20,6 +20,7 @@
 
 
 HDC::IntroScene::IntroScene(){
+    
 
 }
 
@@ -27,7 +28,7 @@ HDC::IntroScene::IntroScene(){
 
 void HDC::IntroScene::initializeGeometry(){
 
-
+    m_soccer_court = new HDC::TexturedPlane();
 
 }
 void HDC::IntroScene::processState(){
@@ -169,7 +170,7 @@ void HDC::IntroScene::render(){
 
     Scene::render();
     fastShaderProgram->bind();
-    m_soccer_court.enable();
+    m_soccer_court->enable();
     fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
     processState();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

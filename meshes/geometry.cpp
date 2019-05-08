@@ -35,18 +35,9 @@ HDC::Plane::Plane() : Geometry() {
 
 }
 
-const HDC::Plane& HDC::Plane::getplane(){
-	static auto const plane = Plane();
-	return plane;
-}
-const HDC::TexturedPlane& HDC::TexturedPlane::getplane(){
-	static auto const plane = TexturedPlane();
-	return plane;
-}
 
 HDC::TexturedPlane::TexturedPlane() : Plane() {
 
-	
 	auto fast_vertices_colors_uvs = vertices_colors_uvs.data();
 	auto fast_indices = indices.data();
 	auto vertices_size = vertices_colors_uvs.size() * sizeof(float);
