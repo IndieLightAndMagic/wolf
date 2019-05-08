@@ -11,6 +11,7 @@
 #include <cassert>
 #include <utility>
 
+
 QString getAbsolutePath(std::string filename){
 
     auto path = QDir(QString(filename.c_str()));
@@ -38,13 +39,9 @@ void printTextureInformation(const QImage& crqimage){
     if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
 
 }
-std::map<std::string, unsigned int> HDC::TextureManager::filename_index_map{};
 std::map<std::string, unsigned int> HDC::TextureManager::filename_gltxture_map{};
 std::map<unsigned int, unsigned int> HDC::TextureManager::gltxture_txtureslot_map{};
 std::map<unsigned int, void*> HDC::TextureManager::gltxture_imageptr_map{};
-
-std::map<unsigned int, void*> HDC::TextureManager::index_ptrimage_map{}; 
-
 std::deque<unsigned int> HDC::TextureManager::emptytextureslots {
     GL_TEXTURE0,
     GL_TEXTURE1,
@@ -80,112 +77,8 @@ std::deque<unsigned int> HDC::TextureManager::emptytextureslots {
     GL_TEXTURE31,
   
 };        
-void HDC::TextureManager::stageTextures(std::vector<unsigned int> textureids){
 
-    std::vector<unsigned int> textures_enumeration{
-        GL_TEXTURE0,
-        GL_TEXTURE1,
-        GL_TEXTURE2,
-        GL_TEXTURE3,
-        GL_TEXTURE4,
-        GL_TEXTURE5,
-        GL_TEXTURE6,
-        GL_TEXTURE7,
-        GL_TEXTURE8,
-        GL_TEXTURE9,
-        GL_TEXTURE10,
-        GL_TEXTURE11,
-        GL_TEXTURE12,
-        GL_TEXTURE13,
-        GL_TEXTURE14,
-        GL_TEXTURE15,
-        GL_TEXTURE16,
-        GL_TEXTURE17,
-        GL_TEXTURE18,
-        GL_TEXTURE19,
-        GL_TEXTURE20,
-        GL_TEXTURE21,
-        GL_TEXTURE22,
-        GL_TEXTURE23,
-        GL_TEXTURE24,
-        GL_TEXTURE25,
-        GL_TEXTURE26,
-        GL_TEXTURE27,
-        GL_TEXTURE28,
-        GL_TEXTURE29,
-        GL_TEXTURE30,
-        GL_TEXTURE31,
-    };
-    auto size = textureids.size();
-    assert(size>0);
-    for (auto index = 0; index < size; ++index){
-        glActiveTexture(textures_enumeration[index]);
-        glBindTexture(GL_TEXTURE_2D, textureids[index]);
-    }
-}
-void HDC::TextureManager::unstageTextures(){
-    std::vector<unsigned int> textures_enumeration{
-        GL_TEXTURE0, 
-        GL_TEXTURE1, 
-        GL_TEXTURE2, 
-        GL_TEXTURE3, 
-        GL_TEXTURE4, 
-        GL_TEXTURE5, 
-        GL_TEXTURE6, 
-        GL_TEXTURE7, 
-        GL_TEXTURE8, 
-        GL_TEXTURE9, 
-        GL_TEXTURE10,
-        GL_TEXTURE11,
-        GL_TEXTURE12,
-        GL_TEXTURE13,
-        GL_TEXTURE14,
-        GL_TEXTURE15,
-        GL_TEXTURE16,
-        GL_TEXTURE17,
-        GL_TEXTURE18,
-        GL_TEXTURE19,
-        GL_TEXTURE20,
-        GL_TEXTURE21,
-        GL_TEXTURE22,
-        GL_TEXTURE23,
-        GL_TEXTURE24,
-        GL_TEXTURE25,
-        GL_TEXTURE26,
-        GL_TEXTURE27,
-        GL_TEXTURE28,
-        GL_TEXTURE29,
-        GL_TEXTURE30,
-        GL_TEXTURE31,
-    };
-    for(auto texture_enumeration : textures_enumeration){
-        glActiveTexture(texture_enumeration);
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-}
-unsigned int HDC::TextureManager::registerImage(std::string ppath){
-
-    auto path = solvePath(ppath);
-    //check the texture filename and texture target are not created/used yet.
-
-    assert(filename_index_map.find(path) == filename_index_map.end());
-    unsigned int tbo{0};
-    glGenTextures(1, &tbo);
-    assert(index_ptrimage_map.find(tbo) == index_ptrimage_map.end());
-    //assert(glIsTexture(tbo));
-
-    //Create image and check it is good.
-    auto pqimage = new QImage(initializeTexture(path));
-    assert(pqimage->isNull() == false);
-    
-    filename_index_map[path] = tbo;
-    index_ptrimage_map[tbo] = pqimage;
-    assert(configureTexture(tbo));
-    return tbo;
-
-}
-
-bool HDC::TextureManager::registerimg(std::string imgpath){
+std::pair<unsigned int, bool> HDC::TextureManager::registerimg(std::string imgpath){
     
     assert(HDC::TextureManager::filename_gltxture_map.find(imgpath) == HDC::TextureManager::filename_gltxture_map.end());
 
@@ -199,13 +92,22 @@ bool HDC::TextureManager::registerimg(std::string imgpath){
     filename_gltxture_map[imgpath] = gltxture;
     gltxture_imageptr_map[gltxture] = pqimage;
 
-    return configureTexture(gltxture);
+    return std::make_pair(gltxture, configureTexture(gltxture));
 
 }
 
-bool HDC::TextureManager::registerimg(std::vector<std::string> imgpaths){
-    for (auto& imgpath : imgpaths) assert(registerimg(imgpath));
-    return true;
+std::pair<std::vector<unsigned int>, bool> HDC::TextureManager::registerimg(std::vector<std::string> imgpaths){
+    
+    auto gltxtures = std::vector<unsigned int>{};
+    for (auto& imgpath : imgpaths){
+
+        auto [gltxture, ok] = registerimg(imgpath);
+        assert(ok);
+
+        gltxtures.push_back(gltxture);
+    
+    }
+    return std::make_pair(gltxtures, true);
 }
 
 bool HDC::TextureManager::configureTexture(unsigned int gltxture){
@@ -234,15 +136,11 @@ bool HDC::TextureManager::configureTexture(unsigned int gltxture){
     return true;
 
 }
-unsigned int HDC::TextureManager::getgltxture(std::string imgpath){
-    auto found = filename_gltxture_map.find(imgpath) != filename_gltxture_map.end();
-    assert(found);
-    return filename_gltxture_map[imgpath];
-}
+
 std::tuple<unsigned int, bool> HDC::TextureManager::getslot(unsigned int gltxture){
     //Check if already
     if (gltxture_txtureslot_map.find(gltxture) != gltxture_txtureslot_map.end())
-        return std::make_pair(gltxture_txtureslot_map[gltxture], true);
+        return std::make_pair(gltxture_txtureslot_map[gltxture] - GL_TEXTURE0, true);
     
     //Grab slot
     assert(!emptytextureslots.empty());
@@ -251,22 +149,38 @@ std::tuple<unsigned int, bool> HDC::TextureManager::getslot(unsigned int gltxtur
     
     //Update dict
     gltxture_txtureslot_map[gltxture] = glslot;
-    return std::make_pair(glslot, true);
+    glActiveTexture(glslot);
+    glBindTexture(GL_TEXTURE_2D, gltxture);
+    return std::make_pair(glslot - GL_TEXTURE0, true);
 
 }
+
 std::tuple<unsigned int, bool> HDC::TextureManager::getslot(std::string imgpath){
-    return getslot(getgltxture(imgpath));
+    auto found = filename_gltxture_map.find(imgpath) != filename_gltxture_map.end();
+    if (found) return std::make_pair(filename_gltxture_map[imgpath], true);
+    else return std::make_pair(0, false);
 }
+
 bool HDC::TextureManager::unstage(unsigned int gltxture){
     
-    assert(gltxture_txtureslot_map.find(gltxture) != gltxture_txtureslot_map.end());
+    if(gltxture_txtureslot_map.find(gltxture) == gltxture_txtureslot_map.end()) return false;
     auto glslot = gltxture_txtureslot_map[gltxture];
     gltxture_txtureslot_map.erase(gltxture);
     emptytextureslots.push_front(glslot);
     return true;
 
 }
+bool HDC::TextureManager::unstage(std::string imgpath){
+    
+    if(filename_gltxture_map.find(imgpath) == filename_gltxture_map.end()) return false;
+    auto gltxture = filename_gltxture_map[imgpath];
+    if(gltxture_txtureslot_map.find(gltxture) == gltxture_txtureslot_map.end()) return false;
+    return unstage(gltxture);
 
+}
+constexpr unsigned int HDC::TextureManager::slot(unsigned int uislot){
+    return uislot + GL_TEXTURE0;
+}
 QImage HDC::TextureManager::initializeTexture(const std::string filename_texture){
 
     auto qimage = QImage(getAbsolutePath(filename_texture)).mirrored(false, true);
