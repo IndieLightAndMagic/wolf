@@ -1,9 +1,11 @@
 #include "introscene.h"
 #include "texturemanager.h"
-#include <iostream>
+
+#include <tuple>
 #include <memory>
 #include <string>
-#include <tuple>
+#include <cassert>
+#include <iostream>
 
 #include <QDir>
 #include <QScreen>
@@ -11,6 +13,23 @@
 #include <QElapsedTimer>
 #include <QGuiApplication>
 #include <QOpenGLShaderProgram>
+
+namespace HDC {
+    class TexturePlane {
+        unsigned int m_textureUniform;
+    public:
+        TexturePlane(std::string texturepath){
+            //HDC::TextureManager::stageTextures(std::vector<unsigned int>{HDC::TextureManager::registerImage(texturepath)});
+        }
+        void LocateTextureInShader(HDC::PShaderProgram program, const char* uniformLocation){
+            m_textureUniform = (*program)()->uniformLocation(uniformLocation);
+            assert(m_textureUniform != -1);
+        }
+        void RenderTextureInShader(HDC::PShaderProgram program){
+        	
+        }
+    };
+}
 
 
 HDC::IntroScene::IntroScene(){
@@ -156,10 +175,12 @@ void HDC::IntroScene::initialize(){
 
     //Register Textures
     //Stage Textures
-    auto evil = HDC::TextureManager::registerImage("/textures/soccerfieldgrass.png");
-    HDC::TextureManager::stageTextures(std::vector<unsigned int>{evil});
+    auto [gltxture, bok] = HDC::TextureManager::registerimg(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png");
+    assert(bok);
+    auto soccer_field = HDC::TextureManager::getslot(gltxture);
 
     auto m_program = shaderProgram.get()[0]();    
+
     m_posAttr = m_program->attributeLocation("posAttr");
     m_colAttr = m_program->attributeLocation("colAttr");
     m_texAttr = m_program->attributeLocation("texAttr");
