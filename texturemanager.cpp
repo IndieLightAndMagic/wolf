@@ -6,6 +6,7 @@
 #include <QImage>
 #include <QFile>
 
+#include <deque>
 #include <tuple>
 #include <cassert>
 #include <utility>
@@ -38,43 +39,82 @@ void printTextureInformation(const QImage& crqimage){
 
 }
 std::map<std::string, unsigned int> HDC::TextureManager::filename_index_map{};
+std::map<std::string, unsigned int> HDC::TextureManager::filename_gltxture_map{};
+std::map<unsigned int, unsigned int> HDC::TextureManager::gltxture_txtureslot_map{};
+std::map<unsigned int, void*> HDC::TextureManager::gltxture_imageptr_map{};
+
 std::map<unsigned int, void*> HDC::TextureManager::index_ptrimage_map{}; 
-        
+
+std::deque<unsigned int> HDC::TextureManager::emptytextureslots {
+    GL_TEXTURE0,
+    GL_TEXTURE1,
+    GL_TEXTURE2,
+    GL_TEXTURE3,
+    GL_TEXTURE4,
+    GL_TEXTURE5,
+    GL_TEXTURE6,
+    GL_TEXTURE7,
+    GL_TEXTURE8,
+    GL_TEXTURE9,
+    GL_TEXTURE10,
+    GL_TEXTURE11,
+    GL_TEXTURE12,
+    GL_TEXTURE13,
+    GL_TEXTURE14,
+    GL_TEXTURE15,
+    GL_TEXTURE16,
+    GL_TEXTURE17,
+    GL_TEXTURE18,
+    GL_TEXTURE19,
+    GL_TEXTURE20,
+    GL_TEXTURE21,
+    GL_TEXTURE22,
+    GL_TEXTURE23,
+    GL_TEXTURE24,
+    GL_TEXTURE25,
+    GL_TEXTURE26,
+    GL_TEXTURE27,
+    GL_TEXTURE28,
+    GL_TEXTURE29,
+    GL_TEXTURE30,
+    GL_TEXTURE31,
+  
+};        
 void HDC::TextureManager::stageTextures(std::vector<unsigned int> textureids){
 
     std::vector<unsigned int> textures_enumeration{
-        GL_TEXTURE0,                       
-        GL_TEXTURE1,                       
-        GL_TEXTURE2,                       
-        GL_TEXTURE3,                       
-        GL_TEXTURE4,                       
-        GL_TEXTURE5,                       
-        GL_TEXTURE6,                       
-        GL_TEXTURE7,                       
-        GL_TEXTURE8,                       
-        GL_TEXTURE9,                       
-        GL_TEXTURE10,                      
-        GL_TEXTURE11,                      
-        GL_TEXTURE12,                      
-        GL_TEXTURE13,                      
-        GL_TEXTURE14,                      
-        GL_TEXTURE15,                      
-        GL_TEXTURE16,                      
-        GL_TEXTURE17,                      
-        GL_TEXTURE18,                      
-        GL_TEXTURE19,                      
-        GL_TEXTURE20,                      
-        GL_TEXTURE21,                      
-        GL_TEXTURE22,                      
-        GL_TEXTURE23,                      
-        GL_TEXTURE24,                      
-        GL_TEXTURE25,                      
-        GL_TEXTURE26,                      
-        GL_TEXTURE27,                      
-        GL_TEXTURE28,                      
-        GL_TEXTURE29,                      
-        GL_TEXTURE30,                      
-        GL_TEXTURE31,                      
+        GL_TEXTURE0,
+        GL_TEXTURE1,
+        GL_TEXTURE2,
+        GL_TEXTURE3,
+        GL_TEXTURE4,
+        GL_TEXTURE5,
+        GL_TEXTURE6,
+        GL_TEXTURE7,
+        GL_TEXTURE8,
+        GL_TEXTURE9,
+        GL_TEXTURE10,
+        GL_TEXTURE11,
+        GL_TEXTURE12,
+        GL_TEXTURE13,
+        GL_TEXTURE14,
+        GL_TEXTURE15,
+        GL_TEXTURE16,
+        GL_TEXTURE17,
+        GL_TEXTURE18,
+        GL_TEXTURE19,
+        GL_TEXTURE20,
+        GL_TEXTURE21,
+        GL_TEXTURE22,
+        GL_TEXTURE23,
+        GL_TEXTURE24,
+        GL_TEXTURE25,
+        GL_TEXTURE26,
+        GL_TEXTURE27,
+        GL_TEXTURE28,
+        GL_TEXTURE29,
+        GL_TEXTURE30,
+        GL_TEXTURE31,
     };
     auto size = textureids.size();
     assert(size>0);
@@ -85,38 +125,38 @@ void HDC::TextureManager::stageTextures(std::vector<unsigned int> textureids){
 }
 void HDC::TextureManager::unstageTextures(){
     std::vector<unsigned int> textures_enumeration{
-        GL_TEXTURE0,                       
-        GL_TEXTURE1,                       
-        GL_TEXTURE2,                       
-        GL_TEXTURE3,                       
-        GL_TEXTURE4,                       
-        GL_TEXTURE5,                       
-        GL_TEXTURE6,                       
-        GL_TEXTURE7,                       
-        GL_TEXTURE8,                       
-        GL_TEXTURE9,                       
-        GL_TEXTURE10,                      
-        GL_TEXTURE11,                      
-        GL_TEXTURE12,                      
-        GL_TEXTURE13,                      
-        GL_TEXTURE14,                      
-        GL_TEXTURE15,                      
-        GL_TEXTURE16,                      
-        GL_TEXTURE17,                      
-        GL_TEXTURE18,                      
-        GL_TEXTURE19,                      
-        GL_TEXTURE20,                      
-        GL_TEXTURE21,                      
-        GL_TEXTURE22,                      
-        GL_TEXTURE23,                      
-        GL_TEXTURE24,                      
-        GL_TEXTURE25,                      
-        GL_TEXTURE26,                      
-        GL_TEXTURE27,                      
-        GL_TEXTURE28,                      
-        GL_TEXTURE29,                      
-        GL_TEXTURE30,                      
-        GL_TEXTURE31,                      
+        GL_TEXTURE0, 
+        GL_TEXTURE1, 
+        GL_TEXTURE2, 
+        GL_TEXTURE3, 
+        GL_TEXTURE4, 
+        GL_TEXTURE5, 
+        GL_TEXTURE6, 
+        GL_TEXTURE7, 
+        GL_TEXTURE8, 
+        GL_TEXTURE9, 
+        GL_TEXTURE10,
+        GL_TEXTURE11,
+        GL_TEXTURE12,
+        GL_TEXTURE13,
+        GL_TEXTURE14,
+        GL_TEXTURE15,
+        GL_TEXTURE16,
+        GL_TEXTURE17,
+        GL_TEXTURE18,
+        GL_TEXTURE19,
+        GL_TEXTURE20,
+        GL_TEXTURE21,
+        GL_TEXTURE22,
+        GL_TEXTURE23,
+        GL_TEXTURE24,
+        GL_TEXTURE25,
+        GL_TEXTURE26,
+        GL_TEXTURE27,
+        GL_TEXTURE28,
+        GL_TEXTURE29,
+        GL_TEXTURE30,
+        GL_TEXTURE31,
     };
     for(auto texture_enumeration : textures_enumeration){
         glActiveTexture(texture_enumeration);
@@ -145,21 +185,36 @@ unsigned int HDC::TextureManager::registerImage(std::string ppath){
 
 }
 
-std::vector<unsigned int> HDC::TextureManager::registerImages(std::vector<std::string> ppaths){
+bool HDC::TextureManager::registerimg(std::string imgpath){
+    
+    assert(HDC::TextureManager::filename_gltxture_map.find(imgpath) == HDC::TextureManager::filename_gltxture_map.end());
 
-    std::vector<unsigned int> textureTargets{};
-    for (const auto ppath : ppaths) textureTargets.push_back(HDC::TextureManager::registerImage(ppath));
-    return textureTargets;
+    unsigned int gltxture{0};
+    glGenTextures(1, &gltxture);
+    assert(HDC::TextureManager::gltxture_txtureslot_map.find(gltxture) == HDC::TextureManager::gltxture_txtureslot_map.end());
+
+    auto pqimage = new QImage(initializeTexture(imgpath));
+    assert(pqimage->isNull() == false);
+    
+    filename_gltxture_map[imgpath] = gltxture;
+    gltxture_imageptr_map[gltxture] = pqimage;
+
+    return configureTexture(gltxture);
 
 }
 
-bool HDC::TextureManager::configureTexture(unsigned int textureIndex){
+bool HDC::TextureManager::registerimg(std::vector<std::string> imgpaths){
+    for (auto& imgpath : imgpaths) assert(registerimg(imgpath));
+    return true;
+}
 
-    auto found = index_ptrimage_map.find(textureIndex) != index_ptrimage_map.end();
+bool HDC::TextureManager::configureTexture(unsigned int gltxture){
+
+    auto found = gltxture_imageptr_map.find(gltxture) != gltxture_imageptr_map.end();
     assert(found);
-    auto pqimage = static_cast<QImage*>(index_ptrimage_map[textureIndex]);
+    auto pqimage = static_cast<QImage*>(gltxture_imageptr_map[gltxture]);
     auto& qimage = pqimage[0];
-    glBindTexture(GL_TEXTURE_2D, textureIndex); 
+    glBindTexture(GL_TEXTURE_2D, gltxture); 
     // set the texture wrapping parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -179,6 +234,38 @@ bool HDC::TextureManager::configureTexture(unsigned int textureIndex){
     return true;
 
 }
+unsigned int HDC::TextureManager::getgltxture(std::string imgpath){
+    auto found = filename_gltxture_map.find(imgpath) != filename_gltxture_map.end();
+    assert(found);
+    return filename_gltxture_map[imgpath];
+}
+std::tuple<unsigned int, bool> HDC::TextureManager::getslot(unsigned int gltxture){
+    //Check if already
+    if (gltxture_txtureslot_map.find(gltxture) != gltxture_txtureslot_map.end())
+        return std::make_pair(gltxture_txtureslot_map[gltxture], true);
+    
+    //Grab slot
+    assert(!emptytextureslots.empty());
+    auto glslot = emptytextureslots.front();
+    emptytextureslots.pop_front();
+    
+    //Update dict
+    gltxture_txtureslot_map[gltxture] = glslot;
+    return std::make_pair(glslot, true);
+
+}
+std::tuple<unsigned int, bool> HDC::TextureManager::getslot(std::string imgpath){
+    return getslot(getgltxture(imgpath));
+}
+bool HDC::TextureManager::unstage(unsigned int gltxture){
+    
+    assert(gltxture_txtureslot_map.find(gltxture) != gltxture_txtureslot_map.end());
+    auto glslot = gltxture_txtureslot_map[gltxture];
+    gltxture_txtureslot_map.erase(gltxture);
+    emptytextureslots.push_front(glslot);
+    return true;
+
+}
 
 QImage HDC::TextureManager::initializeTexture(const std::string filename_texture){
 
@@ -189,46 +276,3 @@ QImage HDC::TextureManager::initializeTexture(const std::string filename_texture
 
 }
 
-HDC::TextureAtlas::TextureAtlas(const std::string filename_texture, const std::string filename_atlas){
-
-    QFile loadFile(getAbsolutePath(filename_atlas));
-    loadFile.open(QIODevice::ReadOnly);
-
-    QJsonDocument jsonDocument(QJsonDocument::fromJson(loadFile.readAll()));
-
-    auto jsonObj = jsonDocument.object();
-    auto jsonObjKeys = jsonObj.keys();
-
-    for (auto jsonObjKey : jsonObjKeys){
-        if (jsonObjKey != QString("data")) continue;
-        std::cout << jsonObjKey.toStdString() << std::endl;
-        auto dataList = jsonObj[jsonObjKey].toArray();
-        auto dataListSize = dataList.count();
-        for (auto index = 0; index < dataListSize; ++index){
-            auto rectanglesDictionary = dataList[index].toObject();
-            for (auto key : rectanglesDictionary.keys()){
-                auto rectangleDictionary = rectanglesDictionary[key].toObject();
-                auto offsetList = rectangleDictionary["offset"].toArray();
-                auto sizeList = rectangleDictionary["size"].toArray();
-                QRect r{
-                    offsetList[0].toInt(),  offsetList[1].toInt(),
-                    sizeList[0].toInt(),    sizeList[1].toInt()
-                };
-                m_atlas[key.toStdString()] = r;
-            }
-        }
-
-    }
-
-    m_image = QImage(getAbsolutePath(filename_texture));
-    std::cout << "Texture Atlas Created with " << m_atlas.size() << " textures." << std::endl;
-
-}
-
-QImage HDC::TextureAtlas::getTexture(const std::string& atlasEntryName){
-
-    return m_atlas.find(atlasEntryName) == m_atlas.end() ?
-                QImage() :
-                m_image.copy(m_atlas[atlasEntryName]);
-
-}
