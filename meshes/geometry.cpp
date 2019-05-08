@@ -3,8 +3,16 @@ HDC::Geometry::Geometry() : ObjId(){
 	glGenVertexArrays(1, &glvao);
 	glGenBuffers(1, &glvbo);
 	glGenBuffers(1, &glebo);
+	enable();
+}
+
+void HDC::Geometry::enable(){
 	glBindVertexArray(glvao);
 }
+void HDC::Geometry::disable(){
+	glBindVertexArray(0);
+}
+
 HDC::Plane::Plane() : Geometry() {
 
 	auto fast_vertices_colors = vertices_colors.data();
@@ -26,6 +34,16 @@ HDC::Plane::Plane() : Geometry() {
     glEnableVertexAttribArray(1);
 
 }
+
+const HDC::Plane& HDC::Plane::getplane(){
+	static auto const plane = Plane();
+	return plane;
+}
+const HDC::TexturedPlane& HDC::TexturedPlane::getplane(){
+	static auto const plane = TexturedPlane();
+	return plane;
+}
+
 HDC::TexturedPlane::TexturedPlane() : Plane() {
 
 	

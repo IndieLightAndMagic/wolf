@@ -5,6 +5,8 @@
 #include "camera.h"
 #include "shader.h"
 #include "texturemanager.h"
+#include "meshes/geometry.h"
+
 
 #include <memory>
 #include <QImage>
@@ -49,16 +51,15 @@ namespace HDC{
         void handleUp();
         void handleDown();
 
-        char fragBuffer[1024];
-        char vertBuffer[1024];
         GLuint m_posAttr;
         GLuint m_colAttr;
         GLuint m_texAttr;
         GLuint m_matrixUniform;
         GLuint m_textureUniform;
         GLuint m_pcsSliderUniform;
-        GLuint m_vao, m_vbo, m_ebo;
-        GLuint m_tbo[2];
+        
+        GLuint m_soccer_court_texture;
+        HDC::TexturedPlane m_soccer_court{HDC::TexturedPlane::getplane()};
 
         std::shared_ptr<HDC::ShaderProgram> shaderProgram;
         QOpenGLShaderProgram* fastShaderProgram;

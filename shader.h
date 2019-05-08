@@ -54,6 +54,7 @@ namespace HDC {
         
             
     };
+    using PShaderProgram = std::shared_ptr<ShaderProgram>;
 }
 
 #endif //__SHADER_H__

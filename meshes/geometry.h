@@ -15,6 +15,8 @@ namespace HDC {
         unsigned int glebo;
     public:
         Geometry();
+        void enable();
+        void disable();
     };
 
     class Plane : public HDC::Geometry{
@@ -49,8 +51,9 @@ namespace HDC {
             -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
 
-    public:
         TexturedPlane();
+    public:
+    	static const TexturedPlane& getplane();
 
 
     };
