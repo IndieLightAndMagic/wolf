@@ -29,15 +29,15 @@ namespace HDC {
         static std::deque<unsigned int>             emptytextureslots;
     
     public:
-        static QImage                                       initializeTexture(const std::string filename_texture);
         static std::pair<std::vector<unsigned int>, bool>   registerimg(std::vector<std::string>);
         static std::pair<unsigned int, bool>                registerimg(std::string);
         static std::tuple<unsigned int, bool>               getslot(std::string);
         static std::tuple<unsigned int, bool>               getslot(unsigned int);
         static bool                                         unstage(std::string);
         static bool                                         unstage(unsigned int);
-        static constexpr unsigned int                       slot(unsigned int uislot);        
     private:
+        static constexpr unsigned int                       slot(unsigned int uislot);        
+        static QImage                                       initializeTexture(const std::string filename_texture);
         static bool                                         configureTexture(unsigned int);
         
     };
