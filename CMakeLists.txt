@@ -19,7 +19,7 @@ endfunction()
 generatecustommacros()
 
 
-set(target wolf)
+set(target courtdemo)
 add_executable(${target} 
     main.cpp
     util.cpp
@@ -32,8 +32,9 @@ add_executable(${target}
     openglwindow.cpp
     shadersource.cpp
     texturemanager.cpp
+    meshes/geometry.cpp
     )
-
+target_include_directories(${target} PUBLIC ${CMAKE_SOURCE_DIR})
 
 if (APPLE)
     message(STATUS "Yes, Apple")
@@ -52,7 +53,7 @@ else()
     )
 endif()
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
-target_compile_definitions(wolf PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_compile_definitions(${target} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
 
 

@@ -52,12 +52,8 @@
 #include <QWindow>
 #include <QGuiApplication>
 #include <QOpenGLFunctions>
-#ifdef __APPLE__
-#include <QOpenGLFunctions_3_3_Core>
-#else
-#include <QOpenGLFunctions_4_3_Core>
-#endif
 
+#include "openglcommon.h"
 #include "inputmanager.h"
 
 QT_BEGIN_NAMESPACE
