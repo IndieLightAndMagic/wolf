@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-
 message(STATUS "-- Trying to build $ENV{SAMPLE_TO_BUILD}")
-
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,13 +17,19 @@ function(generatecustommacros)
 endfunction()
 generatecustommacros()
 
-
 set(target $ENV{SAMPLE_TO_BUILD})
+function(get_target_sources)
+    file(GLOB_RECURSE target_srcs RELATIVE ${CMAKE_SOURCE_DIR} samples/${target}/*.cpp)
+    set(target_srcs ${target_srcs} PARENT_SCOPE)
+    foreach(target_src ${target_srcs})
+        message(STATUS ${target_src})
+    endforeach()
+endfunction()
 
+
+get_target_sources()
 add_executable(${target} 
-    samples/${target}/main.cpp
-    samples/${target}/${target}.cpp
-    
+    ${target_srcs}
     src/util.cpp
     src/objid.cpp
     src/scene/scene.cpp
@@ -38,7 +42,8 @@ add_executable(${target}
     src/inputmanager/inputmanager.cpp
     
     )
-target_include_directories(${target} PUBLIC 
+target_include_directories(${target} PUBLIC
+    samples/${target}
     ${CMAKE_SOURCE_DIR}/src/ 
     ${CMAKE_SOURCE_DIR}/src/camera
     ${CMAKE_SOURCE_DIR}/src/meshes
