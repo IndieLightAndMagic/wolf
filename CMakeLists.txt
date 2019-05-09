@@ -25,16 +25,16 @@ add_executable(${target}
     util.cpp
     objid.cpp
     scene.cpp
-    camera.cpp
+    src/camera/camera.cpp
     shader.cpp
     introscene.cpp
     inputmanager.cpp
     openglwindow.cpp
     shadersource.cpp
     texturemanager.cpp
-    meshes/geometry.cpp
+    src/meshes/geometry.cpp
     )
-target_include_directories(${target} PUBLIC ${CMAKE_SOURCE_DIR})
+target_include_directories(${target} PUBLIC ${CMAKE_SOURCE_DIR} src/meshes src/camera )
 
 if (APPLE)
     message(STATUS "Yes, Apple")
