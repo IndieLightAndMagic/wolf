@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
+message(STATUS "-- Trying to build $ENV{SAMPLE_TO_BUILD}")
 
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -19,10 +20,12 @@ endfunction()
 generatecustommacros()
 
 
-set(target courtdemo)
+set(target $ENV{SAMPLE_TO_BUILD})
+
 add_executable(${target} 
-    main.cpp
-    introscene.cpp
+    samples/${target}/main.cpp
+    samples/${target}/${target}.cpp
+    
     src/util.cpp
     src/objid.cpp
     src/scene/scene.cpp
@@ -33,6 +36,7 @@ add_executable(${target}
     src/shader/shadersource.cpp
     src/texture/texturemanager.cpp
     src/inputmanager/inputmanager.cpp
+    
     )
 target_include_directories(${target} PUBLIC 
     ${CMAKE_SOURCE_DIR}/src/ 

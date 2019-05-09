@@ -49,7 +49,7 @@
 ****************************************************************************/
 
 
-#include "introscene.h"
+#include "courtdemo.h"
 #include <QtGui/QGuiApplication>
 
 
