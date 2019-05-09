@@ -27,7 +27,7 @@ namespace HDC{
         float m_z {-0.625f};
         void setCamera(
             float verticalFov = 60.0f,
-            float aspectRatio = 4.0f / 3.0f,
+            float aspectRatio = 16.0f / 9.0f,
             float nearPlane = 0.1f,
             float farPlane = 100.0f,
             float x = 0.0f,
