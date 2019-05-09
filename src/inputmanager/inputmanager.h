@@ -13,7 +13,8 @@ signals:
     void left_arrow();
     void right_arrow();
     void escape();
-
+    void m_wheel(int);
+    void m_wheelreleased();
 protected:
     bool eventFilter( QObject *dist, QEvent *event );
 };
