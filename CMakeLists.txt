@@ -22,19 +22,28 @@ generatecustommacros()
 set(target courtdemo)
 add_executable(${target} 
     main.cpp
-    util.cpp
-    objid.cpp
-    scene.cpp
-    src/camera/camera.cpp
-    shader.cpp
     introscene.cpp
-    inputmanager.cpp
-    openglwindow.cpp
-    shadersource.cpp
-    texturemanager.cpp
+    src/util.cpp
+    src/objid.cpp
+    src/scene/scene.cpp
+    src/camera/camera.cpp
+    src/shader/shader.cpp
     src/meshes/geometry.cpp
+    src/opengl/openglwindow.cpp
+    src/shader/shadersource.cpp
+    src/texture/texturemanager.cpp
+    src/inputmanager/inputmanager.cpp
     )
-target_include_directories(${target} PUBLIC ${CMAKE_SOURCE_DIR} src/meshes src/camera )
+target_include_directories(${target} PUBLIC 
+    ${CMAKE_SOURCE_DIR}/src/ 
+    ${CMAKE_SOURCE_DIR}/src/camera
+    ${CMAKE_SOURCE_DIR}/src/meshes
+    ${CMAKE_SOURCE_DIR}/src/shader
+    ${CMAKE_SOURCE_DIR}/src/opengl
+    ${CMAKE_SOURCE_DIR}/src/texture
+    ${CMAKE_SOURCE_DIR}/src/scene
+    ${CMAKE_SOURCE_DIR}/src/inputmanager
+    ) 
 
 if (APPLE)
     message(STATUS "Yes, Apple")
