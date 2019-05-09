@@ -4,8 +4,8 @@
 #include "scene.h"
 #include "camera.h"
 #include "shader.h"
+#include "geometry.h"
 #include "texturemanager.h"
-#include "meshes/geometry.h"
 
 
 #include <memory>
@@ -59,7 +59,7 @@ namespace HDC{
         GLuint m_pcsSliderUniform;
         
         GLuint m_soccer_court_texture;
-        HDC::TexturedPlane* m_soccer_court{nullptr};
+        HDC::TexturedPlaneGeometry* m_soccer_court{nullptr};
 
         std::shared_ptr<HDC::ShaderProgram> shaderProgram;
         QOpenGLShaderProgram* fastShaderProgram;

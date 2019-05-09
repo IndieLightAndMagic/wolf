@@ -1,7 +1,6 @@
 #include "introscene.h"
 #include "texturemanager.h"
 
-#include "meshes/geometry.h"
 
 #include <tuple>
 #include <memory>
@@ -28,7 +27,12 @@ HDC::IntroScene::IntroScene(){
 
 void HDC::IntroScene::initializeGeometry(){
 
-    m_soccer_court = new HDC::TexturedPlane();
+    m_soccer_court = new HDC::TexturedPlaneGeometry();
+
+    m_soccer_court->setheight(0.3f);
+    m_soccer_court->setwidth(0.3f);
+    m_soccer_court->resetplane();
+
 
 }
 void HDC::IntroScene::processState(){
@@ -137,6 +141,7 @@ void HDC::IntroScene::initialize(){
     auto slot_bok = HDC::TextureManager::getslot(gltxture);
     assert(std::get<1>(slot_bok));
     m_soccer_court_texture = std::get<0>(slot_bok);
+    TextureManager::printtextureinformation(gltxture);
 
 
     auto m_program = shaderProgram.get()[0]();    
