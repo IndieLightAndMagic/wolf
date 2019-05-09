@@ -228,6 +228,13 @@ QImage HDC::TextureManager::initializeTexture(const std::string filename_texture
 
 }
 
+QImage::Format HDC::TextureManager::getimageformat(unsigned int gltxture){
+
+    auto pqimage = static_cast<QImage*>(gltxture_imageptr_map[gltxture]);
+    return pqimage->format();
+
+}
+
 std::map<QImage::Format, std::string> HDC::TextureManager::format_map{
     std::make_pair(QImage::Format_Invalid,  "QImage::Format_Invalid:\tThe image is invalid."),
     std::make_pair(QImage::Format_Mono, "QImage::Format_Mono:\tThe image is stored using 1-bit per pixel. Bytes are packed with the most significant bit (MSB) first."),

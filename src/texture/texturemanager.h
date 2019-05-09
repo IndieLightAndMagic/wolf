@@ -34,6 +34,7 @@ namespace HDC {
         static std::pair<unsigned int, bool> 				registerimg(std::string, unsigned int, unsigned int, QImage::Format);
         static std::tuple<unsigned int, bool>               getslot(std::string);
         static std::tuple<unsigned int, bool>               getslot(unsigned int);
+        static QImage::Format                               getimageformat(unsigned int);
         static bool                                         unstage(std::string);
         static bool                                         unstage(unsigned int);
         static void*                                        getimageptr(unsigned int);
@@ -43,7 +44,6 @@ namespace HDC {
         static constexpr unsigned int                       slot(unsigned int uislot);        
         static QImage                                       initializeTexture(const std::string filename_texture);
         static bool                                         configureTexture(unsigned int);
-
         static void                               imgisnotregistered(std::string);
         static QImage*                            createimg(std::string);
         static QImage*                            createimg(unsigned int, unsigned int, QImage::Format);
