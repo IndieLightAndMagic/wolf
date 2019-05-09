@@ -12,8 +12,7 @@
 #include <QElapsedTimer>
 #include <QGuiApplication>
 #include <QOpenGLShaderProgram>
-
-
+#include <math.h>
 
 
 HDC::HeathMap::HeathMap(){
@@ -33,93 +32,7 @@ void HDC::HeathMap::initializeGeometry(){
 
 
 }
-void HDC::HeathMap::processState(){
 
-    float sliderValue{0.0f};
-
-    m_elapsedTimeMeasurement = m_timer.elapsed();
-
-    auto m_program = shaderProgram.get()[0]();    
-    if (m_state == IntroState::START){
-
-        m_state = IntroState::FADING_IN_CARNAGE;
-        std::cout << "CARNAGE\n";
-        m_timer.start();
-        m_timeToExpire = 1000.0f;
-
-        //As texture is going to be the same always, lets attach it.
-        m_program->setUniformValue(m_textureUniform, 0);
-
-    } else if (m_state == IntroState::FADING_IN_CARNAGE){
-
-        float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
-        _timeFraction = _timeFraction <= 1.0f ? _timeFraction : 1.0f;
-
-
-        if (_timeFraction >= 1.0f) {
-            std::cout << "STILL IN CARNAGE\n";
-            m_state = IntroState::STILL_IN_CARNAGE;
-            m_timer.start();
-            m_timeToExpire = 3000.0f;
-        }
-        sliderValue = _timeFraction;
-
-    } else if (m_state == IntroState::STILL_IN_CARNAGE){
-
-        float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
-        _timeFraction = _timeFraction < 1.0f ? _timeFraction : 1.0f;
-
-        if (_timeFraction >= 1.0f) {
-            std::cout << "FADING_OUT_CARNAGE\n";
-            m_state = IntroState::FADING_OUT_CARNAGE;
-            m_timer.start();
-            m_timeToExpire = 1000.0f;
-        }
-        sliderValue = 1.0f;
-
-
-    } else if (m_state == IntroState::FADING_OUT_CARNAGE){
-
-        float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
-        _timeFraction = 1.0 - _timeFraction;
-        _timeFraction = _timeFraction >= 0.0f ? _timeFraction : 0.0f;
-
-        if (_timeFraction <= 0.0f) {
-            std::cout << "FADING IN CLASSIC\n";
-
-            m_state = IntroState::FADING_CLASSIC_IN;
-            m_timer.start();
-            m_timeToExpire = 1000.0f;
-        }
-        sliderValue = _timeFraction;
-
-    } else if (m_state == IntroState::FADING_CLASSIC_IN){
-
-        float _timeFraction = m_elapsedTimeMeasurement / m_timeToExpire;
-        _timeFraction = _timeFraction <= 1.0f ? _timeFraction : 1.0f;
-
-        if (_timeFraction >= 1.0f) {
-            m_state = IntroState::IDLE;
-            m_timer.start();
-            m_timeToExpire = 3000.0f;
-        }
-        sliderValue = _timeFraction;
-
-        //As texture is going to be the same always, lets attach it.
-        m_program->setUniformValue(m_textureUniform, m_soccer_court_texture);
-
-    } else if(m_state == IntroState::FINISH){
-
-        QGuiApplication::exit();
-
-    } else {
-
-        sliderValue = 1.0f;
-
-    }
-    m_program->setUniformValue(m_pcsSliderUniform, sliderValue);    
-
-}
 void HDC::HeathMap::initialize(){
 
 
@@ -143,12 +56,10 @@ void HDC::HeathMap::initialize(){
 
     auto m_program = shaderProgram.get()[0]();    
 
-    m_posAttr = m_program->attributeLocation("posAttr");
-    m_colAttr = m_program->attributeLocation("colAttr");
-    m_texAttr = m_program->attributeLocation("texAttr");
     m_matrixUniform = m_program->uniformLocation("matrix");
     m_textureUniform = m_program->uniformLocation("ourTexture");
-    m_pcsSliderUniform = m_program->uniformLocation("pcsSlider");
+    m_blendSliderUniform = m_program->uniformLocation("fblend");
+    m_fgridSliderUniform = m_program->uniformLocation("fgrid");
 
 
     m_valid = true;
@@ -165,16 +76,22 @@ void HDC::HeathMap::initialize(){
         this, &HDC::HeathMap::handleUp);
     connect(&m_im, &InputManager::down_arrow,
         this, &HDC::HeathMap::handleDown);
-
+    connect(&m_im, &InputManager::m_wheel, this, &HDC::HeathMap::handleWheel);
+    connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeathMap::handleWheelButton);
 }
 
 void HDC::HeathMap::render(){
 
     Scene::render();
+
     fastShaderProgram->bind();
     m_soccer_court->enable();
+
     fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
-    processState();
+    fastShaderProgram->setUniformValue(m_textureUniform, m_soccer_court_texture);
+    fastShaderProgram->setUniformValue(m_fgridSliderUniform, m_fgrid);
+    fastShaderProgram->setUniformValue(m_blendSliderUniform, m_fblend);
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     fastShaderProgram->release();
 
@@ -182,6 +99,7 @@ void HDC::HeathMap::render(){
 void HDC::HeathMap::handleEscape(){
     std::cout << "Finishing Scene....." << std::endl;
     m_state = IntroState::FINISH;
+    QGuiApplication::exit();
 }
 void HDC::HeathMap::handleUp(){
     m_cam.setCameraPositionDelta(0.0f, 0.0f, 0.1f);
@@ -189,4 +107,33 @@ void HDC::HeathMap::handleUp(){
 }
 void HDC::HeathMap::handleDown(){
     m_cam.setCameraPositionDelta(0.0f, 0.0f, -0.1f);
+}
+
+void HDC::HeathMap::handleWheel(int delta){
+
+    if (m_wheelstate == WheelState::GRID){
+
+        if (grid_exponent == 10 && delta > 0) return;
+        if (!grid_exponent && delta < 0) return;
+
+        grid_exponent += delta;
+        grid_exponent = grid_exponent % 11 ;
+        m_fgrid = powf(2,grid_exponent);
+        
+
+    } else {
+        auto fdelta = static_cast<float>(delta);
+        fdelta /= 10.0f;
+        m_fblend += fdelta;
+        if (m_fblend < 0.0f) m_fblend = 0.0f;
+        else if (m_fblend > 1.0f) m_fblend = 1.0f;
+    }
+
+
+
+}
+void HDC::HeathMap::handleWheelButton(){
+    m_wheelstate = m_wheelstate == WheelState::GRID ? WheelState::BLEND : WheelState::GRID;
+    auto message = m_wheelstate == WheelState::GRID ? std::string{"GRID mode..."} : std::string{"BLEND mode..."};
+    std::cout << message << std::endl;
 }

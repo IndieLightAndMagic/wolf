@@ -21,6 +21,10 @@ namespace HDC{
     {
     public:
         Camera m_cam;
+        enum class WheelState {
+            GRID,
+            BLEND
+        };
         enum class IntroState {
             START, 
             FADING_IN_CARNAGE, 
@@ -50,14 +54,14 @@ namespace HDC{
         void handleEscape();
         void handleUp();
         void handleDown();
+        void handleWheel(int);
+        void handleWheelButton();
 
-        GLuint m_posAttr;
-        GLuint m_colAttr;
-        GLuint m_texAttr;
+
         GLuint m_matrixUniform;
         GLuint m_textureUniform;
-        GLuint m_pcsSliderUniform;
-        
+        GLuint m_blendSliderUniform;
+        GLuint m_fgridSliderUniform;
         GLuint m_soccer_court_texture;
         HDC::TexturedPlaneGeometry* m_soccer_court{nullptr};
 
@@ -68,9 +72,14 @@ namespace HDC{
         uint64_t m_elapsedTimeMeasurement{0};
 
         HeathMap::IntroState m_state{IntroState::START};
+        HeathMap::WheelState m_wheelstate{WheelState::GRID};
         float m_timeToExpire{0.0f};
         unsigned int m_activeTextureIndex{0};
 
+        unsigned int grid_exponent{0};
+        float m_fgrid{1.0f};
+        float m_fblend{0.0f};
+        
     };
 }
 #endif /* _INTROSCENE_H_ */
