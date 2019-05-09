@@ -35,6 +35,8 @@ namespace HDC {
         static std::tuple<unsigned int, bool>               getslot(unsigned int);
         static bool                                         unstage(std::string);
         static bool                                         unstage(unsigned int);
+        static void*                                        getimageptr(unsigned int);
+        static void                                         printtextureinformation(unsigned int); 
     private:
         static constexpr unsigned int                       slot(unsigned int uislot);        
         static QImage                                       initializeTexture(const std::string filename_texture);

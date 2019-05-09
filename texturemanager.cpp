@@ -19,15 +19,20 @@ QString getAbsolutePath(std::string filename){
     return absoluteTestPath;
 
 }
-void printTextureInformation(const QImage& crqimage){
+void HDC::TextureManager::printtextureinformation(unsigned int gltxture){
 
-    auto colorformat = crqimage.pixelFormat().typeInterpretation();
+    auto found       = gltxture_imageptr_map.find(gltxture) != gltxture_imageptr_map.end();
+    assert(found); 
+    auto pqimage     = gltxture_imageptr_map[gltxture];
+    QImage& rqimage  = *(reinterpret_cast<QImage*>(pqimage));
+    auto colorformat = rqimage.pixelFormat().typeInterpretation();
+
     if (colorformat  == QPixelFormat::UnsignedInteger ) std::cout << "Color is QPixelFormat::UnsignedInteger " << std::endl;     
     if (colorformat  == QPixelFormat::UnsignedShort ) std::cout << "Color is QPixelFormat::UnsignedShort " << std::endl;     
     if (colorformat  == QPixelFormat::UnsignedByte ) std::cout << "Color is QPixelFormat::UnsignedByte " << std::endl;     
     if (colorformat  == QPixelFormat::FloatingPoint ) std::cout << "Color is QPixelFormat::FloatingPoint " << std::endl;     
 
-    auto colormodel = crqimage.pixelFormat().colorModel();
+    auto colormodel = rqimage.pixelFormat().colorModel();
     if (colormodel == QPixelFormat::RGB) std::cout << "Color model is QPixelFormat::RGB" << std::endl;   ;//0   The color model is RGB.
     if (colormodel == QPixelFormat::BGR) std::cout << "Color model is QPixelFormat::BGR" << std::endl;   ;//1   This is logically the opposite endian version of RGB. However, for ease of use it has its own model.
     if (colormodel == QPixelFormat::Indexed) std::cout << "Color model is QPixelFormat::Indexed" << std::endl;   ;//2   The color model uses a color palette.
@@ -39,6 +44,7 @@ void printTextureInformation(const QImage& crqimage){
     if (colormodel == QPixelFormat::Alpha) std::cout << "Color model is QPixelFormat::Alpha" << std::endl; ;//8   There is no color model, only alpha is used.
 
 }
+
 std::map<std::string, unsigned int> HDC::TextureManager::filename_gltxture_map{};
 std::map<unsigned int, unsigned int> HDC::TextureManager::gltxture_txtureslot_map{};
 std::map<unsigned int, void*> HDC::TextureManager::gltxture_imageptr_map{};
