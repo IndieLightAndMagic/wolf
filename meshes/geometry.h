@@ -19,7 +19,7 @@ namespace HDC {
         void disable();
     };
 
-    class Plane : public HDC::Geometry{
+    class PlaneGeometry : public HDC::Geometry{
 
     protected:
 
@@ -35,10 +35,17 @@ namespace HDC {
             1, 2, 3  // second triangle
         };
     public:
-        Plane();
+        void resetplane();
+        PlaneGeometry();
+        void setwidth(float width);
+        const float& width() const;
+        void setheight(float height);
+        const float& height() const;
+
+
     };
 
-    class TexturedPlane : public HDC::Plane {
+    class TexturedPlaneGeometry : public HDC::PlaneGeometry {
 
     protected:
 
@@ -49,9 +56,14 @@ namespace HDC {
             -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
             -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
-
+    
     public:
-        TexturedPlane();
+        void resetplane();
+        TexturedPlaneGeometry();
+        void setwidth(float width);
+        const float& width() const;
+        void setheight(float height);
+        const float& height() const;
 
 
     };
