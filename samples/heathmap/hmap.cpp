@@ -16,14 +16,14 @@
 
 
 
-HDC::IntroScene::IntroScene(){
+HDC::HeathMap::HeathMap(){
     
 
 }
 
 
 
-void HDC::IntroScene::initializeGeometry(){
+void HDC::HeathMap::initializeGeometry(){
 
     m_soccer_court = new HDC::TexturedPlaneGeometry();
 
@@ -33,7 +33,7 @@ void HDC::IntroScene::initializeGeometry(){
 
 
 }
-void HDC::IntroScene::processState(){
+void HDC::HeathMap::processState(){
 
     float sliderValue{0.0f};
 
@@ -120,15 +120,14 @@ void HDC::IntroScene::processState(){
     m_program->setUniformValue(m_pcsSliderUniform, sliderValue);    
 
 }
-void HDC::IntroScene::initialize(){
+void HDC::HeathMap::initialize(){
 
 
-    std::cout <<"Wolfy resources:" << std::endl;
-
+    
     initializeGeometry();
     shaderProgram = std::make_shared<ShaderProgram>(
-        (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.vert").c_str(),    
-        (std::string(RESOURCES_DIR) + "/shaders/wolfy_intro.frag").c_str()
+        (std::string(RESOURCES_DIR) + "/shaders/heathmap.vert").c_str(),
+        (std::string(RESOURCES_DIR) + "/shaders/heathmap.frag").c_str()
         );
     fastShaderProgram = shaderProgram.get()[0]();
 
@@ -161,15 +160,15 @@ void HDC::IntroScene::initialize(){
 
     installEventFilter(&m_im);
     connect(&m_im, &InputManager::escape,
-        this, &HDC::IntroScene::handleEscape);
+        this, &HDC::HeathMap::handleEscape);
     connect(&m_im, &InputManager::up_arrow,
-        this, &HDC::IntroScene::handleUp);
+        this, &HDC::HeathMap::handleUp);
     connect(&m_im, &InputManager::down_arrow,
-        this, &HDC::IntroScene::handleDown);
+        this, &HDC::HeathMap::handleDown);
 
 }
 
-void HDC::IntroScene::render(){
+void HDC::HeathMap::render(){
 
     Scene::render();
     fastShaderProgram->bind();
@@ -180,13 +179,14 @@ void HDC::IntroScene::render(){
     fastShaderProgram->release();
 
 }
-void HDC::IntroScene::handleEscape(){
+void HDC::HeathMap::handleEscape(){
     std::cout << "Finishing Scene....." << std::endl;
     m_state = IntroState::FINISH;
 }
-void HDC::IntroScene::handleUp(){
+void HDC::HeathMap::handleUp(){
     m_cam.setCameraPositionDelta(0.0f, 0.0f, 0.1f);
+
 }
-void HDC::IntroScene::handleDown(){
+void HDC::HeathMap::handleDown(){
     m_cam.setCameraPositionDelta(0.0f, 0.0f, -0.1f);
 }

@@ -17,7 +17,7 @@
 
 
 namespace HDC{
-    class IntroScene : public Scene
+    class HeathMap : public Scene
     {
     public:
         Camera m_cam;
@@ -36,7 +36,7 @@ namespace HDC{
         QImage qimage{};
         std::vector<QImage> qimages{};
         
-        IntroScene();
+        HeathMap();
 
         void initialize() override;
         void render() override;
@@ -67,7 +67,7 @@ namespace HDC{
         QElapsedTimer m_timer;
         uint64_t m_elapsedTimeMeasurement{0};
 
-        IntroScene::IntroState m_state{IntroState::START};
+        HeathMap::IntroState m_state{IntroState::START};
         float m_timeToExpire{0.0f};
         unsigned int m_activeTextureIndex{0};
 

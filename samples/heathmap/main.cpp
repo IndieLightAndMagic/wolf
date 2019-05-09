@@ -60,9 +60,9 @@ int main(int argc, char **argv){
     QSurfaceFormat format;
     format.setSamples(16);
 
-    HDC::IntroScene window;
+    HDC::HeathMap window;
     window.setFormat(format);
-    window.resize(1024, 768);
+    window.resize(1400, 800);
     window.show();
     window.setAnimating(true);
 
