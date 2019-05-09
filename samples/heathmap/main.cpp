@@ -49,7 +49,7 @@
 ****************************************************************************/
 
 
-#include "courtdemo.h"
+#include "hmap.h"
 #include <QtGui/QGuiApplication>
 
 
