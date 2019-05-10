@@ -52,6 +52,7 @@ target_include_directories(${target} PUBLIC
     ${CMAKE_SOURCE_DIR}/src/texture
     ${CMAKE_SOURCE_DIR}/src/scene
     ${CMAKE_SOURCE_DIR}/src/inputmanager
+    /usr/local/include
     ) 
 
 if (APPLE)
