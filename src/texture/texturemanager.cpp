@@ -10,8 +10,40 @@
 #include <tuple>
 #include <cassert>
 #include <utility>
+HDC::FastTextureData::FastTextureData(unsigned int txture, void* pvendor_data)
+{
+    assert(tunits>0);
+    auto qimage = static_cast<QImage*>(pvendor_data);
+
+    width = qimage->width();
+    height = qimage->height();
+    data = qimage->bits();
+    assert( data != nullptr && width > 0 && height > 0);
 
 
+    auto _tunits = tunits;
+    _tunits = ~tunits;  
+    unsigned int tmask = 0;
+    while(  (1 << tmask ) & _tunits  ) tmask++;
+    assert(tmask < 32);
+    gl.slot = tmask;
+    gl.txture = txture;
+    tunits &= ~(1 << tmask);
+
+    image_data_vendor = pvendor_data;
+    format_info_vendor = static_cast<unsigned int>(qimage->format());
+    updateTexture();
+
+}
+unsigned int HDC::FastTextureData::tunits{0xFFFFFFFF};
+void HDC::FastTextureData::bind() const {
+    glActiveTexture(GL_TEXTURE0 + gl.slot);
+    glBindTexture(GL_TEXTURE_2D, gl.txture);
+}
+void HDC::FastTextureData::unbind() const {
+    glActiveTexture(GL_TEXTURE0 + gl.slot);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
 QString getAbsolutePath(std::string filename){
 
     auto path = QDir(QString(filename.c_str()));
@@ -19,15 +51,12 @@ QString getAbsolutePath(std::string filename){
     return absoluteTestPath;
 
 }
-void HDC::TextureManager::printtextureinformation(unsigned int gltxture){
+void HDC::FastTextureData::printtextureinformation(){
+    auto& gltxture = gl.txture; 
 
-    auto found       = gltxture_imageptr_map.find(gltxture) != gltxture_imageptr_map.end();
-    assert(found); 
-    auto pqimage     = gltxture_imageptr_map[gltxture];
-    QImage& rqimage  = *(reinterpret_cast<QImage*>(pqimage));
-
-    auto imageformat = rqimage.format();
-    std::cout << "Image Format is: " << TextureManager::format_map[imageformat] << std::endl;
+    QImage& rqimage = *(reinterpret_cast<QImage*>(image_data_vendor));
+    
+    std::cout << "Image Format is: " << HDC::FastTextureData::format_map[HDC::FastTextureData::ui_format_map[format_info_vendor]] << std::endl;
 
     auto colorformat = rqimage.pixelFormat().typeInterpretation();
 
@@ -49,44 +78,6 @@ void HDC::TextureManager::printtextureinformation(unsigned int gltxture){
 
 }
 
-std::map<std::string, unsigned int> HDC::TextureManager::filename_gltxture_map{};
-std::map<unsigned int, unsigned int> HDC::TextureManager::gltxture_txtureslot_map{};
-std::map<unsigned int, void*> HDC::TextureManager::gltxture_imageptr_map{};
-std::deque<unsigned int> HDC::TextureManager::emptytextureslots {
-    GL_TEXTURE0,
-    GL_TEXTURE1,
-    GL_TEXTURE2,
-    GL_TEXTURE3,
-    GL_TEXTURE4,
-    GL_TEXTURE5,
-    GL_TEXTURE6,
-    GL_TEXTURE7,
-    GL_TEXTURE8,
-    GL_TEXTURE9,
-    GL_TEXTURE10,
-    GL_TEXTURE11,
-    GL_TEXTURE12,
-    GL_TEXTURE13,
-    GL_TEXTURE14,
-    GL_TEXTURE15,
-    GL_TEXTURE16,
-    GL_TEXTURE17,
-    GL_TEXTURE18,
-    GL_TEXTURE19,
-    GL_TEXTURE20,
-    GL_TEXTURE21,
-    GL_TEXTURE22,
-    GL_TEXTURE23,
-    GL_TEXTURE24,
-    GL_TEXTURE25,
-    GL_TEXTURE26,
-    GL_TEXTURE27,
-    GL_TEXTURE28,
-    GL_TEXTURE29,
-    GL_TEXTURE30,
-    GL_TEXTURE31,
-
-};        
 
 void HDC::TextureManager::imgisnotregistered(std::string imgpath){
 
@@ -101,9 +92,9 @@ QImage* HDC::TextureManager::createimg(std::string imgpath){
 
 }
 
-QImage* HDC::TextureManager::createimg(unsigned int width, unsigned int height, QImage::Format format){
+QImage* HDC::TextureManager::createimg(unsigned int width, unsigned int height, unsigned int format){
 
-    auto pqimage = new QImage(static_cast<int>(width), static_cast<int>(height), format);
+    auto pqimage = new QImage(static_cast<int>(width), static_cast<int>(height), static_cast<QImage::Format>(format));
     assert(pqimage->isNull() == false);
     return pqimage;    
 
@@ -113,48 +104,32 @@ void HDC::TextureManager::generateandregistertxture(std::string imgname, QImage*
 
     unsigned int gltxture{0};
     glGenTextures(1, &gltxture);
-    assert(HDC::TextureManager::gltxture_txtureslot_map.find(gltxture) == HDC::TextureManager::gltxture_txtureslot_map.end());
+    assert(gltxture > 0);
     
-    filename_gltxture_map[imgname] = gltxture;
-    gltxture_imageptr_map[gltxture] = pqimage;
+    filename_gltxture_map[imgname]	= gltxture;
+    gltxture_fastdata_map[gltxture] = new HDC::FastTextureData(gltxture, pqimage);
 
 }
 
-std::pair<unsigned int, bool> HDC::TextureManager::registerimg(std::string imgpath){
+HDC::FastTextureData* HDC::TextureManager::registerimg(std::string imgpath){
 
     /*check*/   imgisnotregistered(imgpath);
     /*then*/    generateandregistertxture(imgpath, createimg(imgpath));
-    /*finally*/ return std::make_pair(filename_gltxture_map[imgpath], configureTexture(filename_gltxture_map[imgpath]));
+    /*finally*/ return gltxture_fastdata_map[filename_gltxture_map[imgpath]];
 
 }
-std::pair<unsigned int, bool> HDC::TextureManager::registerimg(std::string imgname, unsigned int width, unsigned int height, QImage::Format format){
+HDC::FastTextureData* HDC::TextureManager::registerimg(std::string imgname, unsigned int width, unsigned int height, unsigned int format){
 
 
     /*check*/   imgisnotregistered(imgname);
     /*then*/    generateandregistertxture(imgname, createimg(width, height, format));
-    /*finally*/ return std::make_pair(filename_gltxture_map[imgname], configureTexture(filename_gltxture_map[imgname]));
+    /*finally*/ return gltxture_fastdata_map[filename_gltxture_map[imgname]];
 
 }
-std::pair<std::vector<unsigned int>, bool> HDC::TextureManager::registerimg(std::vector<std::string> imgpaths){
 
-    auto gltxtures = std::vector<unsigned int>{};
-    for (auto& imgpath : imgpaths){
+void HDC::FastTextureData::updateTexture(){
 
-        auto [gltxture, ok] = registerimg(imgpath);
-        assert(ok);
-        gltxtures.push_back(gltxture);
-
-    }
-    return std::make_pair(gltxtures, true);
-}
-
-bool HDC::TextureManager::configureTexture(unsigned int gltxture){
-
-    auto found = gltxture_imageptr_map.find(gltxture) != gltxture_imageptr_map.end();
-    assert(found);
-    auto pqimage = static_cast<QImage*>(gltxture_imageptr_map[gltxture]);
-    auto& qimage = pqimage[0];
-    glBindTexture(GL_TEXTURE_2D, gltxture); 
+    bind();
     // set the texture wrapping parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -162,63 +137,16 @@ bool HDC::TextureManager::configureTexture(unsigned int gltxture){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    auto [qimagewidth, qimageheight] = std::make_tuple(qimage.width(), qimage.height());
-    auto imagedata = qimage.bits();
-    assert(qimagewidth>0);
-    assert(qimageheight>0);
-    assert(imagedata!=nullptr);
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, qimagewidth, qimageheight, 0, GL_BGRA, GL_UNSIGNED_BYTE, imagedata);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-    
-    return true;
+
+    unbind();
 
 }
 
-std::tuple<unsigned int, bool> HDC::TextureManager::getslot(unsigned int gltxture){
-    //Check if already
-    if (gltxture_txtureslot_map.find(gltxture) != gltxture_txtureslot_map.end())
-        return std::make_pair(gltxture_txtureslot_map[gltxture] - GL_TEXTURE0, true);
-    
-    //Grab slot
-    assert(!emptytextureslots.empty());
-    auto glslot = emptytextureslots.front();
-    emptytextureslots.pop_front();
-    
-    //Update dict
-    gltxture_txtureslot_map[gltxture] = glslot;
-    glActiveTexture(glslot);
-    glBindTexture(GL_TEXTURE_2D, gltxture);
-    return std::make_pair(glslot - GL_TEXTURE0, true);
 
-}
 
-std::tuple<unsigned int, bool> HDC::TextureManager::getslot(std::string imgpath){
-    auto found = filename_gltxture_map.find(imgpath) != filename_gltxture_map.end();
-    if (found) return std::make_pair(filename_gltxture_map[imgpath], true);
-    else return std::make_pair(0, false);
-}
-
-bool HDC::TextureManager::unstage(unsigned int gltxture){
-
-    if(gltxture_txtureslot_map.find(gltxture) == gltxture_txtureslot_map.end()) return false;
-    auto glslot = gltxture_txtureslot_map[gltxture];
-    gltxture_txtureslot_map.erase(gltxture);
-    emptytextureslots.push_front(glslot);
-    return true;
-
-}
-bool HDC::TextureManager::unstage(std::string imgpath){
-
-    if(filename_gltxture_map.find(imgpath) == filename_gltxture_map.end()) return false;
-    auto gltxture = filename_gltxture_map[imgpath];
-    if(gltxture_txtureslot_map.find(gltxture) == gltxture_txtureslot_map.end()) return false;
-    return unstage(gltxture);
-
-}
-constexpr unsigned int HDC::TextureManager::slot(unsigned int uislot){
-    return uislot + GL_TEXTURE0;
-}
 QImage HDC::TextureManager::initializeTexture(const std::string filename_texture){
 
     auto qimage = QImage(getAbsolutePath(filename_texture)).mirrored(false, true);
@@ -228,14 +156,10 @@ QImage HDC::TextureManager::initializeTexture(const std::string filename_texture
 
 }
 
-QImage::Format HDC::TextureManager::getimageformat(unsigned int gltxture){
+std::map<unsigned int, HDC::FastTextureData*> HDC::TextureManager::gltxture_fastdata_map{};
+std::map<std::string, unsigned int> HDC::TextureManager::filename_gltxture_map{};
 
-    auto pqimage = static_cast<QImage*>(gltxture_imageptr_map[gltxture]);
-    return pqimage->format();
-
-}
-
-std::map<QImage::Format, std::string> HDC::TextureManager::format_map{
+std::map<QImage::Format, std::string> HDC::FastTextureData::format_map{
     std::make_pair(QImage::Format_Invalid,  "QImage::Format_Invalid:\tThe image is invalid."),
     std::make_pair(QImage::Format_Mono, "QImage::Format_Mono:\tThe image is stored using 1-bit per pixel. Bytes are packed with the most significant bit (MSB) first."),
     std::make_pair(QImage::Format_MonoLSB,  "QImage::Format_MonoLSB:\tThe image is stored using 1-bit per pixel. Bytes are packed with the less significant bit (LSB) first."),
@@ -266,3 +190,33 @@ std::map<QImage::Format, std::string> HDC::TextureManager::format_map{
     std::make_pair(QImage::Format_RGBA64_Premultiplied, "QImage::Format_RGBA64_Premultiplied:\tThe image is stored using a premultiplied 64-bit halfword-ordered RGBA format (16-16-16-16). (added in Qt 5.12)"),
 }; 
 
+std::map<unsigned int, QImage::Format> HDC::FastTextureData::ui_format_map{
+    std::make_pair(0,QImage::Format_Invalid),
+    std::make_pair(1,QImage::Format_Mono),
+    std::make_pair(2,QImage::Format_MonoLSB ),
+    std::make_pair(3,QImage::Format_Indexed8),
+    std::make_pair(4,QImage::Format_RGB32   ),
+    std::make_pair(5,QImage::Format_ARGB32  ),
+    std::make_pair(6,QImage::Format_ARGB32_Premultiplied),
+    std::make_pair(7,QImage::Format_RGB16   ),
+    std::make_pair(8,QImage::Format_ARGB8565_Premultiplied  ),
+    std::make_pair(9,QImage::Format_RGB666  ),
+    std::make_pair(10,QImage::Format_ARGB6666_Premultiplied  ),
+    std::make_pair(11,QImage::Format_RGB555  ),
+    std::make_pair(12,QImage::Format_ARGB8555_Premultiplied  ),
+    std::make_pair(13,QImage::Format_RGB888  ),
+    std::make_pair(14,QImage::Format_RGB444  ),
+    std::make_pair(15,QImage::Format_ARGB4444_Premultiplied  ),
+    std::make_pair(16,QImage::Format_RGBX8888),
+    std::make_pair(17,QImage::Format_RGBA8888),
+    std::make_pair(18,QImage::Format_RGBA8888_Premultiplied  ),
+    std::make_pair(19,QImage::Format_BGR30   ),
+    std::make_pair(20,QImage::Format_A2BGR30_Premultiplied   ),
+    std::make_pair(22,QImage::Format_RGB30   ),
+    std::make_pair(23,QImage::Format_A2RGB30_Premultiplied   ),
+    std::make_pair(24,QImage::Format_Alpha8  ),
+    std::make_pair(25,QImage::Format_Grayscale8  ),
+    std::make_pair(26,QImage::Format_RGBX64  ),
+    std::make_pair(27,QImage::Format_RGBA64  ),
+    std::make_pair(28,QImage::Format_RGBA64_Premultiplied),
+}; 
