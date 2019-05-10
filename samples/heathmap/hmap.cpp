@@ -46,7 +46,7 @@ void HDC::HeathMap::initializeTextures(){
     auto size = m_soccer_court_texture->width * m_soccer_court_texture->height;
     for ( auto index = 0; index < size; ++index){
                 
-        m_heatmap_texture->data[index * 4 + (index % 3)] = 0xFF;
+        m_heatmap_texture->data[index * 4 + (index % 4)] = 0xFF;
 
     }
     m_heatmap_texture->updateTexture();

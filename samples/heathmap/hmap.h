@@ -73,13 +73,13 @@ namespace HDC{
         uint64_t m_elapsedTimeMeasurement{0};
 
         HeathMap::IntroState m_state{IntroState::START};
-        HeathMap::WheelState m_wheelstate{WheelState::GRID};
+        HeathMap::WheelState m_wheelstate{WheelState::BLEND};
         float m_timeToExpire{0.0f};
         unsigned int m_activeTextureIndex{0};
 
         unsigned int grid_exponent{0};
         float m_fgrid{1.0f};
-        float m_fblend{0.0f};
+        float m_fblend{0.5f};
 
         
     };
