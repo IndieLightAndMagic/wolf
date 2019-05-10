@@ -2,12 +2,14 @@
 out vec4 FragColor;
 in vec4 ourColor;
 in vec2 TexCoord;
-uniform sampler2D ourTexture;
+
+uniform sampler2D heat__texture;
+uniform sampler2D court_texture;
 uniform float fblend;
 uniform float fgrid;
 
-void main(){
 
+void main(){
 
    float x = TexCoord.x * fgrid;
    x = floor(x);
@@ -20,5 +22,6 @@ void main(){
 
    vec4 red = vec4(1.0f - x, 0.0f, 0.0f, 0.0f);
    vec4 blue = vec4(0.0f, 0.0f, 1.0 - y, 0.0f);
-   FragColor=(red + blue)*fblend + texture(ourTexture,TexCoord)*(1.0f - fblend);
+   FragColor=(red + blue)*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);
+
 }

@@ -55,7 +55,7 @@ void HDC::HeathMap::initialize(){
     auto m_program = shaderProgram.get()[0]();    
 
     m_matrixUniform = m_program->uniformLocation("matrix");
-    m_textureUniform = m_program->uniformLocation("ourTexture");
+    m_court_textureUniform = m_program->uniformLocation("court_texture");
     m_blendSliderUniform = m_program->uniformLocation("fblend");
     m_fgridSliderUniform = m_program->uniformLocation("fgrid");
 
@@ -83,7 +83,7 @@ void HDC::HeathMap::render(){
 
     fastShaderProgram->bind();
     fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
-    fastShaderProgram->setUniformValue(m_textureUniform, m_soccer_court_texture->gl.slot);
+    fastShaderProgram->setUniformValue(m_court_textureUniform, m_soccer_court_texture->gl.slot);
     fastShaderProgram->setUniformValue(m_fgridSliderUniform, m_fgrid);
     fastShaderProgram->setUniformValue(m_blendSliderUniform, m_fblend);
 

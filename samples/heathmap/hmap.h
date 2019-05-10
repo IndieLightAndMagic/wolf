@@ -57,7 +57,8 @@ namespace HDC{
 
 
         GLuint m_matrixUniform;
-        GLuint m_textureUniform;
+        GLuint m_court_textureUniform;
+        GLuint m_heat__textureUniform;
         GLuint m_blendSliderUniform;
         GLuint m_fgridSliderUniform;
         HDC::FastTextureData *m_soccer_court_texture;
