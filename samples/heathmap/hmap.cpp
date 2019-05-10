@@ -56,6 +56,7 @@ void HDC::HeathMap::initialize(){
 
     m_matrixUniform = m_program->uniformLocation("matrix");
     m_court_textureUniform = m_program->uniformLocation("court_texture");
+    m_heat__textureUniform = m_program->uniformLocation("heat__texture");
     m_blendSliderUniform = m_program->uniformLocation("fblend");
     m_fgridSliderUniform = m_program->uniformLocation("fgrid");
 
@@ -80,10 +81,13 @@ void HDC::HeathMap::render(){
 
     m_soccer_court->enable();
     m_soccer_court_texture->bind();
+    m_heatmap_texture->bind();
 
     fastShaderProgram->bind();
     fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
     fastShaderProgram->setUniformValue(m_court_textureUniform, m_soccer_court_texture->gl.slot);
+    fastShaderProgram->setUniformValue(m_heat__textureUniform, m_heatmap_texture->gl.slot);
+    
     fastShaderProgram->setUniformValue(m_fgridSliderUniform, m_fgrid);
     fastShaderProgram->setUniformValue(m_blendSliderUniform, m_fblend);
 
