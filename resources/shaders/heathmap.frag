@@ -22,6 +22,6 @@ void main(){
 
    vec4 red = vec4(1.0f - x, 0.0f, 0.0f, 0.0f);
    vec4 blue = vec4(0.0f, 0.0f, 1.0 - y, 0.0f);
-   FragColor=(red + blue)*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);
+   FragColor = texture(heat__texture,TexCoord)*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);
 
 }
