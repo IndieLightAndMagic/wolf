@@ -47,9 +47,7 @@ namespace HDC{
 
     private:
 
-        void processState();
-        void initializeShaders(QOpenGLShader::ShaderType type, const char* path);
-        void bakeShader();
+        void initializeTextures();
         void initializeGeometry();
         void handleEscape();
         void handleUp();
@@ -62,7 +60,9 @@ namespace HDC{
         GLuint m_textureUniform;
         GLuint m_blendSliderUniform;
         GLuint m_fgridSliderUniform;
-        GLuint m_soccer_court_texture;
+        HDC::FastTextureData *m_soccer_court_texture;
+        HDC::FastTextureData *m_heatmap_texture;
+
         HDC::TexturedPlaneGeometry* m_soccer_court{nullptr};
 
         std::shared_ptr<HDC::ShaderProgram> shaderProgram;
@@ -79,6 +79,7 @@ namespace HDC{
         unsigned int grid_exponent{0};
         float m_fgrid{1.0f};
         float m_fblend{0.0f};
+
         
     };
 }

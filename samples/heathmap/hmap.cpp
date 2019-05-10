@@ -16,7 +16,7 @@
 
 
 HDC::HeathMap::HeathMap(){
-    
+
 
 }
 
@@ -25,18 +25,24 @@ HDC::HeathMap::HeathMap(){
 void HDC::HeathMap::initializeGeometry(){
 
     m_soccer_court = new HDC::TexturedPlaneGeometry();
-
-    m_soccer_court->setheight(0.3f);
-    m_soccer_court->setwidth(0.3f);
+    m_soccer_court->setheight(0.55f);
+    m_soccer_court->setwidth(1.0f);
     m_soccer_court->resetplane();
 
 
 }
+void HDC::HeathMap::initializeTextures(){
+
+    //Register Textures
+    //Stage Textures
+    m_soccer_court_texture  = HDC::TextureManager::registerimg(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png");
+    m_heatmap_texture       = HDC::TextureManager::registerimg(std::string{RESOURCES_DIR} + "/textures/trajectory.png");
+
+    //glBindTexture(GL_TEXTURE_2D, 0);
+}
 
 void HDC::HeathMap::initialize(){
 
-
-    
     initializeGeometry();
     shaderProgram = std::make_shared<ShaderProgram>(
         (std::string(RESOURCES_DIR) + "/shaders/heathmap.vert").c_str(),
@@ -44,15 +50,7 @@ void HDC::HeathMap::initialize(){
         );
     fastShaderProgram = shaderProgram.get()[0]();
 
-    //Register Textures
-    //Stage Textures
-    auto [gltxture, bok] = HDC::TextureManager::registerimg(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png");
-    assert(bok);
-    auto slot_bok = HDC::TextureManager::getslot(gltxture);
-    assert(std::get<1>(slot_bok));
-    m_soccer_court_texture = std::get<0>(slot_bok);
-    TextureManager::printtextureinformation(gltxture);
-
+    initializeTextures();
 
     auto m_program = shaderProgram.get()[0]();    
 
@@ -61,34 +59,31 @@ void HDC::HeathMap::initialize(){
     m_blendSliderUniform = m_program->uniformLocation("fblend");
     m_fgridSliderUniform = m_program->uniformLocation("fgrid");
 
-
     m_valid = true;
     std::cout << "\n\tShaders [OK]" << std::endl; 
 
-
     m_cam.setCamera();
 
-
     installEventFilter(&m_im);
-    connect(&m_im, &InputManager::escape,
-        this, &HDC::HeathMap::handleEscape);
-    connect(&m_im, &InputManager::up_arrow,
-        this, &HDC::HeathMap::handleUp);
-    connect(&m_im, &InputManager::down_arrow,
-        this, &HDC::HeathMap::handleDown);
+
+    connect(&m_im, &InputManager::escape, this, &HDC::HeathMap::handleEscape);
+    connect(&m_im, &InputManager::up_arrow, this, &HDC::HeathMap::handleUp);
+    connect(&m_im, &InputManager::down_arrow, this, &HDC::HeathMap::handleDown);
     connect(&m_im, &InputManager::m_wheel, this, &HDC::HeathMap::handleWheel);
     connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeathMap::handleWheelButton);
+
 }
 
 void HDC::HeathMap::render(){
 
     Scene::render();
 
-    fastShaderProgram->bind();
     m_soccer_court->enable();
+    m_soccer_court_texture->bind();
 
+    fastShaderProgram->bind();
     fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
-    fastShaderProgram->setUniformValue(m_textureUniform, m_soccer_court_texture);
+    fastShaderProgram->setUniformValue(m_textureUniform, m_soccer_court_texture->gl.slot);
     fastShaderProgram->setUniformValue(m_fgridSliderUniform, m_fgrid);
     fastShaderProgram->setUniformValue(m_blendSliderUniform, m_fblend);
 
@@ -119,7 +114,7 @@ void HDC::HeathMap::handleWheel(int delta){
         grid_exponent += delta;
         grid_exponent = grid_exponent % 11 ;
         m_fgrid = powf(2,grid_exponent);
-        
+
 
     } else {
         auto fdelta = static_cast<float>(delta);
