@@ -11,17 +11,16 @@ uniform float fgrid;
 
 void main(){
 
-   float x = TexCoord.x * fgrid;
-   x = floor(x);
-   x /= fgrid;
 
-   float y = TexCoord.y * fgrid;
-   y = floor(y);
-   y /= fgrid;
+    float x = TexCoord.x * fgrid;
+	x = floor(x);
+	x /= fgrid;
+    float y = TexCoord.y * fgrid;
+    y = floor(y);
+    y /= fgrid;
+    vec4 sampledColor = texture(heat__texture,vec2(x,y)); 
+    
 
-
-   vec4 red = vec4(1.0f - x, 0.0f, 0.0f, 0.0f);
-   vec4 blue = vec4(0.0f, 0.0f, 1.0 - y, 0.0f);
-   FragColor = texture(heat__texture,TexCoord)*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);
+	FragColor = sampledColor*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);
 
 }
