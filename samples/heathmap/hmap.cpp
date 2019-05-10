@@ -36,8 +36,20 @@ void HDC::HeathMap::initializeTextures(){
     //Register Textures
     //Stage Textures
     m_soccer_court_texture  = HDC::TextureManager::registerimg(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png");
-    m_heatmap_texture       = HDC::TextureManager::registerimg(std::string{RESOURCES_DIR} + "/textures/trajectory.png");
 
+    m_heatmap_texture       = HDC::TextureManager::registerimg("heatmap",
+        m_soccer_court_texture->width,
+        m_soccer_court_texture->height,
+        m_soccer_court_texture->format_info_vendor
+        );
+
+    auto size = m_soccer_court_texture->width * m_soccer_court_texture->height;
+    for ( auto index = 0; index < size; ++index){
+                
+        m_heatmap_texture->data[index * 4 + (index % 3)] = 0xFF;
+
+    }
+    m_heatmap_texture->updateTexture();
     //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
