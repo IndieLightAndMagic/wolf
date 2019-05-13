@@ -7,6 +7,9 @@ HDC::HeatMap::HeatMap() {}
 const float& HDC::HeatMap::getmax() const{
     return m_max_value;
 }
+void HDC::HeatMap::reset(){
+	m_max_value = 0.0f;
+}
 void HDC::HeatMap::updatemax() {
     m_max_value = 0.0f;
     auto sz = m_map.size();
@@ -51,7 +54,8 @@ void HDC::HeatMap::inc(int x, int y){
 	auto data = m_map.data();
 	auto index = x + y * m_size_w;
 	data[index] += m_step;
-	if (data[index] > m_max_value){
+	m_map_txture[index*4 + 2] = 255;
+	/*if (data[index] > m_max_value){
 	    m_max_value = data[index];
         auto sz = m_map.size();
         for (auto index = 0; index < sz; ++index){
@@ -62,7 +66,7 @@ void HDC::HeatMap::inc(int x, int y){
             m_map_txture[index*4 + 2] = ucfred;
 
         }
-	}
+	}*/
 
 } 
 void HDC::HeatMap::dec(int x, int y){

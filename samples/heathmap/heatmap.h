@@ -12,6 +12,7 @@ namespace HDC{
         void initheatmap(const QSize& sz, int sh);
         void inc(int x, int y);
         void dec(int x, int y);
+        void reset();
         const float& getmax() const;
         float* data();
         void settexturedata(unsigned char*);

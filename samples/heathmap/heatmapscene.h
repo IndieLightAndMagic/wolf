@@ -80,7 +80,7 @@ namespace HDC{
 
         unsigned int grid_exponent{0};
         float m_fgrid{1.0f};
-        float m_fblend{0.5f};
+        float m_fblend{1.0f};
 
         
     };

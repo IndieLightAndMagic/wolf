@@ -18,7 +18,7 @@ void main(){
     float y = TexCoord.y * fgrid;
     y = floor(y);
     y /= fgrid;
-    vec4 sampledColor = texture(heat__texture,vec2(x,y)); 
+    vec4 sampledColor = texture(heat__texture,vec2(x,y));
     
 
 	FragColor = sampledColor*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);

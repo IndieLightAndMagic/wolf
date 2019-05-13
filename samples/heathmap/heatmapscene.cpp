@@ -89,7 +89,7 @@ void HDC::HeatMapScene::initialize(){
     connect(&m_im, &InputManager::m_wheel, this, &HDC::HeatMapScene::handleWheel);
     connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeatMapScene::handleWheelButton);
 
-    heat.setperiod(250);
+    heat.setperiod(50);
     heat.opentrackfile("/json/court_cm.json");
     heat.start();
 
@@ -101,8 +101,8 @@ void HDC::HeatMapScene::render(){
 
     m_soccer_court->enable();
     m_soccer_court_texture->bind();
-    m_heatmap_texture->bind();
     m_heatmap_texture->updateTexture();
+    m_heatmap_texture->bind();
 
     fastShaderProgram->bind();
     fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
