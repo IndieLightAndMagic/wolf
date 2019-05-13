@@ -32,7 +32,7 @@ namespace HDC {
         signals:
         void framechanged(const QVector3D&);
     protected:
-        bool eventFilter( QObject *dist, QEvent *event);
+        //bool eventFilter( QObject *dist, QEvent *event);
 
     };
 

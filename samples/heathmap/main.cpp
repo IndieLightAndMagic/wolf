@@ -49,21 +49,14 @@
 ****************************************************************************/
 
 #include <iostream>
-#include "hdata.h"
-#include "hmap.h"
-#include "timedcounter.h"
 #include <QtGui/QGuiApplication>
 
 
+#include "hmap.h"
+
+
+
 int main(int argc, char **argv){
-    HDC::TrackletDataModel hmd;
-    {
-        HDC::Visitor v;
-        v.Parse(std::string{RESOURCES_DIR} + "/json/court_cm.json");
-    }
-    hmd.getdata();
-    hmd.normalizedata();
-    hmd.getspeedandacceleration();
     QGuiApplication app(argc, argv);
 
     QSurfaceFormat format;
