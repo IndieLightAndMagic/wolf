@@ -15,14 +15,12 @@
 #include <math.h>
 
 
-HDC::HeathMap::HeathMap(){
 
+HDC::HeatMapScene::HeatMapScene(){
 
 }
 
-
-
-void HDC::HeathMap::initializeGeometry(){
+void HDC::HeatMapScene::initializeGeometry(){
 
     m_soccer_court = new HDC::TexturedPlaneGeometry();
     m_soccer_court->setheight(0.55f);
@@ -31,7 +29,7 @@ void HDC::HeathMap::initializeGeometry(){
 
 
 }
-void HDC::HeathMap::initializeTextures(){
+void HDC::HeatMapScene::initializeTextures(){
 
     //Register Textures
     //Stage Textures
@@ -53,7 +51,7 @@ void HDC::HeathMap::initializeTextures(){
     //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void HDC::HeathMap::initialize(){
+void HDC::HeatMapScene::initialize(){
 
     initializeGeometry();
     shaderProgram = std::make_shared<ShaderProgram>(
@@ -79,15 +77,15 @@ void HDC::HeathMap::initialize(){
 
     installEventFilter(&m_im);
 
-    connect(&m_im, &InputManager::escape, this, &HDC::HeathMap::handleEscape);
-    connect(&m_im, &InputManager::up_arrow, this, &HDC::HeathMap::handleUp);
-    connect(&m_im, &InputManager::down_arrow, this, &HDC::HeathMap::handleDown);
-    connect(&m_im, &InputManager::m_wheel, this, &HDC::HeathMap::handleWheel);
-    connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeathMap::handleWheelButton);
-
+    connect(&m_im, &InputManager::escape, this, &HDC::HeatMapScene::handleEscape);
+    connect(&m_im, &InputManager::up_arrow, this, &HDC::HeatMapScene::handleUp);
+    connect(&m_im, &InputManager::down_arrow, this, &HDC::HeatMapScene::handleDown);
+    connect(&m_im, &InputManager::m_wheel, this, &HDC::HeatMapScene::handleWheel);
+    connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeatMapScene::handleWheelButton);
+    tc.start();
 }
 
-void HDC::HeathMap::render(){
+void HDC::HeatMapScene::render(){
 
     Scene::render();
 
@@ -107,20 +105,20 @@ void HDC::HeathMap::render(){
     fastShaderProgram->release();
 
 }
-void HDC::HeathMap::handleEscape(){
+void HDC::HeatMapScene::handleEscape(){
     std::cout << "Finishing Scene....." << std::endl;
     m_state = IntroState::FINISH;
     QGuiApplication::exit();
 }
-void HDC::HeathMap::handleUp(){
+void HDC::HeatMapScene::handleUp(){
     m_cam.setCameraPositionDelta(0.0f, 0.0f, 0.1f);
 
 }
-void HDC::HeathMap::handleDown(){
+void HDC::HeatMapScene::handleDown(){
     m_cam.setCameraPositionDelta(0.0f, 0.0f, -0.1f);
 }
 
-void HDC::HeathMap::handleWheel(int delta){
+void HDC::HeatMapScene::handleWheel(int delta){
 
     if (m_wheelstate == WheelState::GRID){
 
@@ -143,7 +141,7 @@ void HDC::HeathMap::handleWheel(int delta){
 
 
 }
-void HDC::HeathMap::handleWheelButton(){
+void HDC::HeatMapScene::handleWheelButton(){
     m_wheelstate = m_wheelstate == WheelState::GRID ? WheelState::BLEND : WheelState::GRID;
     auto message = m_wheelstate == WheelState::GRID ? std::string{"GRID mode..."} : std::string{"BLEND mode..."};
     std::cout << message << std::endl;

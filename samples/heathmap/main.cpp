@@ -48,25 +48,36 @@
 **
 ****************************************************************************/
 
-
+#include <iostream>
+#include "hdata.h"
 #include "hmap.h"
+#include "timedcounter.h"
 #include <QtGui/QGuiApplication>
 
 
 int main(int argc, char **argv){
-
+    HDC::TrackletDataModel hmd;
+    {
+        HDC::Visitor v;
+        v.Parse(std::string{RESOURCES_DIR} + "/json/court_cm.json");
+    }
+    hmd.getdata();
+    hmd.normalizedata();
+    hmd.getspeedandacceleration();
     QGuiApplication app(argc, argv);
 
     QSurfaceFormat format;
     format.setSamples(16);
 
-    HDC::HeathMap window;
+    HDC::HeatMapScene window;
     window.setFormat(format);
     window.resize(1400, 800);
     window.show();
     window.setAnimating(true);
 
     return app.exec();
+
+    return 0;
     
 }
 

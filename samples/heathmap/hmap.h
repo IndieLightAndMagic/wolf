@@ -6,7 +6,7 @@
 #include "shader.h"
 #include "geometry.h"
 #include "texturemanager.h"
-
+#include "timedcounter.h"
 
 #include <memory>
 #include <QImage>
@@ -17,9 +17,10 @@
 
 
 namespace HDC{
-    class HeathMap : public Scene
+    class HeatMapScene : public Scene
     {
     public:
+        HDC::TimedCounter tc;
         Camera m_cam;
         enum class WheelState {
             GRID,
@@ -40,7 +41,7 @@ namespace HDC{
         QImage qimage{};
         std::vector<QImage> qimages{};
         
-        HeathMap();
+        HeatMapScene();
 
         void initialize() override;
         void render() override;
@@ -72,8 +73,8 @@ namespace HDC{
         QElapsedTimer m_timer;
         uint64_t m_elapsedTimeMeasurement{0};
 
-        HeathMap::IntroState m_state{IntroState::START};
-        HeathMap::WheelState m_wheelstate{WheelState::BLEND};
+        HeatMapScene::IntroState m_state{IntroState::START};
+        HeatMapScene::WheelState m_wheelstate{WheelState::BLEND};
         float m_timeToExpire{0.0f};
         unsigned int m_activeTextureIndex{0};
 
