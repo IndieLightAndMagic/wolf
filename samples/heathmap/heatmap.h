@@ -14,12 +14,15 @@ namespace HDC{
         void dec(int x, int y);
         const float& getmax() const;
         float* data();
+        void settexturedata(unsigned char*);
     private:
     	void updatemax();
 
     	std::vector<float>m_map;
-    	float* m_map_;
-    	float m_max_value{0};
+        float* m_map_;
+    	
+        unsigned char* m_map_txture{nullptr};
+        float m_max_value{0};
     };
 }
 

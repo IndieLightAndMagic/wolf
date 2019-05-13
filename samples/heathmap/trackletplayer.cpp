@@ -25,6 +25,8 @@ void HDC::TrackletPlayer::readnewframe(int){
     << " , "
     << std::floorf(qv3d.y()*tdm.court_size.height()) 
     << std::endl;
+
+
 }
 
 bool HDC::TrackletPlayer::opentrackfile(std::string track_filename){
@@ -36,7 +38,7 @@ bool HDC::TrackletPlayer::opentrackfile(std::string track_filename){
     tdm.normalizedata();
     tdm.getspeedandacceleration();
 
-    trackletopened();
+    emit trackletopened();
 
     return true;
 }

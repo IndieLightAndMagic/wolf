@@ -36,18 +36,24 @@ void HDC::HeatMapScene::initializeTextures(){
     m_soccer_court_texture  = HDC::TextureManager::registerimg(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png");
 
     m_heatmap_texture       = HDC::TextureManager::registerimg("heatmap",
-        m_soccer_court_texture->width,
-        m_soccer_court_texture->height,
+        105,
+        68,
         m_soccer_court_texture->format_info_vendor
         );
 
-    auto size = m_soccer_court_texture->width * m_soccer_court_texture->height;
+    auto size = m_heatmap_texture->width * m_heatmap_texture->height;
     for ( auto index = 0; index < size; ++index){
-                
-        m_heatmap_texture->data[index * 4 + (index % 4)] = 0xFF;
+
+
+        m_heatmap_texture->data[index * 4 + 0] = 0x00;
+        m_heatmap_texture->data[index * 4 + 1] = 0x00;
+        m_heatmap_texture->data[index * 4 + 2] = 0x00;
+        m_heatmap_texture->data[index * 4 + 3] = 0x00;
 
     }
+    heat.settexturedata(m_heatmap_texture->data);
     m_heatmap_texture->updateTexture();
+
     //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -83,9 +89,9 @@ void HDC::HeatMapScene::initialize(){
     connect(&m_im, &InputManager::m_wheel, this, &HDC::HeatMapScene::handleWheel);
     connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeatMapScene::handleWheelButton);
 
-    tp.setperiod(250);
-    tp.opentrackfile("/json/court_cm.json");
-    tp.start();
+    heat.setperiod(250);
+    heat.opentrackfile("/json/court_cm.json");
+    heat.start();
 
 }
 
@@ -96,6 +102,7 @@ void HDC::HeatMapScene::render(){
     m_soccer_court->enable();
     m_soccer_court_texture->bind();
     m_heatmap_texture->bind();
+    m_heatmap_texture->updateTexture();
 
     fastShaderProgram->bind();
     fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());

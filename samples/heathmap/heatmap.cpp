@@ -1,3 +1,4 @@
+#include <math.h>
 #include "heatmap.h"
 
 
@@ -8,11 +9,23 @@ const float& HDC::HeatMap::getmax() const{
 }
 void HDC::HeatMap::updatemax() {
     m_max_value = 0.0f;
-    auto aux = m_map_;
-    auto end = &(m_map_ [m_map.size()]);
-    while (aux < end) {
-        if (*aux > m_max_value) m_max_value = *aux;
-        ++aux;
+    auto sz = m_map.size();
+    bool dirty = false;
+
+    for ( auto index = 0; index < sz; ++index){
+        if (m_map_[index] > m_max_value){
+            dirty = true;
+            m_max_value = m_map_[index];
+        }
+    }
+    if (dirty){
+        for (auto index = 0; index < sz; ++index){
+
+            float fred = m_map_[index] / m_max_value;
+            fred *= 255.9f;
+            m_map_txture[index*4 + 2] = static_cast<unsigned char>(floorf(fred));
+
+        }
     }
 
 }
@@ -38,7 +51,19 @@ void HDC::HeatMap::inc(int x, int y){
 	auto data = m_map.data();
 	auto index = x + y * m_size_w;
 	data[index] += m_step;
-	if (data[index] > m_max_value) m_max_value = data[index];
+	if (data[index] > m_max_value){
+	    m_max_value = data[index];
+        auto sz = m_map.size();
+        for (auto index = 0; index < sz; ++index){
+
+            float fred = m_map_[index] / m_max_value;
+            fred *= 255.9f;
+            auto ucfred = static_cast<unsigned char>(floorf(fred));
+            m_map_txture[index*4 + 2] = ucfred;
+
+        }
+	}
+
 } 
 void HDC::HeatMap::dec(int x, int y){
 	
@@ -46,4 +71,7 @@ void HDC::HeatMap::dec(int x, int y){
 	auto index = x + y * m_size_w;
 	data[index] -= m_step;
 	updatemax();
+}
+void HDC::HeatMap::settexturedata(unsigned char * pmaptxture) {
+    m_map_txture = pmaptxture;
 }

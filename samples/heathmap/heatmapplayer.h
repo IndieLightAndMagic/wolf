@@ -14,7 +14,7 @@ namespace HDC {
         
     public:
         HeatMapPlayer( QObject *parent = 0 );
-        void updateheatmap(QVector2D&);
+        void updateheatmap(const QVector2D&);
         bool opentrackfile(std::string track_filename) ;
     protected:
 
