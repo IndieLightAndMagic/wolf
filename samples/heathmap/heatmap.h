@@ -5,14 +5,15 @@
 namespace HDC{
 	struct HeatMap {
 		
-		const int m_size_w;
-		const int m_size_h;
+		int m_size_w;
+		int m_size_h;
 		float m_step;
-
-        HeatMap(const QSize&, int); //Size and Steps.
+        HeatMap();
+        void initheatmap(const QSize& sz, int sh);
         void inc(int x, int y);
         void dec(int x, int y);
         const float& getmax() const;
+        float* data();
     private:
     	void updatemax();
 

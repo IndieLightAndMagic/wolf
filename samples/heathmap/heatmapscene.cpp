@@ -82,7 +82,11 @@ void HDC::HeatMapScene::initialize(){
     connect(&m_im, &InputManager::down_arrow, this, &HDC::HeatMapScene::handleDown);
     connect(&m_im, &InputManager::m_wheel, this, &HDC::HeatMapScene::handleWheel);
     connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeatMapScene::handleWheelButton);
-    tc.start();
+
+    tp.setperiod(250);
+    tp.opentrackfile("/json/court_cm.json");
+    tp.start();
+
 }
 
 void HDC::HeatMapScene::render(){

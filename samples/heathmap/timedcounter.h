@@ -8,7 +8,6 @@ namespace HDC{
     class TimedCounter : public QObject {
 
         Q_OBJECT
-        QTimer* ptimer{nullptr};
     public:
         enum class CounterState{
             quieto,
@@ -43,10 +42,14 @@ namespace HDC{
     void counter_ticked(int);//cnt+1
     void counter_wrapped(); //0x7ffffffff + 1
 private:
+    
     TimedCounter::CounterState m_counter_state{CounterState::quieto};
-    int m_counter{0};
     int m_period_ms{1000};
     void tick();
+    QTimer* ptimer{nullptr};
+    int m_counter{0};
+
+
 };
 
 

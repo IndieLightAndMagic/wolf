@@ -6,10 +6,10 @@ HDC::TimedCounter::TimedCounter(QObject* parent):QObject(parent){
     connect(ptimer, &QTimer::timeout, this, &HDC::TimedCounter::tick);
 }
 void HDC::TimedCounter::tick(){
+
     m_counter++;
     if (m_counter == 0x10000000) emit counter_wrapped();
     emit counter_ticked(m_counter);
-    std::cout << m_counter << std::endl;
 
 }
 void HDC::TimedCounter::setfrequency_hz(float hz){

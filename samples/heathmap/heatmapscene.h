@@ -6,7 +6,7 @@
 #include "shader.h"
 #include "geometry.h"
 #include "texturemanager.h"
-#include "timedcounter.h"
+#include "trackletplayer.h"
 
 #include <memory>
 #include <QImage>
@@ -20,7 +20,7 @@ namespace HDC{
     class HeatMapScene : public Scene
     {
     public:
-        HDC::TimedCounter tc;
+        HDC::TrackletPlayer tp;
         Camera m_cam;
         enum class WheelState {
             GRID,

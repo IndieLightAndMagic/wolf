@@ -1,5 +1,8 @@
 #include "heatmap.h"
 
+
+
+HDC::HeatMap::HeatMap() {}
 const float& HDC::HeatMap::getmax() const{
     return m_max_value;
 }
@@ -13,17 +16,23 @@ void HDC::HeatMap::updatemax() {
     }
 
 }
-HDC::HeatMap::HeatMap(const QSize& sz, int sh) : m_size_w(sz.width()), m_size_h(sz.height()){
+void HDC::HeatMap::initheatmap(const QSize& sz, int sh){
+
+	m_size_w = sz.width();
+	m_size_h = sz.height();
 	
 	assert(sh>0);
 	assert(!sz.isEmpty());
+
 	m_step = sh;
 	m_step = 1/m_step;
+	if (m_map.size()) m_map.clear();
 	auto vector_size = m_size_w * m_size_h;
 	while(vector_size--) m_map.push_back(0.0f);
 	m_map_ = m_map.data();
 
 }
+
 void HDC::HeatMap::inc(int x, int y){
 	
 	auto data = m_map.data();
