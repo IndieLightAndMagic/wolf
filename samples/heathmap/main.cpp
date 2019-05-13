@@ -52,7 +52,7 @@
 #include <QtGui/QGuiApplication>
 
 
-#include "hmap.h"
+#include "heatmapscene.h"
 
 
 

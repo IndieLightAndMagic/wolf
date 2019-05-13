@@ -18,7 +18,6 @@ namespace HDC {
         TrackletPlayer( QObject *parent = 0 );
 
         bool opentrackfile(std::string track_filename); 
-        void closetrackfile();
 
         void playtracklet();
         void pausetracklet();

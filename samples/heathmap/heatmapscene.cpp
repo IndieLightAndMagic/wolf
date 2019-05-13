@@ -1,4 +1,4 @@
-#include "hmap.h"
+#include "heatmapscene.h"
 
 #include <tuple>
 #include <memory>
