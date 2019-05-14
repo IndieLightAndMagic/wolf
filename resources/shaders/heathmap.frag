@@ -11,19 +11,11 @@ uniform float fgrid;
 
 void main(){
 
-
-    /*float x = TexCoord.x * fgrid;
-	x = floor(x);
-	x /= fgrid;
-    float y = TexCoord.y * fgrid;
-    y = floor(y);
-    y /= fgrid;*/
     vec4 sampledColor = texture(heat__texture,TexCoord);
-    if (sampledColor.r > 0.1f) {
+    if (sampledColor.r > 0.12f) {
     	sampledColor.b = 1.0f - sampledColor.r*.2;
-    	sampledColor.a = 0.5f;
-    } else {
-    	sampledColor.a = 0.0f;
+    	sampledColor.b *= 0.4;
+    	
     } 
 
 	FragColor = sampledColor*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);

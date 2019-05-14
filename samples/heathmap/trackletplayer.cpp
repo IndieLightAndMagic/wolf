@@ -20,7 +20,7 @@ void HDC::TrackletPlayer::readnewframe(int){
     auto frameindex = m_frame_index % size;
     auto& qv3d = selected_tracklet->ktlet.positions[frameindex];
     emit framechanged(QVector2D{std::floorf(qv3d.x()*tdm.court_size.width()),std::floorf(qv3d.y()*tdm.court_size.height())});
-    std::cout 
+    /*std::cout 
     << frameindex 
     << " : " 
     << " (" 
@@ -29,7 +29,7 @@ void HDC::TrackletPlayer::readnewframe(int){
     << std::floorf(qv3d.x()*tdm.court_size.width())
     << " , "
     << std::floorf(qv3d.y()*tdm.court_size.height()) 
-    << std::endl;
+    << std::endl;*/
 
 
 }

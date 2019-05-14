@@ -15,7 +15,7 @@
 #include <QOpenGLShaderProgram>
 #include <math.h>
 
-
+static bool resetShader = false;
 
 HDC::HeatMapScene::HeatMapScene(){
 
@@ -53,26 +53,30 @@ void HDC::HeatMapScene::initializeTextures(){
 
     //glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-void HDC::HeatMapScene::initialize(){
-
-
-    initializeGeometry();
+void HDC::HeatMapScene::initializeShader(){
+    shaderProgram.reset();
     shaderProgram = std::make_shared<ShaderProgram>(
         (std::string(RESOURCES_DIR) + "/shaders/heathmap.vert").c_str(),
         (std::string(RESOURCES_DIR) + "/shaders/heathmap.frag").c_str()
         );
     fastShaderProgram = shaderProgram.get()[0]();
 
+    m_matrixUniform        = fastShaderProgram->uniformLocation("matrix");
+    m_court_textureUniform = fastShaderProgram->uniformLocation("court_texture");
+    m_heat__textureUniform = fastShaderProgram->uniformLocation("heat__texture");
+    m_blendSliderUniform   = fastShaderProgram->uniformLocation("fblend");
+    m_fgridSliderUniform   = fastShaderProgram->uniformLocation("fgrid");
+
+}
+
+void HDC::HeatMapScene::initialize(){
+
+
+    initializeGeometry();
+    initializeShader();
     initializeTextures();
 
-    auto m_program = shaderProgram.get()[0]();    
-
-    m_matrixUniform = m_program->uniformLocation("matrix");
-    m_court_textureUniform = m_program->uniformLocation("court_texture");
-    m_heat__textureUniform = m_program->uniformLocation("heat__texture");
-    m_blendSliderUniform = m_program->uniformLocation("fblend");
-    m_fgridSliderUniform = m_program->uniformLocation("fgrid");
+    
 
     m_valid = true;
     std::cout << "\n\tShaders [OK]" << std::endl; 
@@ -150,7 +154,8 @@ void HDC::HeatMapScene::handleWheel(int delta){
 
 }
 void HDC::HeatMapScene::handleWheelButton(){
-    m_wheelstate = m_wheelstate == WheelState::GRID ? WheelState::BLEND : WheelState::GRID;
-    auto message = m_wheelstate == WheelState::GRID ? std::string{"GRID mode..."} : std::string{"BLEND mode..."};
-    std::cout << message << std::endl;
+    //m_wheelstate = m_wheelstate == WheelState::GRID ? WheelState::BLEND : WheelState::GRID;
+    //auto message = m_wheelstate == WheelState::GRID ? std::string{"GRID mode..."} : std::string{"BLEND mode..."};
+    //bool resetShader = true;
+    //std::cout << "Shader Reset" << std::endl;
 }

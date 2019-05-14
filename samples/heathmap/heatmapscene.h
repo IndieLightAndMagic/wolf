@@ -48,7 +48,7 @@ namespace HDC{
         void render() override;
 
     private:
-
+        void initializeShader();
         void initializeTextures();
         void initializeGeometry();
         void handleEscape();
@@ -69,7 +69,7 @@ namespace HDC{
 
         HDC::TexturedPlaneGeometry* m_soccer_court{nullptr};
 
-        std::shared_ptr<HDC::ShaderProgram> shaderProgram;
+        std::shared_ptr<HDC::ShaderProgram> shaderProgram{nullptr};
         QOpenGLShaderProgram* fastShaderProgram;
 
         QElapsedTimer m_timer;
