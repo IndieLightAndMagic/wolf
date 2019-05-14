@@ -18,9 +18,8 @@ namespace HDC {
             forwards,
             backwards
         };
-        TrackletPlayer( QObject *parent = 0 );
+        TrackletPlayer( const HDC::TrackletDataModel& atdm, QObject *parent = 0);
 
-        virtual bool opentrackfile(std::string track_filename); // Open this tracklet
         void playtracklet(PlaybackDirection pb = PlaybackDirection::forwards); // Play the tracklet
         void pausetracklet(); // Pause reproduction
         void playtrackletat(int index); // Set the frame where to play: TODO

@@ -5,7 +5,8 @@
 #include "camera.h"
 #include "shader.h"
 #include "geometry.h"
-#include "texturemanager.h"
+#include "fastqtexturedata.h"
+#include "fastclampedtexturedata.h"
 #include "heatmapplayer.h"
 
 #include <memory>
@@ -20,7 +21,7 @@ namespace HDC{
     class HeatMapScene : public Scene
     {
     public:
-        HDC::HeatMapPlayer heat;
+        HDC::HeatMapPlayer* m_heatmapplayer;
         Camera m_cam;
         enum class WheelState {
             GRID,
@@ -58,12 +59,13 @@ namespace HDC{
 
 
         GLuint m_matrixUniform;
-        GLuint m_court_textureUniform;
-        GLuint m_heat__textureUniform;
+        HDC::FastQTextureData* m_soccer_court_texture{nullptr}; //ARGB [0 = B, G = 1, R = 2, A = 3]
+
+        unsigned int m_court_textureUniform;
+        unsigned int m_heat__textureUniform;
         GLuint m_blendSliderUniform;
         GLuint m_fgridSliderUniform;
-        HDC::FastTextureData *m_soccer_court_texture;
-        HDC::FastTextureData *m_heatmap_texture;
+
 
         HDC::TexturedPlaneGeometry* m_soccer_court{nullptr};
 

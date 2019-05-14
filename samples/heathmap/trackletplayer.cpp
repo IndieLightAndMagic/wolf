@@ -1,8 +1,8 @@
 #include "trackletplayer.h"
 #include <iostream>
-HDC::TrackletPlayer::TrackletPlayer(QObject* parent):HDC::TimedCounter(parent){
+HDC::TrackletPlayer::TrackletPlayer(const HDC::TrackletDataModel& atdm, QObject* parent):HDC::TimedCounter(parent){
 
-
+    tdm = atdm;
     connect(this, &TimedCounter::counter_ticked, this, &HDC::TrackletPlayer::readnewframe);
     
 }
@@ -29,19 +29,6 @@ void HDC::TrackletPlayer::readnewframe(int){
 
 }
 
-bool HDC::TrackletPlayer::opentrackfile(std::string track_filename){
-
-    HDC::Visitor v;
-    v.Parse(std::string{RESOURCES_DIR} + track_filename);
-    
-    tdm.getdata();
-    tdm.normalizedata();
-    tdm.getspeedandacceleration();
-
-    emit trackletopened();
-
-    return true;
-}
 
 
 void HDC::TrackletPlayer::playtracklet(HDC::TrackletPlayer::PlaybackDirection pb){

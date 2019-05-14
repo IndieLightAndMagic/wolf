@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include <QDir>
+#include <QImage>
 #include <QScreen>
 #include <QMatrix4x4>
 #include <QElapsedTimer>
@@ -17,6 +18,8 @@
 
 
 HDC::HeatMapScene::HeatMapScene(){
+
+
 
 }
 
@@ -33,31 +36,26 @@ void HDC::HeatMapScene::initializeTextures(){
 
     //Register Textures
     //Stage Textures
-    m_soccer_court_texture  = HDC::TextureManager::registerimg(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png");
+    QImage* pqimg = new QImage(QString::fromStdString(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png"));
+    m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
 
-    m_heatmap_texture       = HDC::TextureManager::registerimg("heatmap",
-        105,
-        68,
-        m_soccer_court_texture->format_info_vendor
-        );
+    HDC::Visitor v;
+    v.Parse(std::string{RESOURCES_DIR} + "/json/court_cm.json");
 
-    auto size = m_heatmap_texture->width * m_heatmap_texture->height;
-    for ( auto index = 0; index < size; ++index){
+    auto tdm = TrackletDataModel();
+    tdm.getdata();
+    tdm.normalizedata();
+    tdm.getspeedandacceleration();
+
+    m_heatmapplayer = new HDC::HeatMapPlayer(tdm);
 
 
-        m_heatmap_texture->data[index * 4 + 0] = 0x00;
-        m_heatmap_texture->data[index * 4 + 1] = 0x00;
-        m_heatmap_texture->data[index * 4 + 2] = 0x00;
-        m_heatmap_texture->data[index * 4 + 3] = 0x00;
-
-    }
-    heat.settexturedata(m_heatmap_texture->data);
-    m_heatmap_texture->updateTexture();
 
     //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void HDC::HeatMapScene::initialize(){
+
 
     initializeGeometry();
     shaderProgram = std::make_shared<ShaderProgram>(
@@ -89,9 +87,8 @@ void HDC::HeatMapScene::initialize(){
     connect(&m_im, &InputManager::m_wheel, this, &HDC::HeatMapScene::handleWheel);
     connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeatMapScene::handleWheelButton);
 
-    heat.setperiod(50);
-    heat.opentrackfile("/json/court_cm.json");
-    heat.start();
+    m_heatmapplayer->setperiod(30);
+    m_heatmapplayer->start();
 
 }
 
@@ -101,13 +98,13 @@ void HDC::HeatMapScene::render(){
 
     m_soccer_court->enable();
     m_soccer_court_texture->bind();
-    m_heatmap_texture->updateTexture();
-    m_heatmap_texture->bind();
+    m_heatmapplayer->updateTexture();
+    m_heatmapplayer->bind();
 
     fastShaderProgram->bind();
     fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
     fastShaderProgram->setUniformValue(m_court_textureUniform, m_soccer_court_texture->gl.slot);
-    fastShaderProgram->setUniformValue(m_heat__textureUniform, m_heatmap_texture->gl.slot);
+    fastShaderProgram->setUniformValue(m_heat__textureUniform, m_heatmapplayer->gl.slot);
     
     fastShaderProgram->setUniformValue(m_fgridSliderUniform, m_fgrid);
     fastShaderProgram->setUniformValue(m_blendSliderUniform, m_fblend);

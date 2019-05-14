@@ -39,6 +39,9 @@ add_executable(${target}
     src/opengl/openglwindow.cpp
     src/shader/shadersource.cpp
     src/texture/texturemanager.cpp
+    src/texture/fasttexturedata.cpp
+    src/texture/fastqtexturedata.cpp
+    src/texture/fastclampedtexturedata.cpp
     src/inputmanager/inputmanager.cpp
     
     )

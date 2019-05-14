@@ -13,7 +13,7 @@ namespace HDC {
         Q_OBJECT
         
     public:
-        HeatMapPlayer( QObject *parent = 0 );
+        HeatMapPlayer( const HDC::TrackletDataModel& atdm, QObject *parent = 0);
         void updateheatmap(const QVector2D&);
         bool opentrackfile(std::string track_filename) ;
     protected:
