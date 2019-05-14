@@ -33,7 +33,7 @@ void HDC::Camera::setCamera(
     m_z = z;
 }
 
-const QMatrix4x4& HDC::Camera::getCamera(){
+QMatrix4x4& HDC::Camera::getCamera(){
     return m_camera;
 }
 

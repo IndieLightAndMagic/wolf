@@ -34,7 +34,7 @@ namespace HDC{
             float y = 0.0f,
             float z = -0.625f);
 
-        const QMatrix4x4& getCamera();
+        QMatrix4x4& getCamera();
 
         void setCameraPosition(float x = 0.0f, float y = 0.0f, float z = -0.625f);
         void setCameraPositionDelta(float x = 0.0f, float y = 0.0f, float z = 0.0f);

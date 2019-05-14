@@ -85,6 +85,9 @@ void HDC::HeatMapScene::initialize(){
     std::cout << "\n\tShaders [OK]" << std::endl; 
 
     m_cam.setCamera();
+    
+
+
 
     installEventFilter(&m_im);
 
@@ -108,7 +111,12 @@ void HDC::HeatMapScene::render(){
     m_heatmapplayer->bind();
 
     fastShaderProgram->bind();
-    fastShaderProgram->setUniformValue(m_matrixUniform, m_cam.getCamera());
+
+    auto mtx = m_cam.getCamera();
+    auto rotationAxis = QVector3D{1.0f, 0.0f, 0.0f};
+    mtx.rotate(-50.0f, rotationAxis);
+
+    fastShaderProgram->setUniformValue(m_matrixUniform, mtx);
     fastShaderProgram->setUniformValue(m_court_textureUniform, m_soccer_court_texture->gl.slot);
     fastShaderProgram->setUniformValue(m_heat__textureUniform, m_heatmapplayer->gl.slot);
     
