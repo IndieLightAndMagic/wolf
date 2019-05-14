@@ -21,6 +21,13 @@ static unsigned int selectedidx = 0;
 HDC::HeatMapScene::HeatMapScene(){
 
 
+    installEventFilter(&m_im);
+    connect(&m_im, &InputManager::escape, this, &HDC::HeatMapScene::handleEscape);
+    connect(&m_im, &InputManager::up_arrow, this, &HDC::HeatMapScene::handleUp);
+    connect(&m_im, &InputManager::down_arrow, this, &HDC::HeatMapScene::handleDown);
+    connect(&m_im, &InputManager::m_wheel, this, &HDC::HeatMapScene::handleWheel);
+    connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeatMapScene::handleWheelButton);
+
 
 }
 
@@ -89,13 +96,6 @@ void HDC::HeatMapScene::initialize(){
 
 
 
-    installEventFilter(&m_im);
-
-    connect(&m_im, &InputManager::escape, this, &HDC::HeatMapScene::handleEscape);
-    connect(&m_im, &InputManager::up_arrow, this, &HDC::HeatMapScene::handleUp);
-    connect(&m_im, &InputManager::down_arrow, this, &HDC::HeatMapScene::handleDown);
-    connect(&m_im, &InputManager::m_wheel, this, &HDC::HeatMapScene::handleWheel);
-    connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeatMapScene::handleWheelButton);
 
    
 
