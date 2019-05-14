@@ -8,7 +8,6 @@ HDC::TimedCounter::TimedCounter(QObject* parent):QObject(parent){
 void HDC::TimedCounter::tick(){
 
     m_counter++;
-    if (m_counter == 0x10000000) emit counter_wrapped();
     emit counter_ticked(m_counter);
 
 }

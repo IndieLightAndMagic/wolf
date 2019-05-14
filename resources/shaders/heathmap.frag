@@ -19,7 +19,12 @@ void main(){
     y = floor(y);
     y /= fgrid;*/
     vec4 sampledColor = texture(heat__texture,TexCoord);
-    
+    if (sampledColor.r > 0.1f) {
+    	sampledColor.b = 1.0f - sampledColor.r*.2;
+    	sampledColor.a = 0.5f;
+    } else {
+    	sampledColor.a = 0.0f;
+    } 
 
 	FragColor = sampledColor*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);
 

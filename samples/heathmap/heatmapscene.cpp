@@ -48,7 +48,7 @@ void HDC::HeatMapScene::initializeTextures(){
     tdm.getspeedandacceleration();
 
     m_heatmapplayer = new HDC::HeatMapPlayer(tdm);
-
+    m_heatmapplayer->selecttrackletid(11);
 
 
     //glBindTexture(GL_TEXTURE_2D, 0);

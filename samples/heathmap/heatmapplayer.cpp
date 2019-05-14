@@ -10,7 +10,7 @@ HDC::HeatMap(atdm.court_size.width(), atdm.court_size.height() ){
 void HDC::HeatMapPlayer::updateheatmap(const QVector2D& pos){
 
 	inc(pos.x(), pos.y());
-	std::cout << "Max Value is: " << getmax();
+	std::cout << "Max Value is: " << getmax() << std::endl;
 
 }
 

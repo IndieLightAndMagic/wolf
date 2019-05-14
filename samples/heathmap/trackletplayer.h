@@ -25,10 +25,13 @@ namespace HDC {
         void playtrackletat(int index); // Set the frame where to play: TODO
         void setdirection(PlaybackDirection pb); //Set the direction to go to
         void setfpsfactor(float factor = 1.0f); //Set playback speed: TODO
+        void selecttrackletid(unsigned int channel);
+
         void readnewframe(int);
 
     protected:
         //bool eventFilter( QObject *dist, QEvent *event);
+        HDC::Entity* selected_tracklet{nullptr};
         TrackletDataModel tdm;
         PlaybackDirection pbdirection{PlaybackDirection::forwards};
 
