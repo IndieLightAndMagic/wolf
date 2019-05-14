@@ -105,7 +105,6 @@ void HDC::HeatMapScene::render(){
 
     Scene::render();
 
-    m_soccer_court->enable();
     m_soccer_court_texture->bind();
     m_heatmapplayer->updateTexture();
     m_heatmapplayer->bind();
@@ -123,7 +122,14 @@ void HDC::HeatMapScene::render(){
     fastShaderProgram->setUniformValue(m_fgridSliderUniform, m_fgrid);
     fastShaderProgram->setUniformValue(m_blendSliderUniform, m_fblend);
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+
+
+
+    m_soccer_court->enable();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    m_soccer_court->disable();
     fastShaderProgram->release();
 
 }
