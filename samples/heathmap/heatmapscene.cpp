@@ -16,7 +16,8 @@
 #include <math.h>
 
 static bool resetShader = false;
-
+static std::vector<unsigned int> ids {0,1,2,3,4,5,6,7,8,9,10,11,13,14,15,19,20,21,22,23,24,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57};
+static unsigned int selectedidx = 0;
 HDC::HeatMapScene::HeatMapScene(){
 
 
@@ -48,7 +49,9 @@ void HDC::HeatMapScene::initializeTextures(){
     tdm.getspeedandacceleration();
 
     m_heatmapplayer = new HDC::HeatMapPlayer(tdm);
-    m_heatmapplayer->selecttrackletid(11);
+    m_heatmapplayer->selecttrackletid(selectedidx);
+    m_heatmapplayer->setperiod(30);
+    m_heatmapplayer->start();
 
 
     //glBindTexture(GL_TEXTURE_2D, 0);
@@ -91,8 +94,7 @@ void HDC::HeatMapScene::initialize(){
     connect(&m_im, &InputManager::m_wheel, this, &HDC::HeatMapScene::handleWheel);
     connect(&m_im, &InputManager::m_wheelreleased, this, &HDC::HeatMapScene::handleWheelButton);
 
-    m_heatmapplayer->setperiod(30);
-    m_heatmapplayer->start();
+   
 
 }
 
@@ -154,6 +156,11 @@ void HDC::HeatMapScene::handleWheel(int delta){
 
 }
 void HDC::HeatMapScene::handleWheelButton(){
+    
+    selectedidx++;
+    selectedidx %= ids.size();
+    m_heatmapplayer->selecttrackletid(ids[selectedidx]);
+    
     //m_wheelstate = m_wheelstate == WheelState::GRID ? WheelState::BLEND : WheelState::GRID;
     //auto message = m_wheelstate == WheelState::GRID ? std::string{"GRID mode..."} : std::string{"BLEND mode..."};
     //bool resetShader = true;
