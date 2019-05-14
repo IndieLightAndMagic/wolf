@@ -12,12 +12,14 @@ uniform float fgrid;
 void main(){
 
     vec4 sampledColor = texture(heat__texture,TexCoord);
+    vec4 grassColor = texture(court_texture,TexCoord);
     if (sampledColor.r > 0.12f) {
     	sampledColor.b = 1.0f - sampledColor.r*.2;
     	sampledColor.b *= 0.4;
-    	
-    } 
+		FragColor = sampledColor*fblend +  grassColor*(1.0f-fblend);
+    } else {
+    	FragColor = grassColor;
+    }
 
-	FragColor = sampledColor*fblend + texture(court_texture,TexCoord) * (1.0f - fblend);
 
 }

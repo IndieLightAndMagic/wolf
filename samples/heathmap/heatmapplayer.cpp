@@ -12,7 +12,7 @@ void HDC::HeatMapPlayer::updateheatmap(const QVector2D& pos){
 	inc(pos.x(), pos.y());
 
 	auto max = getmax();
-	if (max >= lastmax + 0.1){
+	if (max >= lastmax + 0.05){
 		lastmax = max;
 		std::cout << "Max Value is: " << max << std::endl;
 

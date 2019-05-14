@@ -36,6 +36,7 @@ HDC::FastQTextureData::FastQTextureData(QImage* qimg): FastTextureData(qimg->wid
 
     qimage = qimg;
     data = qimg->bits();
+    updateTexture();
 
 }
 
