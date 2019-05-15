@@ -20,7 +20,7 @@ void HDC::HeatmapRenderer::paintQtLogo()
     program1.enableAttributeArray(vertexAttr1);
     program1.setAttributeArray(vertexAttr1, vertices.constData());
     //program1.setAttributeArray(normalAttr1, normals.constData());
-    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     //program1.disableAttributeArray(normalAttr1);
     program1.disableAttributeArray(vertexAttr1);
 }
