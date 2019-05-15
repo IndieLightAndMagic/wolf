@@ -94,7 +94,7 @@ float HDC::fbo::distance() const
 }
 
 
-void HDC::fbo::setDistance(float distance)
+void HDC::fbo::setdistance(float distance)
 {
     if (m_distance == distance)
         return;

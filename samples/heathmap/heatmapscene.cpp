@@ -78,6 +78,7 @@ void HDC::HeatMapScene::initialize(){
     initializeTextures();
     std::cout << "\n\tShaders [OK]" << std::endl;
     m_cam.setCamera();
+    m_cam.setCameraPosition(0.0f, 0.0f, -5.0f);
 
 }
 void HDC::HeatMapScene::invalidate(){
@@ -99,8 +100,9 @@ void HDC::HeatMapScene::render(){
     fastShaderProgram->bind();
 
     auto mtx = m_cam.getCamera();
-    auto rotationAxis = QVector3D{1.0f, 0.0f, 0.0f};
-    mtx.rotate(-50.0f, rotationAxis);
+    m_cam.setCameraPosition(0.0f, 0.0f, -5.0f);
+    //auto rotationAxis = QVector3D{1.0f, 0.0f, 0.0f};
+    //mtx.rotate(-50.0f, rotationAxis);
 
     fastShaderProgram->setUniformValue(m_matrixUniform, mtx);
     fastShaderProgram->setUniformValue(m_court_textureUniform, m_soccer_court_texture->gl.slot);

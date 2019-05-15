@@ -10,7 +10,7 @@ namespace HDC{
     class fbo : public QQuickFramebufferObject {
     Q_OBJECT
 
-        Q_PROPERTY(float distance READ distance WRITE setDistance NOTIFY distanceChanged)
+        Q_PROPERTY(float distance READ distance WRITE setdistance NOTIFY distanceChanged)
 
     public:
         explicit fbo(QQuickItem *parent = 0);
@@ -22,7 +22,7 @@ namespace HDC{
         void distanceChanged(float distance);
 
     public slots:
-        void setDistance(float distance);
+        void setdistance(float distance);
 
     private:
         float m_distance;
