@@ -38,10 +38,12 @@ add_executable(${target}
     src/opengl/openglwindow.cpp
     src/shader/shadersource.cpp
     src/texture/texturemanager.cpp
+    src/opengl/qqk/threadrenderer.h
     src/texture/fasttexturedata.cpp
     src/texture/fastqtexturedata.cpp
-    src/texture/fastclampedtexturedata.cpp
     src/inputmanager/inputmanager.cpp
+    src/texture/fastclampedtexturedata.cpp
+
     )
 target_include_directories(${target} PUBLIC
     samples/${target}

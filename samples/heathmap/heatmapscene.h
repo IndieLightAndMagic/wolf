@@ -1,5 +1,6 @@
-#ifndef _INTROSCENE_H_
-#define _INTROSCENE_H_
+#ifndef __HEATMAPREDNDERER_H__
+#define __HEATMAPREDNDERER_H__
+
 
 #include "camera.h"
 #include "shader.h"
@@ -21,47 +22,45 @@ class QOpenGLShaderProgram;
 class QOpenGLVertexArrayObject;
 
 namespace HDC{
-    class HeatMapScene : public QObject
+    class HeatmapRenderer : public QOpenGLFunctions
     {
-        Q_OBJECT
-    public:
-        explicit HeatMapScene(QObject* parent = 0);
-        ~HeatMapScene();
 
-        HDC::HeatMapPlayer* m_heatmapplayer;
+    public:
+        HeatmapRenderer();
+        ~HeatmapRenderer();
+
+        void render();
+        void initialize();
+
+    private:
+        
         Camera m_cam;
 
 
-        void initialize();
-        void render();
-        void invalidate();
-
-        void setdistance(float distance);
-
-    private:
         void initializeShader();
         void initializeTextures();
         void initializeGeometry();
 
         GLuint m_matrixUniform;
-        HDC::FastQTextureData* m_soccer_court_texture{nullptr}; //ARGB [0 = B, G = 1, R = 2, A = 3]
-
         unsigned int m_court_textureUniform;
         unsigned int m_heat__textureUniform;
-        GLuint m_blendSliderUniform;
-        GLuint m_fgridSliderUniform;
+        unsigned int m_blendSliderUniform;
+        unsigned int m_fgridSliderUniform;
 
 
         HDC::TexturedPlaneGeometry* m_soccer_court{nullptr};
+        HDC::FastQTextureData* m_soccer_court_texture{nullptr}; //ARGB [0 = B, G = 1, R = 2, A = 3]
 
         std::shared_ptr<HDC::ShaderProgram> shaderProgram{nullptr};
         QOpenGLShaderProgram* fastShaderProgram;
 
 
 
+        HDC::HeatMapPlayer* m_heatmapplayer;
         float m_fblend{1.0f};
-        float m_distance{1.0f};
+        
         
     };
 }
-#endif /* _INTROSCENE_H_ */
+#endif /* __HEATMAPREDNDERER_H__
+ */

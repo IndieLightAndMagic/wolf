@@ -1,252 +1,146 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company.
-** Author: Giuseppe D'Angelo
-** Contact: info@kdab.com
+** Copyright (C) 2017 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
-** This program is free software: you can redistribute it and/or modify
-** it under the terms of the GNU Lesser General Public License as published by
-** the Free Software Foundation, either version 3 of the License, or
-** (at your option) any later version.
+** This file is part of the examples of the Qt Toolkit.
 **
-** This program is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU Lesser General Public License for more details.
+** $QT_BEGIN_LICENSE:BSD$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** You should have received a copy of the GNU Lesser General Public License
-** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+** BSD License Usage
+** Alternatively, you may use this file under the terms of the BSD license
+** as follows:
+**
+** "Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are
+** met:
+**   * Redistributions of source code must retain the above copyright
+**     notice, this list of conditions and the following disclaimer.
+**   * Redistributions in binary form must reproduce the above copyright
+**     notice, this list of conditions and the following disclaimer in
+**     the documentation and/or other materials provided with the
+**     distribution.
+**   * Neither the name of The Qt Company Ltd nor the names of its
+**     contributors may be used to endorse or promote products derived
+**     from this software without specific prior written permission.
+**
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+**
+** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
 import QtQuick 2.0
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.0
-import genius.sports.computer.vision.heatmap 1.0
 
-Rectangle {
-    id: root
-    width: 600
-    height: 600
+import SceneGraphRendering 1.0
 
-    color: "black"
+Item {
+    width: 400
+    height: 400
 
-    Heatmap {
+    // The checkers background
+    ShaderEffect {
+        id: tileBackground
+        anchors.fill: parent
+
+        property real tileSize: 16
+        property color color1: Qt.rgba(0.9, 0.9, 0.9, 1);
+        property color color2: Qt.rgba(0.85, 0.85, 0.85, 1);
+
+        property size pixelSize: Qt.size(width / tileSize, height / tileSize);
+
+        fragmentShader:
+            "
+            uniform lowp vec4 color1;
+            uniform lowp vec4 color2;
+            uniform highp vec2 pixelSize;
+            varying highp vec2 qt_TexCoord0;
+            void main() {
+                highp vec2 tc = sign(sin(3.14159265358979323846 * qt_TexCoord0 * pixelSize));
+                if (tc.x != tc.y)
+                    gl_FragColor = color1;
+                else
+                    gl_FragColor = color2;
+            }
+            "
+    }
+
+    Renderer {
         id: renderer
-        width: 800
-        height: 600
-        smooth: true
+        anchors.fill: parent
+        anchors.margins: 10
 
-        Text {
-            text: "OpenGL in QtQuick!"
-            color: "red"
-            anchors.top: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
+        // The transform is just to show something interesting..
+        transform: [
+            Rotation { id: rotation; axis.x: 0; axis.z: 0; axis.y: 1; angle: 0; origin.x: renderer.width / 2; origin.y: renderer.height / 2; },
+            Translate { id: txOut; x: -renderer.width / 2; y: -renderer.height / 2 },
+            Scale { id: scale; },
+            Translate { id: txIn; x: renderer.width / 2; y: renderer.height / 2 }
+        ]
+
+        Behavior on opacity { NumberAnimation { duration: 500 } }
+        opacity: 0
+        Component.onCompleted: renderer.opacity = 1;
+    }
+
+    // Just to show something interesting
+    SequentialAnimation {
+        PauseAnimation { duration: 5000 }
+        ParallelAnimation {
+            NumberAnimation { target: scale; property: "xScale"; to: 0.6; duration: 1000; easing.type: Easing.InOutBack }
+            NumberAnimation { target: scale; property: "yScale"; to: 0.6; duration: 1000; easing.type: Easing.InOutBack }
         }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: flashyThing.flash()
+        NumberAnimation { target: rotation; property: "angle"; to: 80; duration: 1000; easing.type: Easing.InOutCubic }
+        NumberAnimation { target: rotation; property: "angle"; to: -80; duration: 1000; easing.type: Easing.InOutCubic }
+        NumberAnimation { target: rotation; property: "angle"; to: 0; duration: 1000; easing.type: Easing.InOutCubic }
+        NumberAnimation { target: renderer; property: "opacity"; to: 0.5; duration: 1000; easing.type: Easing.InOutCubic }
+        PauseAnimation { duration: 1000 }
+        NumberAnimation { target: renderer; property: "opacity"; to: 0.8; duration: 1000; easing.type: Easing.InOutCubic }
+        ParallelAnimation {
+            NumberAnimation { target: scale; property: "xScale"; to: 1; duration: 1000; easing.type: Easing.InOutBack }
+            NumberAnimation { target: scale; property: "yScale"; to: 1; duration: 1000; easing.type: Easing.InOutBack }
         }
-
-        Rectangle {
-            id: flashyThing
-            anchors.fill: parent
-            opacity: 0
-
-            color: "yellow"
-
-            Text {
-                id: flashyThingText
-                anchors.centerIn: parent
-                text: "Clicked!"
-                font.pointSize: 40
-            }
-
-            function flash() {
-                flashyAnimation.restart()
-            }
-
-            ParallelAnimation {
-                id: flashyAnimation
-
-                NumberAnimation {
-                    target: flashyThingText
-                    properties: "font.pointSize"
-                    from: 20
-                    to: 60
-                    duration: 2000
-                    easing.type: Easing.OutCubic
-                }
-
-                SequentialAnimation {
-                    PropertyAction {
-                        target: flashyThing
-                        properties: "opacity"
-                        value: 1
-                    }
-
-                    NumberAnimation {
-                        target: flashyThing
-                        properties: "opacity"
-                        to: 0
-                        easing.type: Easing.InCubic
-                        duration: 1500
-                    }
-                }
-            }
-
-        }
+        running: false
+        loops: Animation.Infinite
     }
 
     Rectangle {
-        id: cameraControls
-        property var camera
-
-        border.color: "#000000"
-        border.width: 2
+        id: labelFrame
+        anchors.margins: -10
         radius: 5
-        color: "#55ffffff"
-
-        width: parent ? parent.width - 10 : 400
-        height: 150
-
-        Component.onCompleted: if (camera) actualStuff.createObject(cameraControls)
-
-        Component {
-            id: actualStuff
-            GridLayout {
-                anchors.fill: parent
-                anchors.margins: 5
-                columns: 3
-
-                Label { text: "Azimuth" }
-                Slider {
-                    Layout.fillWidth: true
-                    from: 0
-                    to: 360
-                    value: 180
-                    onValueChanged: cameraControls.camera.azimuth = value
-                }
-                Label { text: cameraControls.camera.azimuth.toFixed(2) }
-
-                Label { text: "Elevation" }
-                Slider {
-                    Layout.fillWidth: true
-                    from: 0
-                    to: 90
-                    value: 10
-                    onValueChanged: cameraControls.camera.elevation = value
-                }
-                Label { text: cameraControls.camera.elevation.toFixed(2) }
-
-                Label { text: "Distance" }
-                Slider {
-                    id: distanceSlider
-                    Layout.fillWidth: true
-                    from: 1
-                    to: 25
-                    value: 15
-                    onValueChanged: cameraControls.camera.distance = value
-                }
-                Label { text: cameraControls.camera.distance.toFixed(2) }
-            }
-        }
-
-
+        color: "white"
+        border.color: "black"
+        opacity: 0.8
+        anchors.fill: label
     }
 
-    ParallelAnimation {
-        loops: Animation.Infinite
-        running: true
-
-        SequentialAnimation {
-            loops: Animation.Infinite
-
-            NumberAnimation {
-                target: renderer
-                properties: "x"
-                from: 50
-                to: root.width - renderer.width
-                duration: 20
-            }
-            NumberAnimation {
-                target: renderer
-                properties: "x"
-                from: root.width - renderer.width
-                to: 0
-                duration: 5000
-            }
-            NumberAnimation {
-                target: renderer
-                properties: "x"
-                from: 0
-                to: 50
-                duration: 1000
-            }
-        }
-
-        SequentialAnimation {
-            loops: Animation.Infinite
-            NumberAnimation {
-                target: renderer
-                properties: "y"
-                from: 100
-                to: 0
-                duration: 1500
-            }
-
-            NumberAnimation {
-                target: renderer
-                properties: "y"
-                from: 0
-                to: root.height - renderer.height
-                duration: 5000
-            }
-
-            NumberAnimation {
-                target: renderer
-                properties: "y"
-                from: root.height - renderer.height
-                to: 100
-                duration: 4000
-            }
-
-        }
-
-        SequentialAnimation {
-            loops: Animation.Infinite
-
-            PauseAnimation {
-                duration: 10000
-            }
-
-            RotationAnimation {
-                target: renderer
-                properties: "rotation"
-                from: 0
-                to: 45
-                duration: 100
-                easing.type: Easing.OutBack
-            }
-
-            RotationAnimation {
-                target: renderer
-                properties: "rotation"
-                to: -90
-                duration: 100
-                easing.type: Easing.OutBack
-            }
-
-            RotationAnimation {
-                target: renderer
-                properties: "rotation"
-                to: 0
-                duration: 100
-                easing.type: Easing.OutBack
-            }
-        }
-
+    Text {
+        id: label
+        anchors.bottom: renderer.bottom
+        anchors.left: renderer.left
+        anchors.right: renderer.right
+        anchors.margins: 20
+        wrapMode: Text.WordWrap
+        text: "The blue rectangle with the vintage 'Q' is an FBO, rendered by the application in a dedicated background thread. The background thread juggles two FBOs, one that is being rendered to and one for displaying. The texture to display is posted to the scene graph and displayed using a QSGSimpleTextureNode."
     }
+
+
 }
-

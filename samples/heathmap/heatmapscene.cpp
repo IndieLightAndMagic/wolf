@@ -15,14 +15,15 @@
 #include <QOpenGLShaderProgram>
 #include <math.h>
 
-static bool resetShader = false;
 static std::vector<unsigned int> ids {0,1,2,3,4,5,6,7,8,9,10,11,13,14,15,19,20,21,22,23,24,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57};
 static unsigned int selectedidx = 0;
-HDC::HeatMapScene::HeatMapScene(QObject* parent):QObject(parent){
+HDC::HeatmapRenderer::HeatmapRenderer(){
 
 }
+HDC::HeatmapRenderer::~HeatmapRenderer() {
 
-void HDC::HeatMapScene::initializeGeometry(){
+}
+void HDC::HeatmapRenderer::initializeGeometry(){
 
     m_soccer_court = new HDC::TexturedPlaneGeometry();
     m_soccer_court->setheight(0.55f);
@@ -31,7 +32,7 @@ void HDC::HeatMapScene::initializeGeometry(){
 
 
 }
-void HDC::HeatMapScene::initializeTextures(){
+void HDC::HeatmapRenderer::initializeTextures(){
 
     //Register Textures
     //Stage Textures
@@ -54,7 +55,7 @@ void HDC::HeatMapScene::initializeTextures(){
 
     //glBindTexture(GL_TEXTURE_2D, 0);
 }
-void HDC::HeatMapScene::initializeShader(){
+void HDC::HeatmapRenderer::initializeShader(){
     shaderProgram.reset();
     shaderProgram = std::make_shared<ShaderProgram>(
         (std::string(RESOURCES_DIR) + "/shaders/heathmap.vert").c_str(),
@@ -70,26 +71,23 @@ void HDC::HeatMapScene::initializeShader(){
 
 }
 
-void HDC::HeatMapScene::initialize(){
+void HDC::HeatmapRenderer::initialize(){
 
+    initializeOpenGLFunctions();
 
     initializeGeometry();
     initializeShader();
     initializeTextures();
     std::cout << "\n\tShaders [OK]" << std::endl;
-    m_cam.setCamera();
-    m_cam.setCameraPosition(0.0f, 0.0f, -5.0f);
+
+
+    auto& mtx = m_cam.getCamera();
+    mtx.rotate(-50.0f, QVector3D(1.0f, 0.0f, 0.0f));
+    m_cam.setCameraPosition(0.0f, 0.0f, -2.0f);
+
 
 }
-void HDC::HeatMapScene::invalidate(){
-
-}
-void HDC::HeatMapScene::setdistance(float distance){
-
-    m_distance = distance;
-
-}
-void HDC::HeatMapScene::render(){
+void HDC::HeatmapRenderer::render(){
 
     QOpenGLFunctions *functions = QOpenGLContext::currentContext()->functions();
 
@@ -110,17 +108,10 @@ void HDC::HeatMapScene::render(){
     
     fastShaderProgram->setUniformValue(m_blendSliderUniform, m_fblend);
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-
-
     m_soccer_court->enable();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     m_soccer_court->disable();
+
     fastShaderProgram->release();
 
-}
-HDC::HeatMapScene::~HeatMapScene() {
-    invalidate();
 }

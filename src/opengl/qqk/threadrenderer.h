@@ -1,9 +1,9 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
-** This file is part of the documentation of the Qt Toolkit.
+** This file is part of the examples of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:BSD$
 ** Commercial License Usage
@@ -48,59 +48,32 @@
 **
 ****************************************************************************/
 
-#include "src/opengl/qqk/threadrenderer.h"
+#ifndef THREADRENDERER_H
+#define THREADRENDERER_H
 
-#include <QThread>
-#include <QQuickView>
-#include <QQmlEngine>
-#include <QSurfaceFormat>
-#include <QGuiApplication>
+#include <QQuickItem>
 
-
-
-
-
-int main(int argc, char **argv){
-    QGuiApplication app(argc, argv);
-
-
-    qmlRegisterType<HDC::ThreadRenderer>("SceneGraphRendering", 1, 0, "Renderer");
-    int execReturn = 0;
-
+namespace HDC{
+    class RenderThread;
+    class ThreadRenderer : public QQuickItem
     {
-        QQuickView view;
+    Q_OBJECT
 
-        // Rendering in a thread introduces a slightly more complicated cleanup
-        // so we ensure that no cleanup of graphics resources happen until the
-        // application is shutting down.
-        view.setPersistentOpenGLContext(true);
-        view.setPersistentSceneGraph(true);
+    public:
+        ThreadRenderer();
 
-        view.setResizeMode(QQuickView::SizeRootObjectToView);
-        view.setSource(QUrl("../samples/heathmap/qml/src/main.qml"));
-        view.show();
+        static QList<QThread *> threads;
 
-        execReturn = app.exec();
-    }
+    public Q_SLOTS:
+        void ready();
 
-    // As the render threads make use of our QGuiApplication object
-    // to clean up gracefully, wait for them to finish before
-    // QGuiApp is taken off the heap.
-    for (QThread *t : qAsConst(HDC::ThreadRenderer::threads)) {
-        t->wait();
-        delete t;
-    }
+    protected:
+        QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 
-    return execReturn;
+    private:
+        RenderThread *m_renderThread;
+    };
 
 }
 
-
-
-
-
-
-
-
-
-
+#endif
