@@ -1,7 +1,9 @@
-attribute highp vec4 vertex;
-attribute mediump vec3 normal;
-uniform mediump mat4 matrix;
-varying mediump vec4 color;
+#version 120
+
+attribute vec4 vertex;
+attribute vec3 normal;
+uniform mat4 matrix;
+varying vec4 color;
 void main(void)
 {
     vec3 toLight = normalize(vec3(0.0, 0.3, 1.0));
