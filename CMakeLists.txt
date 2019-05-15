@@ -26,7 +26,6 @@ function(get_target_sources)
     endforeach()
 endfunction()
 
-
 get_target_sources()
 add_executable(${target} 
     ${target_srcs}
@@ -43,7 +42,6 @@ add_executable(${target}
     src/texture/fastqtexturedata.cpp
     src/texture/fastclampedtexturedata.cpp
     src/inputmanager/inputmanager.cpp
-    
     )
 target_include_directories(${target} PUBLIC
     samples/${target}
@@ -63,6 +61,7 @@ if (APPLE)
     target_link_libraries(${target} PRIVATE
         Qt5::Core
         Qt5::Gui
+        Qt5::Quick
         "-framework DiskArbitration"
         "-framework IOKit" 
         "-framework OpenGL" 
@@ -72,11 +71,13 @@ else()
     target_link_libraries(${target} PRIVATE
         Qt5::Core
         Qt5::Gui
+        Qt5::Quick
+
     )
 endif()
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 target_compile_definitions(${target} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-
+qt5_add_resources(QT_RESOURCES samples/${target}/qml/heatmap.qrc)
 
 
 

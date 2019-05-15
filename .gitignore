@@ -20,6 +20,7 @@
 *.res
 *.so
 *.so.*
+*.txt.user
 *_pch.h.cpp
 *_resource.rc
 *_wrapper.bat

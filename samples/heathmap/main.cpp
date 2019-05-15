@@ -48,11 +48,13 @@
 **
 ****************************************************************************/
 
-#include <iostream>
-#include <QtGui/QGuiApplication>
+#include <QQuickView>
+#include <QQmlEngine>
+#include <QSurfaceFormat>
+#include <QGuiApplication>
+#include <samples/heathmap/fbo/fbo.h>
 
 
-#include "heatmapscene.h"
 
 
 
@@ -61,17 +63,25 @@ int main(int argc, char **argv){
 
     QSurfaceFormat format;
     format.setSamples(16);
+    format.setVersion(3,3);
+    format.setProfile(QSurfaceFormat::CoreProfile);
+    format.setDepthBufferSize(24);
+    format.setStencilBufferSize(8);
+    QSurfaceFormat::setDefaultFormat(format);
+    qmlRegisterType<HDC::fbo>("genius.sports.computer.vision.heatmap", 1, 0, "Heatmap");
 
-    HDC::HeatMapScene window;
-    window.setFormat(format);
-    window.resize(1400, 800);
-    window.show();
-    window.setAnimating(true);
+
+    QQuickView view;
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    //view.setSource(QUrl("qrc:///samples/heathmap/qml/src/main.qml"));
+    view.setSource(QUrl("../samples/heathmap/qml/src/main.qml"));
+    view.resize(1200, 800);
+    view.show();
+
+
 
     return app.exec();
 
-    return 0;
-    
 }
 
 

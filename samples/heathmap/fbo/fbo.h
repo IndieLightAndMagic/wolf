@@ -5,10 +5,30 @@
 #ifndef COURTDEMO_FBO_H
 #define COURTDEMO_FBO_H
 
+#include <QQuickFramebufferObject>
+namespace HDC{
+    class fbo : public QQuickFramebufferObject {
+    Q_OBJECT
 
-class fbo {
+        Q_PROPERTY(float distance READ distance WRITE setDistance NOTIFY distanceChanged)
 
-};
+    public:
+        explicit fbo(QQuickItem *parent = 0);
+        Renderer *createRenderer() const Q_DECL_OVERRIDE;
+
+        float distance() const;
+
+    signals:
+        void distanceChanged(float distance);
+
+    public slots:
+        void setDistance(float distance);
+
+    private:
+        float m_distance;
+    };
+
+}
 
 
 #endif //COURTDEMO_FBO_H
