@@ -22,7 +22,6 @@ namespace HDC {
     class PlaneGeometry : public HDC::Geometry{
 
     protected:
-
         std::vector<float> vertices_colors{
             // positions          // colors           
              1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   // top right
@@ -44,6 +43,35 @@ namespace HDC {
 
 
     };
+    class PlaneGeometry120 : public PlaneGeometry{
+        int vertexAttrLocation;
+        int colorAttrLocation;
+    protected:
+        std::vector<float> vertices_120{
+        };
+        std::vector<float> colors_120{
+        };
+
+    public:
+        PlaneGeometry120():PlaneGeometry(){
+            for (auto&index : indices){
+                vertices_120.push_back(vertices_colors[index * 6 + 0]);
+                vertices_120.push_back(vertices_colors[index * 6 + 1]);
+                vertices_120.push_back(vertices_colors[index * 6 + 2]);
+                colors_120.push_back(vertices_colors[index*6 + 3]);
+                colors_120.push_back(vertices_colors[index*6 + 4]);
+                colors_120.push_back(vertices_colors[index*6 + 5]);
+            }
+        }
+        inline int& getvertexattr(){ return vertexAttrLocation; };
+        int& getcolorattr(){return colorAttrLocation; };
+        float* getvertexdata(){ return vertices_120.data(); };
+        float* getcolordata(){ return colors_120.data(); };
+        unsigned char getnumvertices() { return vertices_120.size() / 3;
+
+        }
+
+    };
 
     class TexturedPlaneGeometry : public HDC::PlaneGeometry {
 
@@ -56,7 +84,7 @@ namespace HDC {
             -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
             -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
-    
+
     public:
         void resetplane();
         TexturedPlaneGeometry();
@@ -64,6 +92,7 @@ namespace HDC {
         const float& width() const;
         void setheight(float height);
         const float& height() const;
+
 
 
     };
