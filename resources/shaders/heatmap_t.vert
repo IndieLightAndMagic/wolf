@@ -10,4 +10,4 @@ void main(void)
     color = vec4(col * 0.2 + col * 0.8 * angle, 1.0);
     color = clamp(color, 0.0, 1.0);
     gl_Position = matrix * vertex;
-};
+}
