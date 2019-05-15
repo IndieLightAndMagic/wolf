@@ -139,7 +139,7 @@ Item {
         anchors.right: renderer.right
         anchors.margins: 20
         wrapMode: Text.WordWrap
-        text: "The blue rectangle with the vintage 'Q' is an FBO, rendered by the application in a dedicated background thread. The background thread juggles two FBOs, one that is being rendered to and one for displaying. The texture to display is posted to the scene graph and displayed using a QSGSimpleTextureNode."
+        text: "blah blah blah displayed using a QSGSimpleTextureNode."
     }
 
 

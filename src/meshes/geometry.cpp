@@ -39,9 +39,10 @@ void HDC::PlaneGeometry::resetplane(){
 
 HDC::PlaneGeometry::PlaneGeometry() : Geometry() {
 
-    resetplane();
+
 
 }
+
 void HDC::PlaneGeometry::setwidth(float width){
     vertices_colors[0] = vertices_colors[6] = width;
     vertices_colors[12] = vertices_colors[18] = -width;

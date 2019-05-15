@@ -53,7 +53,7 @@ namespace HDC {
         };
 
     public:
-        PlaneGeometry120():PlaneGeometry(){
+        PlaneGeometry120(){
             for (auto&index : indices){
                 vertices_120.push_back(vertices_colors[index * 6 + 0]);
                 vertices_120.push_back(vertices_colors[index * 6 + 1]);

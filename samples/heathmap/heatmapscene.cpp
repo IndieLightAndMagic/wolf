@@ -16,12 +16,12 @@ HDC::HeatmapRenderer::~HeatmapRenderer()
 
 void HDC::HeatmapRenderer::paintQtLogo()
 {
-    program1.enableAttributeArray(normalAttr1);
+    //program1.enableAttributeArray(normalAttr1);
     program1.enableAttributeArray(vertexAttr1);
     program1.setAttributeArray(vertexAttr1, vertices.constData());
-    program1.setAttributeArray(normalAttr1, normals.constData());
+    //program1.setAttributeArray(normalAttr1, normals.constData());
     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-    program1.disableAttributeArray(normalAttr1);
+    //program1.disableAttributeArray(normalAttr1);
     program1.disableAttributeArray(vertexAttr1);
 }
 
@@ -37,8 +37,9 @@ void HDC::HeatmapRenderer::initialize()
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.frag"));
     program1.link();
 
+    //auto& vertexAttr1 = plane.getvertexattr();
     vertexAttr1 = program1.attributeLocation("vertex");
-    normalAttr1 = program1.attributeLocation("normal");
+    //normalAttr1 = program1.attributeLocation("normal");
     matrixUniform1 = program1.uniformLocation("matrix");
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );

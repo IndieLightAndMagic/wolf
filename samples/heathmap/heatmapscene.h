@@ -7,6 +7,8 @@
 
 #include <QTime>
 #include <QVector>
+#include <src/meshes/geometry.h>
+
 namespace HDC{
     class HeatmapRenderer : protected QOpenGLFunctions
     {
@@ -27,12 +29,15 @@ namespace HDC{
         void quad(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal x4, qreal y4);
         void extrude(qreal x1, qreal y1, qreal x2, qreal y2);
 
+        HDC::PlaneGeometry120 plane;
         QVector<QVector3D> vertices;
         QVector<QVector3D> normals;
         QOpenGLShaderProgram program1;
         int vertexAttr1;
-        int normalAttr1;
+        //int normalAttr1;
         int matrixUniform1;
+
+
     };
 }
 
