@@ -265,7 +265,10 @@ QSGNode *HDC::ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeD
         current->doneCurrent();
 
         m_renderThread->context = new QOpenGLContext();
-        m_renderThread->context->setFormat(current->format());
+        QSurfaceFormat surfaceFormat;
+        surfaceFormat.setVersion(3,3);
+        surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
+        m_renderThread->context->setFormat(surfaceFormat);
         m_renderThread->context->setShareContext(current);
         m_renderThread->context->create();
         m_renderThread->context->moveToThread(m_renderThread);
