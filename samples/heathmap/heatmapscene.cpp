@@ -17,12 +17,21 @@ HDC::HeatmapRenderer::~HeatmapRenderer()
 void HDC::HeatmapRenderer::paintQtLogo()
 {
     //program1.enableAttributeArray(normalAttr1);
-    program1.enableAttributeArray(vertexAttr1);
-    program1.setAttributeArray(vertexAttr1, vertices.constData());
+    auto va = plane.getvertexattr();
+    auto pdata = plane.getvertexdata();
+
+    program1.enableAttributeArray(va);
+    program1.setAttributeArray(va, pdata, 3, 0);
+
+    //std::cout << vertices[0].x() << "  " << vertices[0].y() << " " << vertices[0].z() <<  std::endl;
+    //std::cout << pdata[0] << "  " << pdata[1] << " " << pdata[2] <<  std::endl;
+    //std::cout << pdata[3] << "  " << pdata[4] << " " << pdata[5] <<  std::endl;
+    //std::cout << pdata[6] << "  " << pdata[7] << " " << pdata[8] <<  std::endl;
+
     //program1.setAttributeArray(normalAttr1, normals.constData());
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     //program1.disableAttributeArray(normalAttr1);
-    program1.disableAttributeArray(vertexAttr1);
+    program1.disableAttributeArray(va);
 }
 
 
@@ -37,7 +46,7 @@ void HDC::HeatmapRenderer::initialize()
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.frag"));
     program1.link();
 
-    //auto& vertexAttr1 = plane.getvertexattr();
+    auto& vertexAttr1 = plane.getvertexattr();
     vertexAttr1 = program1.attributeLocation("vertex");
     //normalAttr1 = program1.attributeLocation("normal");
     matrixUniform1 = program1.uniformLocation("matrix");
@@ -47,7 +56,9 @@ void HDC::HeatmapRenderer::initialize()
 
     m_fAngle = 0;
     m_fScale = 1;
+
     createGeometry();
+
 }
 
 void HDC::HeatmapRenderer::render()
@@ -65,12 +76,8 @@ void HDC::HeatmapRenderer::render()
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
-    QMatrix4x4 modelview;
-    modelview.rotate(m_fAngle, 0.0f, 1.0f, 0.0f);
-    modelview.rotate(m_fAngle, 1.0f, 0.0f, 0.0f);
-    modelview.rotate(m_fAngle, 0.0f, 0.0f, 1.0f);
-    modelview.scale(m_fScale);
-    modelview.translate(0.0f, -0.2f, 0.0f);
+    m_cam.setCameraPosition(0.0f, 0.0f, -5.0f);
+    QMatrix4x4& modelview = m_cam.getCamera();
 
     program1.bind();
     program1.setUniformValue(matrixUniform1, modelview);
@@ -80,7 +87,7 @@ void HDC::HeatmapRenderer::render()
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
-    m_fAngle += 1.0f;
+    m_fAngle += 0.0f;
 }
 
 void HDC::HeatmapRenderer::createGeometry()
@@ -129,9 +136,16 @@ void HDC::HeatmapRenderer::createGeometry()
         extrude(x6, y6, x7, y7);
         extrude(x8, y8, x5, y5);
     }
-
-    for (int i = 0;i < vertices.size();i++)
+    auto pdata = plane.getvertexdata();
+    for (int i = 0;i < vertices.size();i++) {
         vertices[i] *= 2.0f;
+        if (i < 2){
+            pdata[i * 3 + 0] = vertices[i].x();
+            pdata[i * 3 + 1] = vertices[i].y();
+            pdata[i * 3 + 2] = vertices[i].z();
+
+        }
+    }
 }
 
 void HDC::HeatmapRenderer::quad(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal x4, qreal y4)
