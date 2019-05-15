@@ -1,4 +1,4 @@
-#version 410 core    
+#version 410 core
 layout (location = 0) in vec4 posAttr;
 layout (location = 1) in vec4 colAttr;
 layout (location = 2) in vec2 texAttr;
