@@ -19,8 +19,13 @@ void HDC::HeatmapRenderer::paintQtLogo()
 {
     auto va = plane.getvertexattr();
     auto pdata = plane.getvertexdata();
+    
     program1.enableAttributeArray(va);
     program1.setAttributeArray(va, pdata, 3, 0);
+
+    auto texturedata = reinterpret_cast<const unsigned char*>(m_soccer_court_texture->data);
+    //program1.setUniformValueArray(courtUniform, texturedata, m_soccer_court_texture->m_w* m_soccer_court_texture->m_h);
+
     glDrawArrays(GL_TRIANGLES, 0, 6);
     program1.disableAttributeArray(va);
 }
@@ -28,8 +33,8 @@ void HDC::HeatmapRenderer::paintQtLogo()
 void HDC::HeatmapRenderer::initializeTextures(){
 
     QImage* pqimg = new QImage(QString::fromStdString(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png"));
-    auto m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
-    delete m_soccer_court_texture;
+    m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
+
 }
 void HDC::HeatmapRenderer::initialize()
 {

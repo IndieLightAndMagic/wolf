@@ -9,6 +9,7 @@
 #include <QVector>
 #include <src/meshes/geometry.h>
 #include <src/camera/camera.h>
+#include <src/texture/fastqtexturedata.h>
 
 namespace HDC{
     class HeatmapRenderer : protected QOpenGLFunctions
@@ -23,13 +24,14 @@ namespace HDC{
     private:
         void initializeTextures();
 
-        qreal   m_fAngle;
+        qreal m_fAngle;
 
         void paintQtLogo();
         void createGeometry();
 
         HDC::Camera m_cam;
         HDC::TexturedPlaneGeometry120 plane;
+        HDC::FastQTextureData* m_soccer_court_texture;
         QOpenGLShaderProgram program1;
 
         int matrixUniform1;
