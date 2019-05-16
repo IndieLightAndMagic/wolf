@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QPaintEngine>
 #include <qmath.h>
+#include "src/texture/fastqtexturedata.h"
 
 HDC::HeatmapRenderer::HeatmapRenderer()
 {
@@ -26,8 +27,9 @@ void HDC::HeatmapRenderer::paintQtLogo()
 
 void HDC::HeatmapRenderer::initializeTextures(){
 
-    
-
+    QImage* pqimg = new QImage(QString::fromStdString(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png"));
+    auto m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
+    delete m_soccer_court_texture;
 }
 void HDC::HeatmapRenderer::initialize()
 {
@@ -48,7 +50,7 @@ void HDC::HeatmapRenderer::initialize()
     m_cam.setCamera();
 
     createGeometry();
-
+    initializeTextures();
 }
 
 void HDC::HeatmapRenderer::render()
