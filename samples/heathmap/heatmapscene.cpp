@@ -43,11 +43,10 @@ void HDC::HeatmapRenderer::initialize()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
-
+    m_cam.setCamera();
+    m_cam.setCameraPosition(0.0f, 0.0f, 30.0f);
     auto& mtx = m_cam.getCamera();
-    mtx.rotate(-50.0f, QVector3D(1.0f, 0.0f, 0.0f));
-    m_cam.setCameraPosition(0.0f, 0.0f, -12.0f);
-
+    //mtx.rotate(90.0, QVector3D(1.0f, 0.0, 0.0));
     createGeometry();
 
 }
@@ -76,7 +75,9 @@ void HDC::HeatmapRenderer::render()
 
 void HDC::HeatmapRenderer::createGeometry()
 {
-    plane.resetplane();
+    auto size = 50.0f;
+    plane.setsize(size, size);
+
 
 }
 
