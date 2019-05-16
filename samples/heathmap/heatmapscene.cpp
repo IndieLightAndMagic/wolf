@@ -45,7 +45,7 @@ void HDC::HeatmapRenderer::initialize()
     auto& vertexAttr1 = plane.getvertexattr();
     vertexAttr1 = program1.attributeLocation("vertex");
     matrixUniform1 = program1.uniformLocation("matrix");
-
+    courtUniform =  program1.uniformLocation("court_texture");
 
     m_cam.setCamera();
 

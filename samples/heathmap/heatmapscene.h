@@ -33,7 +33,7 @@ namespace HDC{
         QOpenGLShaderProgram program1;
 
         int matrixUniform1;
-
+        int courtUniform;
 
 
     };
