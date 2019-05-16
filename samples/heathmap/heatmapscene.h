@@ -29,7 +29,7 @@ namespace HDC{
         void createGeometry();
 
         HDC::Camera m_cam;
-        HDC::PlaneGeometry120 plane;
+        HDC::TexturedPlaneGeometry120 plane;
         QOpenGLShaderProgram program1;
 
         int matrixUniform1;
