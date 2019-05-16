@@ -2,6 +2,7 @@
 
 
 static std::map<QImage::Format, std::string> format_map{
+
     std::make_pair(QImage::Format_Invalid,  "QImage::Format_Invalid:\tThe image is invalid."),
     std::make_pair(QImage::Format_Mono, "QImage::Format_Mono:\tThe image is stored using 1-bit per pixel. Bytes are packed with the most significant bit (MSB) first."),
     std::make_pair(QImage::Format_MonoLSB,  "QImage::Format_MonoLSB:\tThe image is stored using 1-bit per pixel. Bytes are packed with the less significant bit (LSB) first."),
@@ -30,7 +31,8 @@ static std::map<QImage::Format, std::string> format_map{
     std::make_pair(QImage::Format_RGBX64,   "QImage::Format_RGBX64:\tThe image is stored using a 64-bit halfword-ordered RGB(x) format (16-16-16-16). This is the same as the Format_RGBX64 except alpha must always be 65535. (added in Qt 5.12)"),
     std::make_pair(QImage::Format_RGBA64,   "QImage::Format_RGBA64:\tThe image is stored using a 64-bit halfword-ordered RGBA format (16-16-16-16). (added in Qt 5.12)"),
     std::make_pair(QImage::Format_RGBA64_Premultiplied, "QImage::Format_RGBA64_Premultiplied:\tThe image is stored using a premultiplied 64-bit halfword-ordered RGBA format (16-16-16-16). (added in Qt 5.12)"),
-}; 
+
+    };
 
 HDC::FastQTextureData::FastQTextureData(QImage* qimg): FastTextureData(qimg->width(), qimg->height()){
 
@@ -46,6 +48,7 @@ HDC::FastQTextureData::FastQTextureData(int w, int h, unsigned int format): Fast
     data = qimage->bits();
 
 }
+
 void HDC::FastQTextureData::updateTexture(){
 
     bind();

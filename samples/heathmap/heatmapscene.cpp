@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QPaintEngine>
 #include <qmath.h>
+#include <src/texture/fasttexturedata.h>
 #include "src/texture/fastqtexturedata.h"
 
 HDC::HeatmapRenderer::HeatmapRenderer()
@@ -17,17 +18,27 @@ HDC::HeatmapRenderer::~HeatmapRenderer()
 
 void HDC::HeatmapRenderer::paintQtLogo()
 {
-    auto va = plane.getvertexattr();
-    auto pdata = plane.getvertexdata();
+    auto vertices      = HDC::Plane120::Plane120Attr::vertices;
+    auto texturecoords = HDC::Plane120::Plane120Attr::texturecoords;
     
-    program1.enableAttributeArray(va);
-    program1.setAttributeArray(va, pdata, 3, 0);
+    auto vertexattrlocation = plane.getattrlocation(vertices);
+    auto tcoordattrlocation = plane.getattrlocation(texturecoords);
+    
+    auto vertexdata = plane.getdata(vertices);
+    auto tcoorddata = plane.getdata(texturecoords);
+    
+    program1.enableAttributeArray(vertexattrlocation);
+    program1.setAttributeArray(vertexattrlocation, vertexdata, 3, 0);
+    
+    program1.enableAttributeArray(tcoordattrlocation);
+    program1.setAttributeArray(tcoordattrlocation, tcoorddata, 2, 0);
 
-    auto texturedata = reinterpret_cast<const unsigned char*>(m_soccer_court_texture->data);
-    //program1.setUniformValueArray(courtUniform, texturedata, m_soccer_court_texture->m_w* m_soccer_court_texture->m_h);
+    //program1.setUniformValue(courtUniform, m_soccer_court_texture->gl.slot);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    program1.disableAttributeArray(va);
+
+    program1.disableAttributeArray(tcoordattrlocation);
+    program1.disableAttributeArray(vertexattrlocation);
 }
 
 void HDC::HeatmapRenderer::initializeTextures(){
@@ -38,24 +49,26 @@ void HDC::HeatmapRenderer::initializeTextures(){
 }
 void HDC::HeatmapRenderer::initialize()
 {
+
     initializeOpenGLFunctions();
 
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
-
     
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.vert"));
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.frag"));
     program1.link();
 
-    auto& vertexAttr1 = plane.getvertexattr();
-    vertexAttr1       = program1.attributeLocation("vertex");
-    matrixUniform1    = program1.uniformLocation("matrix");
-    courtUniform      = program1.uniformLocation("court_texture");
+    plane.setattrlocation(program1.attributeLocation("vertex"), HDC::Plane120::Plane120Attr::vertices);
+    plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::vertices);
+    
+    matrixUniform1 = program1.uniformLocation("matrix");
+    courtUniform   = program1.uniformLocation("court_texture");
 
     m_cam.setCamera();
 
     createGeometry();
     initializeTextures();
+
 }
 
 void HDC::HeatmapRenderer::render()
@@ -69,11 +82,7 @@ void HDC::HeatmapRenderer::render()
     glEnable(GL_DEPTH_TEST);
 
     program1.bind();
-
-
-    m_cam.setCameraPositionDelta(0.0f, 0.0f, -.10f);
-    auto mtx = m_cam.getCamera();
-    program1.setUniformValue(matrixUniform1, mtx);
+    program1.setUniformValue(matrixUniform1, m_cam.getCamera());
     paintQtLogo();
     program1.release();
 
@@ -84,10 +93,8 @@ void HDC::HeatmapRenderer::render()
 
 void HDC::HeatmapRenderer::createGeometry()
 {
-    auto size = 10.0f;
-    plane.setsize(size*1.05f, size*.68f);
-
-
+    //plane.reset(10.5f, 6.8f);
+    plane.reset();
 }
 
 
