@@ -39,8 +39,6 @@ void HDC::PlaneGeometry::resetplane(){
 
 HDC::PlaneGeometry::PlaneGeometry() : Geometry() {
 
-
-
 }
 
 void HDC::PlaneGeometry::setwidth(float width){
@@ -59,7 +57,7 @@ const float& HDC::PlaneGeometry::height() const{
     return vertices_colors[1];
 }
 
-        
+
 
 
 void HDC::TexturedPlaneGeometry::resetplane(){
@@ -107,6 +105,33 @@ const float& HDC::TexturedPlaneGeometry::height() const{
     return vertices_colors_uvs[1];
 }
 
+HDC::PlaneGeometry120::PlaneGeometry120(){
 
+}
+
+void HDC::PlaneGeometry120::resetplane(){
+    vertices_120.clear();
+    colors_120.clear();
+    for (auto&index : indices){
+        vertices_120.push_back(vertices_colors[index * 6 + 0]);
+        vertices_120.push_back(vertices_colors[index * 6 + 1]);
+        vertices_120.push_back(vertices_colors[index * 6 + 2]);
+        colors_120.push_back(vertices_colors[index*6 + 3]);
+        colors_120.push_back(vertices_colors[index*6 + 4]);
+        colors_120.push_back(vertices_colors[index*6 + 5]);
+    }
+
+}
+
+void HDC::PlaneGeometry120::setsize(float width, float height){
+    resetplane();
+    auto sz = vertices_120.size();
+    for (auto index = 0; index < sz; index += 3){
+        vertices_120[index + 0] *= width;
+        vertices_120[index + 1] *= height;
+        vertices_120[index + 2] = 0.0f;  
+    }
+
+}
 
 

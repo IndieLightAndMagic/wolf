@@ -35,6 +35,7 @@ namespace HDC {
         };
     public:
         void resetplane();
+        void setsize(float width, float height);
         PlaneGeometry();
         void setwidth(float width);
         const float& width() const;
@@ -43,36 +44,39 @@ namespace HDC {
 
 
     };
-    class PlaneGeometry120 : public PlaneGeometry{
+    class PlaneGeometry120  {
         int vertexAttrLocation;
         int colorAttrLocation;
     protected:
+        std::vector<float> vertices_colors{
+                // positions          // colors
+                1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   // top right
+                1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   // bottom right
+                -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   // bottom left
+                -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f    // top left
+        };
+        std::vector<unsigned int> indices{
+                0, 1, 3, // first triangle
+                1, 2, 3  // second triangle
+        };
         std::vector<float> vertices_120{
         };
         std::vector<float> colors_120{
         };
 
     public:
-        PlaneGeometry120(){
-            for (auto&index : indices){
-                vertices_120.push_back(vertices_colors[index * 6 + 0]);
-                vertices_120.push_back(vertices_colors[index * 6 + 1]);
-                vertices_120.push_back(vertices_colors[index * 6 + 2]);
-                colors_120.push_back(vertices_colors[index*6 + 3]);
-                colors_120.push_back(vertices_colors[index*6 + 4]);
-                colors_120.push_back(vertices_colors[index*6 + 5]);
-            }
-        }
+        PlaneGeometry120();
+        void resetplane();
         inline int& getvertexattr(){ return vertexAttrLocation; };
-        int& getcolorattr(){return colorAttrLocation; };
-        float* getvertexdata(){ return vertices_120.data(); };
-        float* getcolordata(){ return colors_120.data(); };
-        unsigned char getnumvertices() { return vertices_120.size() / 3;
-
-        }
+        inline int& getcolorattr(){return colorAttrLocation; };
+        inline float* getvertexdata(){ return vertices_120.data(); };
+        inline float* getcolordata(){ return colors_120.data(); };
+        inline unsigned char getnumvertices() { return vertices_120.size() / 3; }
+        void setsize(float width, float height);
+        const float& width() const;
+        const float& height() const;
 
     };
-
     class TexturedPlaneGeometry : public HDC::PlaneGeometry {
 
     protected:
@@ -93,8 +97,20 @@ namespace HDC {
         void setheight(float height);
         const float& height() const;
 
+    };
+
+    class TexturedPlaneGeometry120 : public HDC::PlaneGeometry120 {
+    protected:
+        std::vector<float> uvs {};
+    public:
+        void resetplane();
+        TexturedPlaneGeometry120();
+        void setsize(float width, float height);
+        const float& width() const;
+        const float& height() const;
 
 
     };
+
 }
 #endif //_HDC_GEOMETRY_
