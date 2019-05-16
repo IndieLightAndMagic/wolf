@@ -44,44 +44,12 @@ namespace HDC {
 
 
     };
-    class PlaneGeometry120  {
-        int vertexAttrLocation;
-        int colorAttrLocation;
-    protected:
-        std::vector<float> vertices_colors{
-                // positions          // colors
-                1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   // top right
-                1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   // bottom right
-                -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   // bottom left
-                -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f    // top left
-        };
-        std::vector<unsigned int> indices{
-                0, 1, 3, // first triangle
-                1, 2, 3  // second triangle
-        };
-        std::vector<float> vertices_120{
-        };
-        std::vector<float> colors_120{
-        };
 
-    public:
-        PlaneGeometry120();
-        void resetplane();
-        inline int& getvertexattr(){ return vertexAttrLocation; };
-        inline int& getcolorattr(){return colorAttrLocation; };
-        inline float* getvertexdata(){ return vertices_120.data(); };
-        inline float* getcolordata(){ return colors_120.data(); };
-        inline unsigned char getnumvertices() { return vertices_120.size() / 3; }
-        void setsize(float width, float height);
-        const float& width() const;
-        const float& height() const;
+        class TexturedPlaneGeometry : public HDC::PlaneGeometry {
 
-    };
-    class TexturedPlaneGeometry : public HDC::PlaneGeometry {
+        protected:
 
-    protected:
-
-        std::vector<float> vertices_colors_uvs{
+            std::vector<float> vertices_colors_uvs{
             // positions          // colors           // texture coords
              1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
              1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
@@ -98,19 +66,57 @@ namespace HDC {
         const float& height() const;
 
     };
-
-    class TexturedPlaneGeometry120 : public HDC::PlaneGeometry120 {
+    class PlaneGeometry120  {
+        int vertexAttrLocation;
+        int colorAttrLocation;
     protected:
-        std::vector<float> uvs {};
-    public:
-        void resetplane();
-        TexturedPlaneGeometry120();
-        void setsize(float width, float height);
-        const float& width() const;
-        const float& height() const;
+        std::vector<float> vertices_colors{
+                // positions          // colors
+                1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   // top right
+                1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   // bottom right
+                -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   // bottom left
+                -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f    // top left
+            };
+            std::vector<unsigned int> indices{
+                0, 1, 3, // first triangle
+                1, 2, 3  // second triangle
+            };
+            std::vector<float> vertices_120{
+            };
+            std::vector<float> colors_120{
+            };
 
+        public:
+            PlaneGeometry120();
+            void resetplane();
+            inline int& getvertexattr(){ return vertexAttrLocation; };
+            inline int& getcolorattr(){return colorAttrLocation; };
+            inline float* getvertexdata(){ return vertices_120.data(); };
+            inline float* getcolordata(){ return colors_120.data(); };
+            inline unsigned char getnumvertices() { return vertices_120.size() / 3; }
+            void setsize(float width, float height);
+            const float& width() const;
+            const float& height() const;
 
-    };
+        };
+        class TexturedPlaneGeometry120 : public HDC::PlaneGeometry120 {
+            std::vector<float> uvs {
+                1.0f, 1.0f, 
+                1.0f, 0.0f, 
+                0.0f, 0.0f, 
+                0.0f, 1.0f
+            };
+        protected:
+            std::vector<float> uvs_120 {
+            };
+
+        public:
+            inline float* gettexturedata(){ return uvs_120.data();};
+            void resetplane();
+            TexturedPlaneGeometry120();
+            
+
+        };
 
 }
 #endif //_HDC_GEOMETRY_

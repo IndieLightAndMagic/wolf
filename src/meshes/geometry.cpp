@@ -135,3 +135,17 @@ void HDC::PlaneGeometry120::setsize(float width, float height){
 }
 
 
+HDC::TexturedPlaneGeometry120::TexturedPlaneGeometry120() {
+
+}
+void HDC::TexturedPlaneGeometry120::resetplane() {
+    PlaneGeometry120::resetplane();
+    uvs_120.clear();
+    for (auto&index : indices){
+        uvs_120.push_back(uvs[index * 6 + 0]);
+        uvs_120.push_back(uvs[index * 6 + 1]);
+        uvs_120.push_back(uvs[index * 6 + 2]);
+
+    }
+
+}
