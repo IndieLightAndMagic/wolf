@@ -21,6 +21,7 @@ namespace HDC{
         void initialize();
 
     private:
+        void initializeTextures();
 
         qreal   m_fAngle;
 
@@ -32,6 +33,7 @@ namespace HDC{
         QOpenGLShaderProgram program1;
 
         int matrixUniform1;
+
 
 
     };

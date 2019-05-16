@@ -24,7 +24,11 @@ void HDC::HeatmapRenderer::paintQtLogo()
     program1.disableAttributeArray(va);
 }
 
+void HDC::HeatmapRenderer::initializeTextures(){
 
+    
+
+}
 void HDC::HeatmapRenderer::initialize()
 {
     initializeOpenGLFunctions();
