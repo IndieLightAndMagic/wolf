@@ -74,6 +74,8 @@ QList<QThread *> HDC::ThreadRenderer::threads;
  * to use for rendering
  */
 namespace HDC{
+
+
     class RenderThread : public QThread
     {
         Q_OBJECT

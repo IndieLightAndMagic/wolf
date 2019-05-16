@@ -40,13 +40,9 @@ void HDC::HeatmapRenderer::initialize()
     vertexAttr1 = program1.attributeLocation("vertex");
     matrixUniform1 = program1.uniformLocation("matrix");
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
     m_cam.setCamera();
-    m_cam.setCameraPosition(0.0f, 0.0f, 30.0f);
-    auto& mtx = m_cam.getCamera();
-    //mtx.rotate(90.0, QVector3D(1.0f, 0.0, 0.0));
+
     createGeometry();
 
 }
@@ -58,13 +54,15 @@ void HDC::HeatmapRenderer::render()
     glClearColor(0.5f, 0.5f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
     glEnable(GL_DEPTH_TEST);
 
     program1.bind();
-    program1.setUniformValue(matrixUniform1, m_cam.getCamera());
+
+
+    m_cam.setCameraPositionDelta(0.0f, 0.0f, -.10f);
+    auto mtx = m_cam.getCamera();
+    program1.setUniformValue(matrixUniform1, mtx);
     paintQtLogo();
     program1.release();
 
@@ -75,8 +73,8 @@ void HDC::HeatmapRenderer::render()
 
 void HDC::HeatmapRenderer::createGeometry()
 {
-    auto size = 50.0f;
-    plane.setsize(size, size);
+    auto size = 10.0f;
+    plane.setsize(size*1.05f, size*.68f);
 
 
 }
