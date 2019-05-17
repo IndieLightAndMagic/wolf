@@ -1,0 +1,11 @@
+INCLUDEPATH += $$PWD
+HEADERS += $$PWD/openglwindow.h
+HEADERS += $$PWD/inputmanager.h
+HEADERS += $$PWD/introscene.h
+HEADERS += $$PWD/texturemanager.h
+HEADERS += $$PWD/util.h
+HEADERS += $$PWD/objid.h
+HEADERS += $$PWD/camera.h
+HEADERS += $$PWD/shader.h
+HEADERS += $$PWD/gamescene.h
+HEADERS += $$PWD/resources/atlases/level_compressed.png.h
