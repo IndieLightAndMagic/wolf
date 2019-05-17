@@ -9,6 +9,7 @@
 
 HDC::HeatmapRenderer::HeatmapRenderer()
 {
+    
 }
 
 HDC::HeatmapRenderer::~HeatmapRenderer()
@@ -58,15 +59,14 @@ void HDC::HeatmapRenderer::initialize()
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.frag"));
     program1.link();
 
-    plane.setattrlocation(program1.attributeLocation("vertex"), HDC::Plane120::Plane120Attr::vertices);
-    plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::vertices);
+    createGeometry();
+    
     
     matrixUniform1 = program1.uniformLocation("matrix");
     courtUniform   = program1.uniformLocation("court_texture");
 
     m_cam.setCamera();
 
-    createGeometry();
     initializeTextures();
 
 }
@@ -82,7 +82,9 @@ void HDC::HeatmapRenderer::render()
     glEnable(GL_DEPTH_TEST);
 
     program1.bind();
-    program1.setUniformValue(matrixUniform1, m_cam.getCamera());
+    
+    auto mtx = m_cam.getCamera();
+    program1.setUniformValue(matrixUniform1, mtx);
     paintQtLogo();
     program1.release();
 
@@ -93,8 +95,10 @@ void HDC::HeatmapRenderer::render()
 
 void HDC::HeatmapRenderer::createGeometry()
 {
-    //plane.reset(10.5f, 6.8f);
     plane.reset();
+    plane.setattrlocation(program1.attributeLocation("vertex"), HDC::Plane120::Plane120Attr::vertices);
+    plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::vertices);
+    
 }
 
 
