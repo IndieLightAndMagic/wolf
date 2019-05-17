@@ -1,25 +1,36 @@
+QT += core
+QT += gui
+
 QMAKE_CXXFLAGS += -std=c++17
 QMAKE_CFLAGS_RELEASE    = -O2 -MT
 QMAKE_CXXFLAGS_GNUCXX11 -= -std=gnu++11
 QMAKE_CXXFLAGS_CXX11 -= -std=c++11
 
-message("Wolfenstein 3D clone. 100 Days of Code by JG")
+message("Heathmap Data Court. A Genius Sports Tech Demo")
 include(openglwindow.pri)
 SOURCES += \
-    main.cpp \
-    util.cpp \
-    objid.cpp \
-    scene.cpp \
-    camera.cpp \
-    shader.cpp \
-    gamescene.cpp \
-    introscene.cpp \
-    inputmanager.cpp \
-    openglwindow.cpp \
-    shadersource.cpp \
-    texturemanager.cpp \
-    resources/atlases/level1_compressed.png.cpp
-    
+	src/util.cpp \
+	src/objid.cpp \
+	src/scene/scene.cpp \
+	src/shader/shader.cpp \
+	src/camera/camera.cpp \
+	src/meshes/geometry.cpp \
+	src/opengl/openglwindow.cpp \
+	src/shader/shadersource.cpp \
+	src/texture/texturemanager.cpp \
+	src/texture/fasttexturedata.cpp \
+	src/texture/fastqtexturedata.cpp \
+	src/inputmanager/inputmanager.cpp \
+	src/texture/fastclampedtexturedata.cpp \
+	samples/heathmap/hdata.cpp \
+	samples/heathmap/heatmap.cpp \
+	samples/heathmap/heatmapplayer.cpp \
+	samples/heathmap/heatmapscene.cpp \
+	samples/heathmap/json.cpp \
+	samples/heathmap/main.cpp \
+	samples/heathmap/timedcounter.cpp \
+	samples/heathmap/trackletplayer.cpp \
+
 GIT_COMMIT_NUMBER=$$system(git rev-parse --short=7 HEAD) 
 message(At the moment of qmake execution git number is $$GIT_COMMIT_NUMBER)
 
