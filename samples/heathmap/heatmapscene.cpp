@@ -34,7 +34,9 @@ void HDC::HeatmapRenderer::paintQtLogo()
     program1.enableAttributeArray(tcoordattrlocation);
     program1.setAttributeArray(tcoordattrlocation, tcoorddata, 2, 0);
 
-    //program1.setUniformValue(courtUniform, m_soccer_court_texture->gl.slot);
+    m_soccer_court_texture->updateTexture();
+    program1.setUniformValue(courtUniform, m_soccer_court_texture->gl.slot);
+    m_soccer_court_texture->bind();
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
@@ -44,7 +46,7 @@ void HDC::HeatmapRenderer::paintQtLogo()
 
 void HDC::HeatmapRenderer::initializeTextures(){
 
-    QImage* pqimg = new QImage(QString::fromStdString(std::string{RESOURCES_DIR} + "/textures/soccerfieldgrass.png"));
+    QImage* pqimg = new QImage(QString::fromStdString(std::string{RESOURCES_DIR} + "/textures/soccer_court_texture.png"));
     m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
 
 }
@@ -63,7 +65,7 @@ void HDC::HeatmapRenderer::initialize()
     
     
     matrixUniform1 = program1.uniformLocation("matrix");
-    //courtUniform   = program1.uniformLocation("court_texture");
+    courtUniform   = program1.uniformLocation("court_texture");
 
     m_cam.setCamera();
 
@@ -75,27 +77,29 @@ void HDC::HeatmapRenderer::render()
 {
     glDepthMask(true);
 
-    glClearColor(0.5f, 0.5f, 0.7f, 1.0f);
+    glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
 
     program1.bind();
-    
-    auto mtx = m_cam.getCamera();
-    program1.setUniformValue(matrixUniform1, mtx);
-    paintQtLogo();
+    {
+        auto mtx = m_cam.getCamera();
+        program1.setUniformValue(matrixUniform1, mtx);
+        paintQtLogo();
+    }
     program1.release();
+    
 
-    glDisable(GL_DEPTH_TEST);
+    //glDisable(GL_DEPTH_TEST);
 
 
 }
 
 void HDC::HeatmapRenderer::createGeometry()
 {
-    plane.reset();
+    plane.reset(1.05, .68);
     plane.setattrlocation(program1.attributeLocation("vertex"), HDC::Plane120::Plane120Attr::vertices);
     plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::texturecoords);
     

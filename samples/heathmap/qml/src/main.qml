@@ -53,8 +53,8 @@ import QtQuick 2.0
 import SceneGraphRendering 1.0
 
 Item {
-    width: 400
-    height: 400
+    width: 1200
+    height: 675
 
     // The checkers background
     ShaderEffect {
@@ -139,7 +139,7 @@ Item {
         anchors.right: renderer.right
         anchors.margins: 20
         wrapMode: Text.WordWrap
-        text: "blah blah blah displayed using a QSGSimpleTextureNode."
+        text: "Genius Sports / WEB ASSEMBLY Tech Demo."
     }
 
 
