@@ -63,7 +63,7 @@ void HDC::HeatmapRenderer::initialize()
     
     
     matrixUniform1 = program1.uniformLocation("matrix");
-    courtUniform   = program1.uniformLocation("court_texture");
+    //courtUniform   = program1.uniformLocation("court_texture");
 
     m_cam.setCamera();
 
@@ -97,7 +97,7 @@ void HDC::HeatmapRenderer::createGeometry()
 {
     plane.reset();
     plane.setattrlocation(program1.attributeLocation("vertex"), HDC::Plane120::Plane120Attr::vertices);
-    plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::vertices);
+    plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::texturecoords);
     
 }
 

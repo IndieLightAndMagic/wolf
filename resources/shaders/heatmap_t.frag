@@ -1,7 +1,7 @@
 #version 120
 varying vec4 color;
 varying vec2 texcoordout;
-uniform sampler2D court_texture;
+//uniform sampler2D court_texture;
 
 void main(void)
 {
