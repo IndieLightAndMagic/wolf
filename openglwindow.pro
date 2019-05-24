@@ -1,5 +1,6 @@
 QT += core
 QT += gui
+QT += quick
 
 QMAKE_CXXFLAGS += -std=c++17
 QMAKE_CFLAGS_RELEASE    = -O2 -MT

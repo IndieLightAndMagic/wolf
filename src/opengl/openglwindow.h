@@ -66,7 +66,7 @@ QT_END_NAMESPACE
 #ifdef __APPLE__
 class OpenGLWindow : public QWindow, protected QOpenGLFunctions_3_3_Core
 #else
-class OpenGLWindow : public QWindow, protected QOpenGLFunctions_4_3_Core
+class OpenGLWindow : public QWindow, protected QOpenGLFunctions//QOpenGLFunctions_4_3_Core
 #endif
 {
     Q_OBJECT

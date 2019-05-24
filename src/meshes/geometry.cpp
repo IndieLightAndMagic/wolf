@@ -1,7 +1,9 @@
 #include "geometry.h"
 HDC::Geometry::Geometry() : ObjId(){
 
+#ifdef __APPLE__
     glGenVertexArrays(1, &glvao);
+#endif
     glGenBuffers(1, &glvbo);
     glGenBuffers(1, &glebo);
     enable();
@@ -9,10 +11,14 @@ HDC::Geometry::Geometry() : ObjId(){
 }
 
 void HDC::Geometry::enable(){
+#ifdef __APPLE__
     glBindVertexArray(glvao);
+#endif
 }
 void HDC::Geometry::disable(){
+#ifdef __APPLE__
     glBindVertexArray(0);
+#endif
 }
 
 void HDC::PlaneGeometry::resetplane(){

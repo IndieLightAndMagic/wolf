@@ -21,7 +21,7 @@ void HDC::FastClampedTextureData::updateTexture(){
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_w, m_h, 0, GL_RED, GL_FLOAT, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, 0x1903, m_w, m_h, 0, 0x1903, GL_FLOAT, data);
     glGenerateMipmap(GL_TEXTURE_2D);
     unbind();
 

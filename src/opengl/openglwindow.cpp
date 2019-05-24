@@ -139,7 +139,7 @@ void OpenGLWindow::renderNow()
         surfaceFormat.setVersion(3,3);
         surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
         m_context->setFormat(surfaceFormat);
-#elif
+#else
         m_context->setFormat(requestedFormat());
 #endif
 
