@@ -15,7 +15,7 @@ SOURCES += \
 	src/scene/scene.cpp \
 	src/shader/shader.cpp \
 	src/camera/camera.cpp \
-	src/meshes/geometry.cpp \
+	src/meshes/geometry120.cpp \
 	src/opengl/openglwindow.cpp \
 	src/shader/shadersource.cpp \
 	src/texture/texturemanager.cpp \
@@ -31,7 +31,7 @@ SOURCES += \
 	samples/heathmap/main.cpp \
 	samples/heathmap/timedcounter.cpp \
 	samples/heathmap/trackletplayer.cpp \
-
+	samples/heathmap/threadrenderer.cpp
 GIT_COMMIT_NUMBER=$$system(git rev-parse --short=7 HEAD) 
 message(At the moment of qmake execution git number is $$GIT_COMMIT_NUMBER)
 

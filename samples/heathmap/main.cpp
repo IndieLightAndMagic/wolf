@@ -48,7 +48,7 @@
 **
 ****************************************************************************/
 
-#include "src/opengl/qqk/threadrenderer.h"
+#include "threadrenderer.h"
 
 #include <QThread>
 #include <QQuickView>

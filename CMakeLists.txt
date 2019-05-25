@@ -49,12 +49,13 @@ add_executable(${target}
 target_include_directories(${target} PUBLIC
     samples/${target}
     ${CMAKE_SOURCE_DIR}/src/ 
+    ${CMAKE_SOURCE_DIR}/src/scene
     ${CMAKE_SOURCE_DIR}/src/camera
     ${CMAKE_SOURCE_DIR}/src/meshes
-    ${CMAKE_SOURCE_DIR}/src/shader
     ${CMAKE_SOURCE_DIR}/src/opengl
+    ${CMAKE_SOURCE_DIR}/src/shader
     ${CMAKE_SOURCE_DIR}/src/texture
-    ${CMAKE_SOURCE_DIR}/src/scene
+    ${CMAKE_SOURCE_DIR}/src/opengl/qqk    
     ${CMAKE_SOURCE_DIR}/src/inputmanager
     /usr/local/include
     ) 
