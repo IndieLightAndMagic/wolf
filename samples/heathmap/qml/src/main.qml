@@ -49,7 +49,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-
+import QtQuick.Controls 2.5
 import SceneGraphRendering 1.0
 
 Item {
@@ -82,7 +82,6 @@ Item {
             }
             "
     }
-
     Renderer {
         id: renderer
         anchors.fill: parent
@@ -101,6 +100,28 @@ Item {
         Component.onCompleted: renderer.opacity = 1;
     }
 
+
+    Item {
+        
+        id: openfilebutton_item
+        
+        property var aspectRatio: parent.height/parent.width 
+        
+        width: parent.width * 0.05
+        height: width * aspectRatio
+
+        anchors.top : renderer.top
+        anchors.left : renderer.left
+        
+        Rectangle {
+            border.color : "red"
+            radius : width * 0.05
+            anchors.fill : parent
+            anchors.margins: width * 0.1
+
+        }    
+    }
+    
     // Just to show something interesting
     SequentialAnimation {
         PauseAnimation { duration: 5000 }
