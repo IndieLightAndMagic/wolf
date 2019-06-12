@@ -51,7 +51,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 import SceneGraphRendering 1.0
-
+import Qt.labs.platform 1.1
 Item {
     width: 1200
     height: 675
@@ -103,23 +103,32 @@ Item {
 
     Item {
         
-        id: openfilebutton_item
+        id: resource_loader
         
         property var aspectRatio: parent.height/parent.width 
         
-        width: parent.width * 0.05
+        width: parent.width * 0.1
         height: width * aspectRatio
 
         anchors.top : renderer.top
         anchors.left : renderer.left
-        
-        Rectangle {
-            border.color : "red"
-            radius : width * 0.05
-            anchors.fill : parent
-            anchors.margins: width * 0.1
+        //Control
+        //
+        Action {
+            id: resource_loader_controller
+            text: qsTr("&Open")
+            onTriggered: console.log("open dialog!")
+        }
+        //View
+        Button {
+            anchors.fill: parent
+            anchors.margins: parent.width * 0.1
+            text : "Open"
+            highlighted : true
+            action: resource_loader_controller
+        }
 
-        }    
+
     }
     
     // Just to show something interesting
