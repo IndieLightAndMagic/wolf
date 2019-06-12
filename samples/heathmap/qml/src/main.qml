@@ -51,7 +51,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 import SceneGraphRendering 1.0
-import Qt.labs.platform 1.1
+import QtQuick.Dialogs 1.1
+
 Item {
     width: 1200
     height: 675
@@ -68,19 +69,19 @@ Item {
         property size pixelSize: Qt.size(width / tileSize, height / tileSize);
 
         fragmentShader:
-            "
-            uniform lowp vec4 color1;
-            uniform lowp vec4 color2;
-            uniform highp vec2 pixelSize;
-            varying highp vec2 qt_TexCoord0;
-            void main() {
-                highp vec2 tc = sign(sin(3.14159265358979323846 * qt_TexCoord0 * pixelSize));
-                if (tc.x != tc.y)
-                    gl_FragColor = color1;
-                else
-                    gl_FragColor = color2;
-            }
-            "
+        "
+        uniform lowp vec4 color1;
+        uniform lowp vec4 color2;
+        uniform highp vec2 pixelSize;
+        varying highp vec2 qt_TexCoord0;
+        void main() {
+            highp vec2 tc = sign(sin(3.14159265358979323846 * qt_TexCoord0 * pixelSize));
+            if (tc.x != tc.y)
+            gl_FragColor = color1;
+            else
+            gl_FragColor = color2;
+        }
+        "
     }
     Renderer {
         id: renderer
@@ -89,10 +90,10 @@ Item {
 
         // The transform is just to show something interesting..
         transform: [
-            Rotation { id: rotation; axis.x: 0; axis.z: 0; axis.y: 1; angle: 0; origin.x: renderer.width / 2; origin.y: renderer.height / 2; },
-            Translate { id: txOut; x: -renderer.width / 2; y: -renderer.height / 2 },
-            Scale { id: scale; },
-            Translate { id: txIn; x: renderer.width / 2; y: renderer.height / 2 }
+        Rotation { id: rotation; axis.x: 0; axis.z: 0; axis.y: 1; angle: 0; origin.x: renderer.width / 2; origin.y: renderer.height / 2; },
+        Translate { id: txOut; x: -renderer.width / 2; y: -renderer.height / 2 },
+        Scale { id: scale; },
+        Translate { id: txIn; x: renderer.width / 2; y: renderer.height / 2 }
         ]
 
         Behavior on opacity { NumberAnimation { duration: 500 } }
@@ -100,9 +101,14 @@ Item {
         Component.onCompleted: renderer.opacity = 1;
     }
 
+    FileDialog {
+        id: openImageDialog
+    }
+
+
 
     Item {
-        
+
         id: resource_loader
         
         property var aspectRatio: parent.height/parent.width 
@@ -117,7 +123,10 @@ Item {
         Action {
             id: resource_loader_controller
             text: qsTr("&Open")
-            onTriggered: console.log("open dialog!")
+            onTriggered: {
+                //console.log("open dialog!")
+                openImageDialog.open()
+            }
         }
         //View
         Button {
