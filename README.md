@@ -30,11 +30,11 @@ Activities Done So Far In This Sprint:
     3. Created Button Functionality in the Rectangle.
     4. Triggered the Opening of a OpenFile Dialoge.
     5. Configure filters for png images.
+    6. Modify the class to receive a filepath with an image. 
     
     
 Activities To Finish This Sprint:
 
-    6. Modify the class to receive a filepath with an image. 
     7. Load the image and wrap it in the rectangle. 
     8. Use Right and Left to rotate around rectangle normal.
     9. Use Up and Down to rotate around rectangle "x" (like flipping a coin)

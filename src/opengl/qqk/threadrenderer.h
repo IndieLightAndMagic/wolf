@@ -51,19 +51,25 @@
 #ifndef THREADRENDERER_H
 #define THREADRENDERER_H
 
+#include <QString>
 #include <QQuickItem>
 
 namespace HDC{
     class RenderThread;
     class ThreadRenderer : public QQuickItem
     {
-    Q_OBJECT
-
+        Q_OBJECT
+        Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
     public:
         ThreadRenderer();
-
         static QList<QThread *> threads;
+        
+        QString userName();
+        void setUserName(const QString& userName);
 
+    signals:
+        void userNameChanged(); 
+    
     public Q_SLOTS:
         void ready();
 
@@ -72,6 +78,7 @@ namespace HDC{
 
     private:
         RenderThread *m_renderThread;
+        QString m_userName;
     };
 
 }

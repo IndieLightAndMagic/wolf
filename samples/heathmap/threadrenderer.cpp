@@ -312,4 +312,16 @@ QSGNode *HDC::ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeD
     return node;
 }
 
+QString HDC::ThreadRenderer::userName(){
+    return m_userName;
+}
+
+void HDC::ThreadRenderer::setUserName(const QString& userName){
+    if (userName == m_userName){
+        return;
+    }
+    m_userName = userName;
+    emit userNameChanged();
+}
+
 #include "threadrenderer.moc"
