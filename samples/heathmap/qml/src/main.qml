@@ -103,6 +103,15 @@ Item {
 
     FileDialog {
         id: openImageDialog
+        title: "Please choose a PNG file for your texture"
+        nameFilters: [ "PNG Image Files (*.png)"]
+        folder: shortcuts.home
+        onAccepted: {
+            console.log("You chose: " + openImageDialog.fileUrls)
+        }
+        onRejected: {
+            console.log("Cancelled")
+        }
     }
 
 
@@ -124,7 +133,6 @@ Item {
             id: resource_loader_controller
             text: qsTr("&Open")
             onTriggered: {
-                //console.log("open dialog!")
                 openImageDialog.open()
             }
         }
