@@ -98,7 +98,11 @@ Item {
 
         Behavior on opacity { NumberAnimation { duration: 500 } }
         opacity: 0
-        Component.onCompleted: renderer.opacity = 1;
+        Component.onCompleted: {
+
+            renderer.opacity = 1;
+            console.log("Finished the renderer loading.")
+        }
     }
 
     FileDialog {

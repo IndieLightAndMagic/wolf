@@ -20,18 +20,19 @@ namespace HDC{
 
         void render();
         void initialize();
+        void loadTextureAndWrap(const QString &rTexturePath);
 
     private:
         void initializeTextures();
 
-        qreal m_fAngle;
-
         void paintQtLogo();
         void createGeometry();
 
+
+        bool textureChanged{false};
         HDC::Camera m_cam;
         HDC::Plane120 plane;
-        HDC::FastQTextureData* m_soccer_court_texture;
+        HDC::FastQTextureData* m_soccer_court_texture{nullptr};
         QOpenGLShaderProgram program1;
 
         int matrixUniform1;

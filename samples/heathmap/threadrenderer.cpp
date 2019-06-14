@@ -142,6 +142,10 @@ namespace HDC{
             moveToThread(QGuiApplication::instance()->thread());
         }
 
+        HDC::HeatmapRenderer* getHeatmapRenderer() {
+            return m_heatmapRenderer;
+        }
+
         signals:
         void textureReady(int id, const QSize &size);
 
@@ -321,6 +325,10 @@ void HDC::ThreadRenderer::setUserName(const QString& userName){
         return;
     }
     m_userName = userName;
+    auto ptrHeatmapRenderer = m_renderThread->getHeatmapRenderer();
+    if (ptrHeatmapRenderer) {
+        ptrHeatmapRenderer->loadTextureAndWrap(userName);
+    }
     emit userNameChanged();
 }
 

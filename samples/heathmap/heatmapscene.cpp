@@ -1,6 +1,6 @@
 #include "heatmapscene.h"
 
-
+#include <QDebug>
 #include <QPainter>
 #include <QPaintEngine>
 #include <qmath.h>
@@ -15,7 +15,28 @@ HDC::HeatmapRenderer::HeatmapRenderer()
 HDC::HeatmapRenderer::~HeatmapRenderer()
 {
 }
+void HDC::HeatmapRenderer::loadTextureAndWrap(const QString &rTexturePath) {
 
+
+    auto sz = rTexturePath.size();
+    sz -= QString{"file://"}.size();
+
+    auto file_absolutepath = rTexturePath.right(sz);
+    qDebug() << "Ok The Scene recieved: " << file_absolutepath;
+    QImage* pqimg = new QImage(file_absolutepath);
+
+    if (pqimg) {
+
+        if (m_soccer_court_texture){
+
+            delete m_soccer_court_texture;
+            m_soccer_court_texture = nullptr;
+
+        }
+        m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
+    }
+
+}
 
 void HDC::HeatmapRenderer::paintQtLogo()
 {
