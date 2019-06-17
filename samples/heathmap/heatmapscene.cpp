@@ -1,7 +1,6 @@
 #include "heatmapscene.h"
 
 #include <QDebug>
-#include <QTimer>
 #include <QPainter>
 #include <QPaintEngine>
 #include <qmath.h>
@@ -10,7 +9,8 @@
 
 HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):QObject(parent)
 {
-    m_ptimer = new QTimer(this);
+    m_ptimer = new QElapsedTimer();
+    m_ptimer->start();
 }
 
 HDC::HeatmapRenderer::~HeatmapRenderer()
@@ -96,24 +96,50 @@ void HDC::HeatmapRenderer::initialize()
 
 }
 
+constexpr bool frameperiodexpired(qint64 tDelta, const qint64 tFramePeriod = 33){
+    if (tDelta > tFramePeriod) return true;
+    return false;
+}
+
 void HDC::HeatmapRenderer::render()
 {
+    static auto tFrame = qint64{0};
+    static auto tBegin = qint64{0};
+
+    static auto zRotation = 0.0f;
+    const auto  zRotationSpeedDegPerMs = 0.006f;//6.0f Grad Per /1000.0f Millisecs //AKA 6 grad per sec;
+
+    auto tNow = m_ptimer->elapsed();
+
+    if (tBegin == 0.0f){
+
+        tBegin = tFrame = tNow;
+        return;
+
+    }
+
+    zRotation = zRotationSpeedDegPerMs * (tNow - tBegin);
+
     glDepthMask(true);
 
     glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     //glEnable(GL_DEPTH_TEST);
+
+
 
     program1.bind();
     {
         auto mtx = m_cam.getCamera();
+        mtx.rotate(zRotation, 0.0, 0.0, 1.0f);
         program1.setUniformValue(matrixUniform1, mtx);
         paintQtLogo();
     }
     program1.release();
-    
+
+
+
 
     //glDisable(GL_DEPTH_TEST);
 

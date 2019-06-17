@@ -7,6 +7,7 @@
 
 #include <QTime>
 #include <QVector>
+#include <QElapsedTimer>
 #include <src/meshes/geometry120.h>
 #include <src/camera/camera.h>
 #include <src/texture/fastqtexturedata.h>
@@ -39,7 +40,7 @@ namespace HDC{
         int matrixUniform1;
         int courtUniform;
 
-        QTimer* m_ptimer{nullptr};
+        QElapsedTimer* m_ptimer{nullptr};
     };
 }
 

@@ -32,12 +32,15 @@ Activities Done So Far In This Sprint:
     5. Configure filters for png images.
     6. Modify the class to receive a filepath with an image. 
     7. Load the image and wrap it in the rectangle. 
+    8. Convert the heathmap scene into a qobject
+    9. Setup a timer.
+    A. Rotate Around Z Axis.
     
     
 Activities To Finish This Sprint:
 
-    8. Use Right and Left to rotate around rectangle normal.
-    9. Use Up and Down to rotate around rectangle "x" (like flipping a coin)
+    B. Use Right and Left to rotate around rectangle normal.
+    C. Use Up and Down to rotate around rectangle "x" (like flipping a coin)
 
 Next Steps:
 
