@@ -39,7 +39,7 @@ namespace HDC{
         int matrixUniform1;
         int courtUniform;
 
-
+        QTimer* m_ptimer{nullptr};
     };
 }
 

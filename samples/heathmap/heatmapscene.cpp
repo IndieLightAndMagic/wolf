@@ -1,6 +1,7 @@
 #include "heatmapscene.h"
 
 #include <QDebug>
+#include <QTimer>
 #include <QPainter>
 #include <QPaintEngine>
 #include <qmath.h>
@@ -9,11 +10,12 @@
 
 HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):QObject(parent)
 {
-    
+    m_ptimer = new QTimer(this);
 }
 
 HDC::HeatmapRenderer::~HeatmapRenderer()
 {
+    delete m_ptimer;
 }
 void HDC::HeatmapRenderer::loadTextureAndWrap(const QString &rTexturePath) {
 
