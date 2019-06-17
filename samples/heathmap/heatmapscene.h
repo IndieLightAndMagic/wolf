@@ -12,10 +12,11 @@
 #include <src/texture/fastqtexturedata.h>
 
 namespace HDC{
-    class HeatmapRenderer : protected QOpenGLFunctions
+    class HeatmapRenderer : protected QObject, QOpenGLFunctions
     {
+        Q_OBJECT
     public:
-        HeatmapRenderer();
+        HeatmapRenderer(QObject* parent = nullptr);
         ~HeatmapRenderer();
 
         void render();

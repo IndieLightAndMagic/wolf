@@ -7,7 +7,7 @@
 #include <src/texture/fasttexturedata.h>
 #include "src/texture/fastqtexturedata.h"
 
-HDC::HeatmapRenderer::HeatmapRenderer()
+HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):QObject(parent)
 {
     
 }
