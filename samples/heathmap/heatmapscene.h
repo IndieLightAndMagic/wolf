@@ -6,6 +6,7 @@
 #include <QtGui/qopenglfunctions.h>
 
 #include <QTime>
+#include <QEvent>
 #include <QVector>
 #include <QElapsedTimer>
 #include <src/meshes/geometry120.h>
@@ -23,7 +24,10 @@ namespace HDC{
         void render();
         void initialize();
         void loadTextureAndWrap(const QString &rTexturePath);
-
+        void leftPressed(QEvent::Type);
+        void rightPressed(QEvent::Type);
+    protected:
+        bool event(QEvent *event ) override ;
     private:
         void initializeTextures();
 
@@ -41,6 +45,7 @@ namespace HDC{
         int courtUniform;
 
         QElapsedTimer* m_ptimer{nullptr};
+
     };
 }
 

@@ -2,15 +2,21 @@
 
 #include <QDebug>
 #include <QPainter>
+#include <QKeyEvent>
 #include <QPaintEngine>
 #include <qmath.h>
 #include <src/texture/fasttexturedata.h>
 #include "src/texture/fastqtexturedata.h"
 
+static auto zRotation = 0.0f;
+static auto zRotationSpeedDegPerMs = 0.000f;//6.0f Grad Per /1000.0f Millisecs //AKA 6 grad per sec;
+
 HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):QObject(parent)
 {
+
     m_ptimer = new QElapsedTimer();
     m_ptimer->start();
+
 }
 
 HDC::HeatmapRenderer::~HeatmapRenderer()
@@ -96,18 +102,13 @@ void HDC::HeatmapRenderer::initialize()
 
 }
 
-constexpr bool frameperiodexpired(qint64 tDelta, const qint64 tFramePeriod = 33){
-    if (tDelta > tFramePeriod) return true;
-    return false;
-}
+
 
 void HDC::HeatmapRenderer::render()
 {
     static auto tFrame = qint64{0};
     static auto tBegin = qint64{0};
 
-    static auto zRotation = 0.0f;
-    const auto  zRotationSpeedDegPerMs = 0.006f;//6.0f Grad Per /1000.0f Millisecs //AKA 6 grad per sec;
 
     auto tNow = m_ptimer->elapsed();
 
@@ -154,4 +155,37 @@ void HDC::HeatmapRenderer::createGeometry()
     
 }
 
+void HDC::HeatmapRenderer::leftPressed(QEvent::Type) {
 
+    zRotationSpeedDegPerMs = zRotationSpeedDegPerMs <= 0.0f ? 0.006f : 0.0f;
+
+}
+void HDC::HeatmapRenderer::rightPressed(QEvent::Type) {
+
+    zRotationSpeedDegPerMs = zRotationSpeedDegPerMs >= 0.0f ? -0.006f : 0.0f;
+
+}
+bool HDC::HeatmapRenderer::event( QEvent* event )
+{
+
+    auto et = event->type();
+    if( et == QEvent::KeyPress || et == QEvent::KeyRelease){
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>( event );
+
+        if ( keyEvent->key() == Qt::Key_Up ) { return true;}
+        else if ( keyEvent->key() == Qt::Key_Down ) { return true;}
+        else if ( keyEvent->key() == Qt::Key_Left ) {
+
+            return true;
+        }
+        else if ( keyEvent->key() == Qt::Key_Right ) {
+
+            return true;
+        }
+        else if ( keyEvent->key() == Qt::Key_Escape ) { return true;}
+
+
+    }
+
+    return false;
+}
