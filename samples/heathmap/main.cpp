@@ -64,7 +64,7 @@ int main(int argc, char **argv){
     QGuiApplication app(argc, argv);
 
 
-    qmlRegisterType<HDC::ThreadRenderer>("SceneGraphRendering", 1, 0, "Renderer");
+    qmlRegisterType<HDC::ThreadRenderer>("SceneGraphRendering", 1, 0, "SceneRender");
     int execReturn = 0;
 
     {
