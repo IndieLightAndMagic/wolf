@@ -14,7 +14,7 @@
 #include <src/texture/fastqtexturedata.h>
 
 namespace HDC{
-    class HeatmapRenderer : protected QObject, QOpenGLFunctions
+    class HeatmapRenderer : public QObject, QOpenGLFunctions
     {
         Q_OBJECT
     public:
@@ -24,8 +24,11 @@ namespace HDC{
         void render();
         void initialize();
         void loadTextureAndWrap(const QString &rTexturePath);
+
+        void keyPressed();
         void leftPressed(QEvent::Type);
         void rightPressed(QEvent::Type);
+
     protected:
         bool event(QEvent *event ) override ;
     private:

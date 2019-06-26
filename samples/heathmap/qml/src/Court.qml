@@ -11,7 +11,10 @@ SceneRender {
 
             renderer.opacity = 1;
             console.log("Finished the renderer loading.")
-            
+
         }
-        Keys.onPressed : console.log("Keys on pressed")
+        Keys.onPressed: {
+        	console.log("Keys on pressed")
+        	renderer.keyPressed()
+        }
     }

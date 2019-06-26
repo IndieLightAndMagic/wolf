@@ -154,7 +154,10 @@ void HDC::HeatmapRenderer::createGeometry()
     plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::texturecoords);
     
 }
+void HDC::HeatmapRenderer::keyPressed(){
 
+    qDebug() << "Key Pressed " << __FILE__ << " " << __LINE__ ;
+}
 void HDC::HeatmapRenderer::leftPressed(QEvent::Type) {
 
     zRotationSpeedDegPerMs = zRotationSpeedDegPerMs <= 0.0f ? 0.006f : 0.0f;

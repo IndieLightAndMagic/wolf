@@ -60,16 +60,18 @@ namespace HDC{
     {
         Q_OBJECT
         Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
+
     public:
         ThreadRenderer();
         static QList<QThread *> threads;
         
         QString userName();
         void setUserName(const QString& userName);
+        Q_INVOKABLE void keyPressed();
 
     signals:
         void userNameChanged(); 
-    
+
     public Q_SLOTS:
         void ready();
 

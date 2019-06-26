@@ -107,6 +107,8 @@ namespace HDC{
                 m_displayFbo = new QOpenGLFramebufferObject(m_size, format);
                 m_heatmapRenderer = new HDC::HeatmapRenderer();
                 m_heatmapRenderer->initialize();
+
+
             }
 
             m_renderFbo->bind();
@@ -148,6 +150,8 @@ namespace HDC{
 
         signals:
         void textureReady(int id, const QSize &size);
+        void keyPressed();
+
 
     private:
         QOpenGLFramebufferObject *m_renderFbo;
@@ -254,7 +258,6 @@ void HDC::ThreadRenderer::ready()
     m_renderThread->moveToThread(m_renderThread);
 
     connect(window(), &QQuickWindow::sceneGraphInvalidated, m_renderThread, &RenderThread::shutDown, Qt::QueuedConnection);
-
     m_renderThread->start();
     update();
 }
@@ -331,5 +334,11 @@ void HDC::ThreadRenderer::setUserName(const QString& userName){
     }
     emit userNameChanged();
 }
+void HDC::ThreadRenderer::keyPressed() {
 
+    qDebug() << "Key Pressed " << __FILE__ << ":" << __LINE__ ;
+    auto p = m_renderThread->getHeatmapRenderer();
+    p->keyPressed();
+
+}
 #include "threadrenderer.moc"
