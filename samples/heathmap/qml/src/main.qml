@@ -48,14 +48,13 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.13
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.1
 
 Item {
     width: 1200
     height: 675
-
     // The checkers background
     ShaderEffect {
         id: tileBackground
@@ -83,11 +82,12 @@ Item {
         "
     }
     Court {
-
+        focus: true
         id: renderer
         anchors.fill: parent
         anchors.margins: 10
-    
+        
+        
     }
     FileDialog {
         id: openImageDialog
