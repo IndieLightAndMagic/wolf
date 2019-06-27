@@ -25,9 +25,9 @@ namespace HDC{
         void initialize();
         void loadTextureAndWrap(const QString &rTexturePath);
 
-        void keyPressed();
-        void leftPressed(QEvent::Type);
-        void rightPressed(QEvent::Type);
+        void keyPressed(int keypressed_code);
+        void leftPressed();
+        void rightPressed();
 
     protected:
         bool event(QEvent *event ) override ;

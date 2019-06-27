@@ -135,11 +135,12 @@ void HDC::HeatmapRenderer::render()
         static float distance = 0.001;
         distance += 0.001;
         auto mtx = m_cam.getCamera();
-        mtx.translate(0.0f, 0.0f, -distance);
-        mtx.rotate(45.0f, 1.0f, 0.0f, 0.0f);
-        //mtx.rotate(zRotation, 0.0, 0.0, 1.0f);
 
-        program1.setUniformValue(matrixUniform1, mtx);
+        auto mtxCopy = mtx;
+        mtxCopy.rotate(15.0f, 1.0f, 0.0f, 0.0f);
+        mtxCopy.rotate(zRotation, 0.0, 0.0, 1.0f);
+
+        program1.setUniformValue(matrixUniform1, mtxCopy);
         paintQtLogo();
     }
     program1.release();
@@ -159,16 +160,23 @@ void HDC::HeatmapRenderer::createGeometry()
     plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::texturecoords);
     
 }
-void HDC::HeatmapRenderer::keyPressed(){
+void HDC::HeatmapRenderer::keyPressed(int keypressed_code){
 
     qDebug() << "Key Pressed " << __FILE__ << " " << __LINE__ ;
+    if (keypressed_code == Qt::Key_Left){
+        qDebug() << "Key Left Pressed " << __FILE__ << " " << __LINE__ ;
+        leftPressed();
+    } else if(keypressed_code == Qt::Key_Right){
+        rightPressed();
+        qDebug() << "Key Right Pressed " << __FILE__ << " " << __LINE__ ;
+    } 
 }
-void HDC::HeatmapRenderer::leftPressed(QEvent::Type) {
+void HDC::HeatmapRenderer::leftPressed() {
 
     zRotationSpeedDegPerMs = zRotationSpeedDegPerMs <= 0.0f ? 0.006f : 0.0f;
 
 }
-void HDC::HeatmapRenderer::rightPressed(QEvent::Type) {
+void HDC::HeatmapRenderer::rightPressed() {
 
     zRotationSpeedDegPerMs = zRotationSpeedDegPerMs >= 0.0f ? -0.006f : 0.0f;
 

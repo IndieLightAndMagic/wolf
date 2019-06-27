@@ -67,7 +67,7 @@ namespace HDC{
         
         QString userName();
         void setUserName(const QString& userName);
-        Q_INVOKABLE void keyPressed();
+        Q_INVOKABLE void keyPressed(int keypressed_code);
 
     signals:
         void userNameChanged(); 

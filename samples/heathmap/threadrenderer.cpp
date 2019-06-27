@@ -334,11 +334,11 @@ void HDC::ThreadRenderer::setUserName(const QString& userName){
     }
     emit userNameChanged();
 }
-void HDC::ThreadRenderer::keyPressed() {
+void HDC::ThreadRenderer::keyPressed(int keypressed_code) {
 
     qDebug() << "Key Pressed " << __FILE__ << ":" << __LINE__ ;
     auto p = m_renderThread->getHeatmapRenderer();
-    p->keyPressed();
+    p->keyPressed(keypressed_code);
 
 }
 #include "threadrenderer.moc"

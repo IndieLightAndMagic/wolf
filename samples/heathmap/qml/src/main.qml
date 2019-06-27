@@ -97,9 +97,11 @@ Item {
         onAccepted: {
             console.log("You chose: " + openImageDialog.fileUrls)
             renderer.userName = openImageDialog.fileUrls[0]
+            renderer.focus = true
         }
         onRejected: {
             console.log("Cancelled")
+            renderer.focus = false
         }
     }
 
