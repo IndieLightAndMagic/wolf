@@ -119,7 +119,8 @@ void HDC::HeatmapRenderer::render()
 
     }
 
-    zRotation = zRotationSpeedDegPerMs * (tNow - tBegin);
+    zRotation += zRotationSpeedDegPerMs * (tNow - tBegin);
+    tBegin = tNow;
 
     glDepthMask(true);
 
