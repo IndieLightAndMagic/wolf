@@ -132,8 +132,13 @@ void HDC::HeatmapRenderer::render()
 
     program1.bind();
     {
+        static float distance = 0.001;
+        distance += 0.001;
         auto mtx = m_cam.getCamera();
-        mtx.rotate(zRotation, 0.0, 0.0, 1.0f);
+        mtx.translate(0.0f, 0.0f, -distance);
+        mtx.rotate(45.0f, 1.0f, 0.0f, 0.0f);
+        //mtx.rotate(zRotation, 0.0, 0.0, 1.0f);
+
         program1.setUniformValue(matrixUniform1, mtx);
         paintQtLogo();
     }
