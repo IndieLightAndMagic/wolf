@@ -24,7 +24,7 @@ namespace HDC{
         Camera();
         float m_x {0.0f};
         float m_y {0.0f};
-        float m_z {-0.625f};
+        float m_z {-1.0f};
         void setCamera(
             float verticalFov = 60.0f,
             float aspectRatio = 16.0f / 9.0f,
@@ -32,7 +32,7 @@ namespace HDC{
             float farPlane = 100.0f,
             float x = 0.0f,
             float y = 0.0f,
-            float z = -0.625f);
+            float z = -1.0f);
 
         QMatrix4x4& getCamera();
 

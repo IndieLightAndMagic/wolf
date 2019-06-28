@@ -28,6 +28,8 @@ namespace HDC{
         void keyPressed(int keypressed_code);
         void leftPressed();
         void rightPressed();
+        void upPressed();
+        void downPressed();
 
     protected:
         bool event(QEvent *event ) override ;

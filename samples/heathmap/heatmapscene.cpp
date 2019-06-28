@@ -8,8 +8,13 @@
 #include <src/texture/fasttexturedata.h>
 #include "src/texture/fastqtexturedata.h"
 
+constexpr auto _6gradsPerSec__ms__ = 0.006f;
 static auto zRotation = 0.0f;
 static auto zRotationSpeedDegPerMs = 0.000f;//6.0f Grad Per /1000.0f Millisecs //AKA 6 grad per sec;
+
+constexpr auto _1meter = 0.01f;
+constexpr auto _1meterpersec__ms__ = _1meter / 1000;
+static auto zSpeedMeterPerMs = 0.000f;
 
 HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):QObject(parent)
 {
@@ -119,7 +124,9 @@ void HDC::HeatmapRenderer::render()
 
     }
 
-    zRotation += zRotationSpeedDegPerMs * (tNow - tBegin);
+    auto timeDelta = tNow - tBegin;
+    zRotation += zRotationSpeedDegPerMs * timeDelta;
+    auto zDelta = zSpeedMeterPerMs * timeDelta; 
     tBegin = tNow;
 
     glDepthMask(true);
@@ -133,17 +140,18 @@ void HDC::HeatmapRenderer::render()
 
     program1.bind();
     {
-        static float distance = 0.001;
-        distance += 0.001;
-        auto mtx = m_cam.getCamera();
 
-        auto mtxCopy = mtx;
-        mtxCopy.rotate(15.0f, 1.0f, 0.0f, 0.0f);
-        mtxCopy.rotate(zRotation, 0.0, 0.0, 1.0f);
+        m_cam.setCameraPositionDelta(0.0f, 0.0f, zDelta);
 
-        program1.setUniformValue(matrixUniform1, mtxCopy);
+        auto mtxReference = m_cam.getCamera();
+        mtxReference.rotate(75.0f, 1.0f, 0.0f, 0.0f);
+        mtxReference.rotate(zRotation, 0.0, 0.0, 1.0f);
+
+        program1.setUniformValue(matrixUniform1, mtxReference);
         paintQtLogo();
+    
     }
+
     program1.release();
 
 
@@ -159,29 +167,55 @@ void HDC::HeatmapRenderer::createGeometry()
     plane.reset(1.05, .68);
     plane.setattrlocation(program1.attributeLocation("vertex"), HDC::Plane120::Plane120Attr::vertices);
     plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::texturecoords);
-    
 }
-void HDC::HeatmapRenderer::keyPressed(int keypressed_code){
 
-    qDebug() << "Key Pressed " << __FILE__ << " " << __LINE__ ;
+void HDC::HeatmapRenderer::keyPressed(int keypressed_code){
+    auto keymsg = QString();
     if (keypressed_code == Qt::Key_Left){
-        qDebug() << "Key Left Pressed " << __FILE__ << " " << __LINE__ ;
+
+        keymsg = "Left";
         leftPressed();
+
     } else if(keypressed_code == Qt::Key_Right){
+
+        keymsg = "Right";
         rightPressed();
-        qDebug() << "Key Right Pressed " << __FILE__ << " " << __LINE__ ;
-    } 
+
+    } else if (keypressed_code == Qt::Key_Down){
+
+        keymsg = "Down";
+        downPressed();
+
+    } else if (keypressed_code == Qt::Key_Up) {
+
+        keymsg = "Up";
+        upPressed();
+
+    }
+    qDebug() << "Key Pressed " << keymsg << " " <<__FILE__ << " : " << __LINE__ ;
+
 }
 void HDC::HeatmapRenderer::leftPressed() {
 
-    zRotationSpeedDegPerMs = zRotationSpeedDegPerMs <= 0.0f ? 0.006f : 0.0f;
+    zRotationSpeedDegPerMs = zRotationSpeedDegPerMs <= 0.0f ? _6gradsPerSec__ms__ * 10 : 0.0f;
 
 }
 void HDC::HeatmapRenderer::rightPressed() {
 
-    zRotationSpeedDegPerMs = zRotationSpeedDegPerMs >= 0.0f ? -0.006f : 0.0f;
+    zRotationSpeedDegPerMs = zRotationSpeedDegPerMs >= 0.0f ? -_6gradsPerSec__ms__ * 10 : 0.0f;
 
 }
+void HDC::HeatmapRenderer::upPressed() {
+
+    zSpeedMeterPerMs = zSpeedMeterPerMs <= 0.0f ? _1meterpersec__ms__ * 10 : 0.0f;
+
+}
+void HDC::HeatmapRenderer::downPressed() {
+
+    zSpeedMeterPerMs = zSpeedMeterPerMs >= 0.0f ? -_1meterpersec__ms__ * 10 : 0.0f;
+
+}
+
 bool HDC::HeatmapRenderer::event( QEvent* event )
 {
 
