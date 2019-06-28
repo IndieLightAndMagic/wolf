@@ -64,7 +64,7 @@ int main(int argc, char **argv){
     QGuiApplication app(argc, argv);
 
 
-    qmlRegisterType<HDC::ThreadRenderer>("SceneGraphRendering", 1, 0, "SceneRender");
+    qmlRegisterType<HDC::SceneRenderer>("SceneGraphRendering", 1, 0, "SceneRender");
     int execReturn = 0;
 
     {
@@ -86,7 +86,7 @@ int main(int argc, char **argv){
     // As the render threads make use of our QGuiApplication object
     // to clean up gracefully, wait for them to finish before
     // QGuiApp is taken off the heap.
-    for (QThread *t : qAsConst(HDC::ThreadRenderer::threads)) {
+    for (QThread *t : qAsConst(HDC::SceneRenderer::threads)) {
         t->wait();
         delete t;
     }

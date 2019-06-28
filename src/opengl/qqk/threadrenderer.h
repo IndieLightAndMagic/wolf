@@ -56,13 +56,13 @@
 
 namespace HDC{
     class RenderThread;
-    class ThreadRenderer : public QQuickItem
+    class SceneRenderer : public QQuickItem
     {
         Q_OBJECT
         Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
 
     public:
-        ThreadRenderer();
+        SceneRenderer();
         static QList<QThread *> threads;
         
         QString userName();

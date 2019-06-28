@@ -66,7 +66,7 @@
 #include <QtQuick/QQuickWindow>
 #include <qsgsimpletexturenode.h>
 
-QList<QThread *> HDC::ThreadRenderer::threads;
+QList<QThread *> HDC::SceneRenderer::threads;
 
 /*
  * The render thread shares a context with the scene graph and will
@@ -88,7 +88,7 @@ namespace HDC{
         , m_heatmapRenderer(nullptr)
         , m_size(size)
         {
-            HDC::ThreadRenderer::threads << this;
+            HDC::SceneRenderer::threads << this;
         }
 
         QOffscreenSurface *surface;
@@ -242,14 +242,14 @@ namespace HDC{
 
 
 
-HDC::ThreadRenderer::ThreadRenderer()
+HDC::SceneRenderer::SceneRenderer()
 : m_renderThread(nullptr)
 {
     setFlag(ItemHasContents, true);
     m_renderThread = new RenderThread(QSize(512, 512));
 }
 
-void HDC::ThreadRenderer::ready()
+void HDC::SceneRenderer::ready()
 {
     m_renderThread->surface = new QOffscreenSurface();
     m_renderThread->surface->setFormat(m_renderThread->context->format());
@@ -262,7 +262,7 @@ void HDC::ThreadRenderer::ready()
     update();
 }
 
-QSGNode *HDC::ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode *HDC::SceneRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     TextureNode *node = static_cast<TextureNode *>(oldNode);
 
@@ -319,11 +319,11 @@ QSGNode *HDC::ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeD
     return node;
 }
 
-QString HDC::ThreadRenderer::userName(){
+QString HDC::SceneRenderer::userName(){
     return m_userName;
 }
 
-void HDC::ThreadRenderer::setUserName(const QString& userName){
+void HDC::SceneRenderer::setUserName(const QString& userName){
     if (userName == m_userName){
         return;
     }
@@ -334,7 +334,7 @@ void HDC::ThreadRenderer::setUserName(const QString& userName){
     }
     emit userNameChanged();
 }
-void HDC::ThreadRenderer::keyPressed(int keypressed_code) {
+void HDC::SceneRenderer::keyPressed(int keypressed_code) {
 
     qDebug() << "Key Pressed " << __FILE__ << ":" << __LINE__ ;
     auto p = m_renderThread->getHeatmapRenderer();
