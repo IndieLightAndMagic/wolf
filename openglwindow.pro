@@ -21,6 +21,7 @@ SOURCES += \
 	src/texture/texturemanager.cpp \
 	src/texture/fasttexturedata.cpp \
 	src/texture/fastqtexturedata.cpp \
+	src/opengl/qqk/threadrenderer.cpp \
 	src/inputmanager/inputmanager.cpp \
 	src/texture/fastclampedtexturedata.cpp \
 	samples/heathmap/hdata.cpp \
@@ -30,8 +31,8 @@ SOURCES += \
 	samples/heathmap/json.cpp \
 	samples/heathmap/main.cpp \
 	samples/heathmap/timedcounter.cpp \
-	samples/heathmap/trackletplayer.cpp \
-	samples/heathmap/threadrenderer.cpp
+	samples/heathmap/trackletplayer.cpp
+	
 GIT_COMMIT_NUMBER=$$system(git rev-parse --short=7 HEAD) 
 message(At the moment of qmake execution git number is $$GIT_COMMIT_NUMBER)
 

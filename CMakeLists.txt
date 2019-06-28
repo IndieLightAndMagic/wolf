@@ -37,6 +37,7 @@ add_executable(${target}
     src/meshes/geometry.cpp
     src/meshes/geometry120.cpp
     src/opengl/openglwindow.cpp
+    src/opengl/qqk/threadrenderer.cpp
     src/shader/shadersource.cpp
     src/texture/texturemanager.cpp
     src/opengl/qqk/threadrenderer.h
