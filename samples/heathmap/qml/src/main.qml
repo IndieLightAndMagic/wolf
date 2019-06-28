@@ -96,7 +96,7 @@ Item {
         folder: shortcuts.home
         onAccepted: {
             console.log("You chose: " + openImageDialog.fileUrls)
-            renderer.userName = openImageDialog.fileUrls[0]
+            renderer.textureName = openImageDialog.fileUrls[0]
             renderer.focus = true
         }
         onRejected: {

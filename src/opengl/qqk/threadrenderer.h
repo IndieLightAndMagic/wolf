@@ -55,22 +55,22 @@
 #include <QQuickItem>
 
 namespace HDC{
-    class RenderThread;
+    class SceneRenderThread;
     class SceneRenderer : public QQuickItem
     {
         Q_OBJECT
-        Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
+        Q_PROPERTY(QString textureName READ textureName WRITE setTextureName NOTIFY textureNameChanged)
 
     public:
         SceneRenderer();
         static QList<QThread *> threads;
         
-        QString userName();
-        void setUserName(const QString& userName);
+        QString textureName();
+        void setTextureName(const QString& textureName);
         Q_INVOKABLE void keyPressed(int keypressed_code);
 
     signals:
-        void userNameChanged(); 
+        void textureNameChanged(); 
 
     public Q_SLOTS:
         void ready();
@@ -79,8 +79,8 @@ namespace HDC{
         QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 
     private:
-        RenderThread *m_renderThread;
-        QString m_userName;
+        SceneRenderThread *m_renderThread;
+        QString m_textureName;
     };
 
 }

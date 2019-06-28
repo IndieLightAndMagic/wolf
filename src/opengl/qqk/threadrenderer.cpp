@@ -75,12 +75,12 @@ QList<QThread *> HDC::SceneRenderer::threads;
  */
 namespace HDC{
 
-
-    class RenderThread : public QThread
+    
+    class SceneRenderThread : public QThread
     {
         Q_OBJECT
     public:
-        RenderThread(const QSize &size)
+        SceneRenderThread(const QSize &size)
         : surface(nullptr)
         , context(nullptr)
         , m_renderFbo(nullptr)
@@ -246,7 +246,7 @@ HDC::SceneRenderer::SceneRenderer()
 : m_renderThread(nullptr)
 {
     setFlag(ItemHasContents, true);
-    m_renderThread = new RenderThread(QSize(512, 512));
+    m_renderThread = new SceneRenderThread(QSize(512, 512));
 }
 
 void HDC::SceneRenderer::ready()
@@ -257,7 +257,7 @@ void HDC::SceneRenderer::ready()
 
     m_renderThread->moveToThread(m_renderThread);
 
-    connect(window(), &QQuickWindow::sceneGraphInvalidated, m_renderThread, &RenderThread::shutDown, Qt::QueuedConnection);
+    connect(window(), &QQuickWindow::sceneGraphInvalidated, m_renderThread, &SceneRenderThread::shutDown, Qt::QueuedConnection);
     m_renderThread->start();
     update();
 }
@@ -305,10 +305,10 @@ QSGNode *HDC::SceneRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeDa
          *
          * This FBO rendering pipeline is throttled by vsync on the scene graph rendering thread.
          */
-        connect(m_renderThread, &RenderThread::textureReady, node, &TextureNode::newTexture, Qt::DirectConnection);
+        connect(m_renderThread, &SceneRenderThread::textureReady, node, &TextureNode::newTexture, Qt::DirectConnection);
         connect(node, &TextureNode::pendingNewTexture, window(), &QQuickWindow::update, Qt::QueuedConnection);
         connect(window(), &QQuickWindow::beforeRendering, node, &TextureNode::prepareNode, Qt::DirectConnection);
-        connect(node, &TextureNode::textureInUse, m_renderThread, &RenderThread::renderNext, Qt::QueuedConnection);
+        connect(node, &TextureNode::textureInUse, m_renderThread, &SceneRenderThread::renderNext, Qt::QueuedConnection);
 
         // Get the production of FBO textures started..
         QMetaObject::invokeMethod(m_renderThread, "renderNext", Qt::QueuedConnection);
@@ -319,20 +319,20 @@ QSGNode *HDC::SceneRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeDa
     return node;
 }
 
-QString HDC::SceneRenderer::userName(){
-    return m_userName;
+QString HDC::SceneRenderer::textureName(){
+    return m_textureName;
 }
 
-void HDC::SceneRenderer::setUserName(const QString& userName){
-    if (userName == m_userName){
+void HDC::SceneRenderer::setTextureName(const QString& textureName){
+    if (textureName == m_textureName){
         return;
     }
-    m_userName = userName;
+    m_textureName = textureName;
     auto ptrHeatmapRenderer = m_renderThread->getHeatmapRenderer();
     if (ptrHeatmapRenderer) {
-        ptrHeatmapRenderer->loadTextureAndWrap(userName);
+        ptrHeatmapRenderer->loadTextureAndWrap(textureName);
     }
-    emit userNameChanged();
+    emit textureNameChanged();
 }
 void HDC::SceneRenderer::keyPressed(int keypressed_code) {
 
