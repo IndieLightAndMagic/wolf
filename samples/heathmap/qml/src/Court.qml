@@ -1,5 +1,5 @@
 import QtQuick 2.13
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.13
 import SceneGraphRendering 1.0
 import QtQuick.Dialogs 1.1
 

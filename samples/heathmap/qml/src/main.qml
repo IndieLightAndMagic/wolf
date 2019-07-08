@@ -53,8 +53,19 @@ import QtQuick.Controls 2.13
 import QtQuick.Dialogs 1.1
 
 Item {
-    width: 1200
-    height: 675
+    Drawer {
+        id: drawer
+        width: 0.66 * parent.width
+        height: parent.height
+
+        Label {
+            text: "Content goes here!"
+            anchors.centerIn: parent
+        }
+    }
+   
+   width: 1200
+   height: 675
     // The checkers background
     ShaderEffect {
         id: tileBackground
@@ -86,7 +97,12 @@ Item {
         id: renderer
         anchors.fill: parent
         anchors.margins: 10
-        
+        MouseArea {
+            anchors.fill : parent
+            onClicked : {
+                renderer.focus = true
+            }
+        }
         
     }
 
