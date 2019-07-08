@@ -336,7 +336,6 @@ void HDC::SceneRenderer::setTextureName(const QString& textureName){
 }
 void HDC::SceneRenderer::keyPressed(int keypressed_code) {
 
-    qDebug() << "Key Pressed " << __FILE__ << ":" << __LINE__ ;
     auto p = m_renderThread->getHeatmapRenderer();
     p->keyPressed(keypressed_code);
 

@@ -170,29 +170,25 @@ void HDC::HeatmapRenderer::createGeometry()
 }
 
 void HDC::HeatmapRenderer::keyPressed(int keypressed_code){
-    auto keymsg = QString();
+
     if (keypressed_code == Qt::Key_Left){
 
-        keymsg = "Left";
         leftPressed();
 
     } else if(keypressed_code == Qt::Key_Right){
 
-        keymsg = "Right";
         rightPressed();
 
     } else if (keypressed_code == Qt::Key_Down){
 
-        keymsg = "Down";
         downPressed();
 
     } else if (keypressed_code == Qt::Key_Up) {
 
-        keymsg = "Up";
         upPressed();
 
     }
-    qDebug() << "Key Pressed " << keymsg << " " <<__FILE__ << " : " << __LINE__ ;
+    //qDebug() << "Key Pressed " << keymsg << " " <<__FILE__ << " : " << __LINE__ ;
 
 }
 void HDC::HeatmapRenderer::leftPressed() {

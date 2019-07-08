@@ -14,8 +14,6 @@ SceneRender {
 
         }
         Keys.onPressed: {
-        	console.log("Keys on pressed")
         	renderer.keyPressed(event.key)
-
         }
     }

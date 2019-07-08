@@ -49,7 +49,7 @@
 ****************************************************************************/
 
 import QtQuick 2.13
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.13
 import QtQuick.Dialogs 1.1
 
 Item {
@@ -89,6 +89,7 @@ Item {
         
         
     }
+
     FileDialog {
         id: openImageDialog
         title: "Please choose a PNG file for your texture"
