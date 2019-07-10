@@ -57,7 +57,7 @@
 #include <QGuiApplication>
 
 
-
+#include "loggingrectangletest.h"
 
 
 int main(int argc, char **argv){
@@ -80,6 +80,7 @@ int main(int argc, char **argv){
         view.setSource(QUrl("../samples/heathmap/qml/src/main.qml"));
         view.show();
 
+        LoggingRectangle::install(view, "drawer.loggingRectangle");
         execReturn = app.exec();
     }
 

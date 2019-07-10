@@ -51,16 +51,24 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Dialogs 1.1
-
+import "3rd"
 Item {
+
     Drawer {
         id: drawer
+        objectName: "drawer"
         width: 0.66 * parent.width
         height: parent.height
 
         Label {
             text: "Content goes here!"
             anchors.centerIn: parent
+        }
+        LoggingRectangle{
+            id: loggingRectangle
+            objectName: "loggingRectangle"
+            anchors.fill: parent
+            bordercolor: "green"
         }
     }
    
