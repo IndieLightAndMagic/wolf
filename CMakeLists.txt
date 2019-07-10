@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 message(STATUS "-- Trying to build $ENV{SAMPLE_TO_BUILD}")
+set(CMAKE_BUILD_TYPE DEBUG)
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -45,6 +46,7 @@ add_executable(${target}
     src/texture/fastqtexturedata.cpp
     src/inputmanager/inputmanager.cpp
     src/texture/fastclampedtexturedata.cpp
+    src/3rd/utils/screen/loggingrectangletest.cpp
 
     )
 target_include_directories(${target} PUBLIC
@@ -58,6 +60,7 @@ target_include_directories(${target} PUBLIC
     ${CMAKE_SOURCE_DIR}/src/texture
     ${CMAKE_SOURCE_DIR}/src/opengl/qqk    
     ${CMAKE_SOURCE_DIR}/src/inputmanager
+    ${CMAKE_SOURCE_DIR}/src/3rd/utils/screen
     /usr/local/include
     ) 
 
