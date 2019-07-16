@@ -28,6 +28,12 @@ function(get_target_sources)
 endfunction()
 
 get_target_sources()
+
+set(3rd_party_target_srcs
+    
+    src/3rd/utils/screen/loggingrectangletest.cpp
+
+    )
 add_executable(${target} 
     ${target_srcs}
     src/util.cpp
@@ -38,15 +44,16 @@ add_executable(${target}
     src/meshes/geometry.cpp
     src/meshes/geometry120.cpp
     src/opengl/openglwindow.cpp
-    src/opengl/qqk/threadrenderer.cpp
     src/shader/shadersource.cpp
     src/texture/texturemanager.cpp
     src/opengl/qqk/threadrenderer.h
     src/texture/fasttexturedata.cpp
     src/texture/fastqtexturedata.cpp
+    src/opengl/qqk/threadrenderer.cpp
     src/inputmanager/inputmanager.cpp
     src/texture/fastclampedtexturedata.cpp
-    src/3rd/utils/screen/loggingrectangletest.cpp
+    ${3rd_party_target_srcs}
+
 
     )
 target_include_directories(${target} PUBLIC
