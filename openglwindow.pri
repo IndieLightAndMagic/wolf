@@ -8,8 +8,8 @@ INCLUDEPATH += $$PWD/src/opengl/qqk/
 INCLUDEPATH += $$PWD/src/shader/
 INCLUDEPATH += $$PWD/src/texture/
 INCLUDEPATH += $$PWD/src/inputmanager
+INCLUDEPATH += $$PWD/src/3rd/utils/screen/
 INCLUDEPATH += $$PWD/samples/heathmap/
-
 INCLUDEPATH += /usr/local/include
 
 HEADERS += $$PWD
@@ -33,3 +33,4 @@ HEADERS += $$PWD/samples/heathmap/hdata.h
 HEADERS += $$PWD/samples/heathmap/timedcounter.h
 HEADERS += $$PWD/samples/heathmap/heatmapplayer.h
 HEADERS += $$PWD/samples/heathmap/heatmapscene.h
+

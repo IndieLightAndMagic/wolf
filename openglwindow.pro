@@ -1,11 +1,13 @@
 QT += core
 QT += gui
-QT += quick
+QT += quick qml
 
 QMAKE_CXXFLAGS += -std=c++17
 QMAKE_CFLAGS_RELEASE    = -O2 -MT
 QMAKE_CXXFLAGS_GNUCXX11 -= -std=gnu++11
 QMAKE_CXXFLAGS_CXX11 -= -std=c++11
+
+RESOURCES += samples/heathmap/qml/heatmap.qrc
 
 message("Heathmap Data Court. A Genius Sports Tech Demo")
 include(openglwindow.pri)
@@ -24,6 +26,7 @@ SOURCES += \
 	src/opengl/qqk/threadrenderer.cpp \
 	src/inputmanager/inputmanager.cpp \
 	src/texture/fastclampedtexturedata.cpp \
+    src/3rd/utils/screen/loggingrectangletest.cpp \
 	samples/heathmap/hdata.cpp \
 	samples/heathmap/heatmap.cpp \
 	samples/heathmap/heatmapplayer.cpp \

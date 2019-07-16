@@ -52,6 +52,7 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Dialogs 1.1
 import "3rd"
+
 Item {
 
     Drawer {
