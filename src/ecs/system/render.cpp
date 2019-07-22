@@ -1,22 +1,13 @@
-#include "heatmapscene.h"
+#include "render.h"
 
 #include <QDebug>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QPaintEngine>
 #include <qmath.h>
-#include <src/texture/fasttexturedata.h>
-#include "src/texture/fastqtexturedata.h"
 
-constexpr auto _6gradsPerSec__ms__ = 0.006f;
-static auto zRotation = 0.0f;
-static auto zRotationSpeedDegPerMs = 0.000f;//6.0f Grad Per /1000.0f Millisecs //AKA 6 grad per sec;
 
-constexpr auto _1meter = 0.01f;
-constexpr auto _1meterpersec__ms__ = _1meter / 1000;
-static auto zSpeedMeterPerMs = 0.000f;
-
-HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):QObject(parent)
+ECS_SYSTEM::Renderer::Renderer(QObject* parent):QObject(parent)
 {
 
     m_ptimer = new QElapsedTimer();
@@ -24,74 +15,18 @@ HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):QObject(parent)
 
 }
 
-HDC::HeatmapRenderer::~HeatmapRenderer()
+ECS_SYSTEM::Renderer::~Renderer()
 {
     delete m_ptimer;
 }
-void HDC::HeatmapRenderer::loadTextureAndWrap(const QString &rTexturePath) {
 
-
-    auto sz = rTexturePath.size();
-    sz -= QString{"file://"}.size();
-
-    auto file_absolutepath = rTexturePath.right(sz);
-    qDebug() << "Ok The Scene recieved: " << file_absolutepath;
-    QImage* pqimg = new QImage(file_absolutepath);
-
-    if (pqimg) {
-
-        if (m_soccer_court_texture){
-
-            delete m_soccer_court_texture;
-            m_soccer_court_texture = nullptr;
-
-        }
-        m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
-    }
-
-}
-
-void HDC::HeatmapRenderer::paintQtLogo()
-{
-    auto vertices      = HDC::Plane120::Plane120Attr::vertices;
-    auto texturecoords = HDC::Plane120::Plane120Attr::texturecoords;
-    
-    auto vertexattrlocation = plane.getattrlocation(vertices);
-    auto tcoordattrlocation = plane.getattrlocation(texturecoords);
-    
-    auto vertexdata = plane.getdata(vertices);
-    auto tcoorddata = plane.getdata(texturecoords);
-    
-    program1.enableAttributeArray(vertexattrlocation);
-    program1.setAttributeArray(vertexattrlocation, vertexdata, 3, 0);
-    
-    program1.enableAttributeArray(tcoordattrlocation);
-    program1.setAttributeArray(tcoordattrlocation, tcoorddata, 2, 0);
-
-    m_soccer_court_texture->updateTexture();
-    program1.setUniformValue(courtUniform, m_soccer_court_texture->gl.slot);
-    m_soccer_court_texture->bind();
-
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    program1.disableAttributeArray(tcoordattrlocation);
-    program1.disableAttributeArray(vertexattrlocation);
-}
-
-void HDC::HeatmapRenderer::initializeTextures(){
-
-    QImage* pqimg = new QImage(QString::fromStdString(std::string{RESOURCES_DIR} + "/textures/soccer_court_texture.png"));
-    m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
-
-}
-void HDC::HeatmapRenderer::initialize()
+void ECS_SYSTEM::Renderer::initialize()
 {
 
     initializeOpenGLFunctions();
-
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
     
-    program1.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.vert"));
+    /*program1.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.vert"));
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.frag"));
     program1.link();
 
@@ -103,13 +38,13 @@ void HDC::HeatmapRenderer::initialize()
 
     m_cam.setCamera();
 
-    initializeTextures();
+    initializeTextures();*/
 
 }
 
 
 
-void HDC::HeatmapRenderer::render()
+void ECS_SYSTEM::Renderer::render()
 {
     static auto tFrame = qint64{0};
     static auto tBegin = qint64{0};
@@ -125,20 +60,21 @@ void HDC::HeatmapRenderer::render()
     }
 
     auto timeDelta = tNow - tBegin;
-    zRotation += zRotationSpeedDegPerMs * timeDelta;
-    auto zDelta = zSpeedMeterPerMs * timeDelta; 
     tBegin = tNow;
 
+    /*zRotation += zRotationSpeedDegPerMs * timeDelta;
+    auto zDelta = zSpeedMeterPerMs * timeDelta; 
+    
     glDepthMask(true);
 
     glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    */
     //glEnable(GL_DEPTH_TEST);
 
 
 
-    program1.bind();
+    /*program1.bind();
     {
 
         m_cam.setCameraPositionDelta(0.0f, 0.0f, zDelta);
@@ -153,7 +89,7 @@ void HDC::HeatmapRenderer::render()
     }
 
     program1.release();
-
+    */
 
 
 
@@ -162,57 +98,8 @@ void HDC::HeatmapRenderer::render()
 
 }
 
-void HDC::HeatmapRenderer::createGeometry()
-{
-    plane.reset(1.05, .68);
-    plane.setattrlocation(program1.attributeLocation("vertex"), HDC::Plane120::Plane120Attr::vertices);
-    plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::texturecoords);
-}
 
-void HDC::HeatmapRenderer::keyPressed(int keypressed_code){
-
-    if (keypressed_code == Qt::Key_Left){
-
-        leftPressed();
-
-    } else if(keypressed_code == Qt::Key_Right){
-
-        rightPressed();
-
-    } else if (keypressed_code == Qt::Key_Down){
-
-        downPressed();
-
-    } else if (keypressed_code == Qt::Key_Up) {
-
-        upPressed();
-
-    }
-    //qDebug() << "Key Pressed " << keymsg << " " <<__FILE__ << " : " << __LINE__ ;
-
-}
-void HDC::HeatmapRenderer::leftPressed() {
-
-    zRotationSpeedDegPerMs = zRotationSpeedDegPerMs <= 0.0f ? _6gradsPerSec__ms__ * 10 : 0.0f;
-
-}
-void HDC::HeatmapRenderer::rightPressed() {
-
-    zRotationSpeedDegPerMs = zRotationSpeedDegPerMs >= 0.0f ? -_6gradsPerSec__ms__ * 10 : 0.0f;
-
-}
-void HDC::HeatmapRenderer::upPressed() {
-
-    zSpeedMeterPerMs = zSpeedMeterPerMs <= 0.0f ? _1meterpersec__ms__ * 10 : 0.0f;
-
-}
-void HDC::HeatmapRenderer::downPressed() {
-
-    zSpeedMeterPerMs = zSpeedMeterPerMs >= 0.0f ? -_1meterpersec__ms__ * 10 : 0.0f;
-
-}
-
-bool HDC::HeatmapRenderer::event( QEvent* event )
+bool ECS_SYSTEM::Renderer::event( QEvent* event )
 {
 
     auto et = event->type();

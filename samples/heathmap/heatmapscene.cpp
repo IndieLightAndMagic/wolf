@@ -16,7 +16,7 @@ constexpr auto _1meter = 0.01f;
 constexpr auto _1meterpersec__ms__ = _1meter / 1000;
 static auto zSpeedMeterPerMs = 0.000f;
 
-HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):QObject(parent)
+HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):ECS_SYSTEM::Renderer(parent)
 {
 
     m_ptimer = new QElapsedTimer();
@@ -72,7 +72,8 @@ void HDC::HeatmapRenderer::paintQtLogo()
     program1.setUniformValue(courtUniform, m_soccer_court_texture->gl.slot);
     m_soccer_court_texture->bind();
 
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    auto glFuncs = QOpenGLContext::currentContext()->functions();
+    glFuncs->glDrawArrays(GL_TRIANGLES, 0, 6);
 
     program1.disableAttributeArray(tcoordattrlocation);
     program1.disableAttributeArray(vertexattrlocation);
@@ -87,10 +88,7 @@ void HDC::HeatmapRenderer::initializeTextures(){
 void HDC::HeatmapRenderer::initialize()
 {
 
-    initializeOpenGLFunctions();
 
-    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
-    
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.vert"));
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.frag"));
     program1.link();
@@ -129,10 +127,12 @@ void HDC::HeatmapRenderer::render()
     auto zDelta = zSpeedMeterPerMs * timeDelta; 
     tBegin = tNow;
 
-    glDepthMask(true);
+    auto glFuncs = QOpenGLContext::currentContext()->functions();
 
-    glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glFuncs->glDepthMask(true);
+
+    glFuncs->glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
+    glFuncs->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //glEnable(GL_DEPTH_TEST);
 

@@ -1,5 +1,5 @@
-#ifndef __HEATMAPREDNDERER_H__
-#define __HEATMAPREDNDERER_H__
+#ifndef __ECSSYSTEM_RENDER_H__
+#define __ECSSYSTEM_RENDER_H__
 #include <QtGui/qvector3d.h>
 #include <QtGui/qmatrix4x4.h>
 #include <QtGui/qopenglshaderprogram.h>
@@ -13,46 +13,26 @@
 #include <src/camera/camera.h>
 #include <src/texture/fastqtexturedata.h>
 
-namespace HDC{
-    class HeatmapRenderer : public QObject, QOpenGLFunctions
+namespace ECS_SYSTEM{
+
+    class Renderer : public QObject, QOpenGLFunctions
     {
         Q_OBJECT
     public:
-        HeatmapRenderer(QObject* parent = nullptr);
-        ~HeatmapRenderer();
+        Renderer(QObject* parent = nullptr);
+        virtual ~Renderer();
 
-        void render();
-        void initialize();
-        void loadTextureAndWrap(const QString &rTexturePath);
-
-        void keyPressed(int keypressed_code);
-        void leftPressed();
-        void rightPressed();
-        void upPressed();
-        void downPressed();
+        virtual void render();
+        virtual void initialize();
 
     protected:
-        bool event(QEvent *event ) override ;
+        virtual bool event(QEvent *event);
+
     private:
-        void initializeTextures();
-
-        void paintQtLogo();
-        void createGeometry();
-
-
-        bool textureChanged{false};
-        HDC::Camera m_cam;
-        HDC::Plane120 plane;
-        HDC::FastQTextureData* m_soccer_court_texture{nullptr};
-        QOpenGLShaderProgram program1;
-
-        int matrixUniform1;
-        int courtUniform;
-
         QElapsedTimer* m_ptimer{nullptr};
 
     };
 }
 
-#endif /* __HEATMAPREDNDERER_H__
+#endif /* __ECS_SSYSTEM_RENDER_H__
  */

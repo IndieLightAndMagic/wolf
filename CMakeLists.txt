@@ -34,6 +34,9 @@ set(3rd_party_target_srcs
     src/3rd/utils/screen/loggingrectangletest.cpp
 
     )
+find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+qt5_add_resources(QT_RESOURCES samples/${target}/qml/heatmap.qrc)
+
 add_executable(${target} 
     ${target_srcs}
     src/util.cpp
@@ -42,11 +45,12 @@ add_executable(${target}
     src/camera/camera.cpp
     src/shader/shader.cpp
     src/meshes/geometry.cpp
+    src/ecs/system/render.cpp
     src/meshes/geometry120.cpp
-    src/opengl/openglwindow.cpp
     src/shader/shadersource.cpp
     src/texture/texturemanager.cpp
     src/opengl/qqk/threadrenderer.h
+    src/opengl/sys/openglwindow.cpp
     src/texture/fasttexturedata.cpp
     src/texture/fastqtexturedata.cpp
     src/opengl/qqk/threadrenderer.cpp
@@ -54,7 +58,7 @@ add_executable(${target}
     src/texture/fastclampedtexturedata.cpp
     ${3rd_party_target_srcs}
 
-
+    ${QT_RESOURCES}
     )
 target_include_directories(${target} PUBLIC
     samples/${target}
@@ -90,9 +94,9 @@ else()
 
     )
 endif()
-find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+
 target_compile_definitions(${target} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-qt5_add_resources(QT_RESOURCES samples/${target}/qml/heatmap.qrc)
+
 
 
 

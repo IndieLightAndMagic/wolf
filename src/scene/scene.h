@@ -1,6 +1,6 @@
 #ifndef _Scene_H_
 #define _Scene_H_
-#include "openglwindow.h"
+#include "opengl/sys/openglwindow.h"
 
 class Scene : public OpenGLWindow
 {

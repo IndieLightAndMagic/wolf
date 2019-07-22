@@ -2,7 +2,7 @@
 #define _HDC_GEOMETRY_
 
 #include "objid.h"
-#include "openglcommon.h"
+#include "opengl/sys/openglcommon.h"
 
 #include <vector> 
 

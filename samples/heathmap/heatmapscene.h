@@ -1,5 +1,6 @@
 #ifndef __HEATMAPREDNDERER_H__
 #define __HEATMAPREDNDERER_H__
+
 #include <QtGui/qvector3d.h>
 #include <QtGui/qmatrix4x4.h>
 #include <QtGui/qopenglshaderprogram.h>
@@ -12,17 +13,18 @@
 #include <src/meshes/geometry120.h>
 #include <src/camera/camera.h>
 #include <src/texture/fastqtexturedata.h>
+#include "ecs/system/render.h"
 
 namespace HDC{
-    class HeatmapRenderer : public QObject, QOpenGLFunctions
+class HeatmapRenderer : public ECS_SYSTEM::Renderer
     {
         Q_OBJECT
     public:
         HeatmapRenderer(QObject* parent = nullptr);
         ~HeatmapRenderer();
 
-        void render();
-        void initialize();
+        void render() override;
+        void initialize() override;
         void loadTextureAndWrap(const QString &rTexturePath);
 
         void keyPressed(int keypressed_code);

@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="src">
         <file>src/main.qml</file>
         <file>src/3rd/LoggingRectangle.qml</file>
     </qresource>
