@@ -12,19 +12,20 @@ RESOURCES += samples/heathmap/qml/heatmap.qrc
 message("Heathmap Data Court. A Genius Sports Tech Demo")
 include(openglwindow.pri)
 SOURCES += \
-	src/util.cpp \
+    src/util.cpp \
 	src/objid.cpp \
 	src/scene/scene.cpp \
 	src/shader/shader.cpp \
 	src/camera/camera.cpp \
-	src/meshes/geometry120.cpp \
-	src/opengl/openglwindow.cpp \
-	src/shader/shadersource.cpp \
+    src/ecs/system/render.cpp \
+    src/meshes/geometry120.cpp \
+    src/shader/shadersource.cpp \
 	src/texture/texturemanager.cpp \
-	src/texture/fasttexturedata.cpp \
+    src/opengl/sys/openglwindow.cpp \
+    src/texture/fasttexturedata.cpp \
 	src/texture/fastqtexturedata.cpp \
 	src/opengl/qqk/threadrenderer.cpp \
-	src/inputmanager/inputmanager.cpp \
+    src/inputmanager/inputmanager.cpp \
 	src/texture/fastclampedtexturedata.cpp \
     src/3rd/utils/screen/loggingrectangletest.cpp \
 	samples/heathmap/hdata.cpp \
