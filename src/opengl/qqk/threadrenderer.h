@@ -20,9 +20,6 @@ namespace HDC{
         QString textureName();
         virtual void setTextureName(const QString& textureName);
         Q_INVOKABLE void keyPressed(int keypressed_code);
-        Q_INVOKABLE void setPropertyString(const QString& propertyName, const QString& propertyValue);
-        Q_INVOKABLE void setPropertyReal(const QString& propertyName, const qreal& propertyValue);
-        Q_INVOKABLE void setPropertyInteger(const QString& propertyName, const int& propertyValue);
 
 
     signals:
