@@ -1,6 +1,3 @@
 [submodule "src/gitsubmodules/collader"]
 	path = src/gitsubmodules/collader
 	url = /Users/jg/Code/opensource/gtch/collader
-[submodule "src/gitsubmodules/glm"]
-	path = src/gitsubmodules/glm
-	url = /Users/jg/Code/opensource/glm/
