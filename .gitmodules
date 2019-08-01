@@ -1,3 +1,3 @@
 [submodule "src/gitsubmodules/collader"]
 	path = src/gitsubmodules/collader
-	url = /Users/jg/Code/opensource/gtch/collader
+	url = git@github.com:IndieLightAndMagic/collader-guacamole.git
