@@ -15,7 +15,7 @@
 #include <src/texture/fastqtexturedata.h>
 #include "ecs/system/render.h"
 
-namespace HDC{
+namespace QQE{
 class HeatmapRenderer : public ECS_SYSTEM::Renderer
     {
         Q_OBJECT
@@ -43,9 +43,9 @@ class HeatmapRenderer : public ECS_SYSTEM::Renderer
 
 
         bool textureChanged{false};
-        HDC::Camera m_cam;
-        HDC::Plane120 plane;
-        HDC::FastQTextureData* m_soccer_court_texture{nullptr};
+        QQE::Camera m_cam;
+        QQE::Plane120 plane;
+        QQE::FastQTextureData* m_soccer_court_texture{nullptr};
         QOpenGLShaderProgram program1;
 
         int matrixUniform1;

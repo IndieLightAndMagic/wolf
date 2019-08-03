@@ -1,10 +1,10 @@
 #include "inputmanager.h"
 #include <iostream>
-HDC::InputManager::InputManager( QObject *parent ) : QObject( parent ) {
+QQE::InputManager::InputManager( QObject *parent ) : QObject( parent ) {
     
 }
 
-bool HDC::InputManager::eventFilter( QObject *dist, QEvent *event )
+bool QQE::InputManager::eventFilter( QObject *dist, QEvent *event )
 {
     Q_UNUSED(dist);
     auto et = event->type();

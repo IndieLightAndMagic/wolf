@@ -7,9 +7,9 @@
 #include "hdata.h"
 #include "timedcounter.h"
 
-namespace HDC {
+namespace QQE {
 
-    class TrackletPlayer : public HDC::TimedCounter
+    class TrackletPlayer : public QQE::TimedCounter
     {
         Q_OBJECT
         int m_frame_index{0};
@@ -18,7 +18,7 @@ namespace HDC {
             forwards,
             backwards
         };
-        TrackletPlayer( const HDC::TrackletDataModel& atdm, QObject *parent = 0);
+        TrackletPlayer( const QQE::TrackletDataModel& atdm, QObject *parent = 0);
 
         void playtracklet(PlaybackDirection pb = PlaybackDirection::forwards); // Play the tracklet
         void pausetracklet(); // Pause reproduction
@@ -31,7 +31,7 @@ namespace HDC {
 
     protected:
         //bool eventFilter( QObject *dist, QEvent *event);
-        HDC::Entity* selected_tracklet{nullptr};
+        QQE::Entity* selected_tracklet{nullptr};
         TrackletDataModel tdm;
         PlaybackDirection pbdirection{PlaybackDirection::forwards};
 

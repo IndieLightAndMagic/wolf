@@ -12,6 +12,6 @@
 #include <utility>
 
 
-unsigned int HDC::TextureManager::tunits{0xFFFFFFFF};
+unsigned int QQE::TextureManager::tunits{0xFFFFFFFF};
 
 

@@ -1,17 +1,17 @@
 #include "trackletplayer.h"
 #include <iostream>
-HDC::TrackletPlayer::TrackletPlayer(const HDC::TrackletDataModel& atdm, QObject* parent):HDC::TimedCounter(parent){
+QQE::TrackletPlayer::TrackletPlayer(const QQE::TrackletDataModel& atdm, QObject* parent):QQE::TimedCounter(parent){
 
     tdm = atdm;
-    connect(this, &TimedCounter::counter_ticked, this, &HDC::TrackletPlayer::readnewframe);
+    connect(this, &TimedCounter::counter_ticked, this, &QQE::TrackletPlayer::readnewframe);
     
 }
-void HDC::TrackletPlayer::selecttrackletid(unsigned int channel) {
+void QQE::TrackletPlayer::selecttrackletid(unsigned int channel) {
 
     assert(tdm.id_entity_map.find(channel) != tdm.id_entity_map.end());
     selected_tracklet = &(tdm.id_entity_map[channel]);
 }
-void HDC::TrackletPlayer::readnewframe(int){
+void QQE::TrackletPlayer::readnewframe(int){
 
     auto size = selected_tracklet->ktlet.positions.size();
     static int lastx = 0;
@@ -36,24 +36,24 @@ void HDC::TrackletPlayer::readnewframe(int){
 
 
 
-void HDC::TrackletPlayer::playtracklet(HDC::TrackletPlayer::PlaybackDirection pb){
+void QQE::TrackletPlayer::playtracklet(QQE::TrackletPlayer::PlaybackDirection pb){
 
     pause();
     setdirection(pb);
     start();
 
 }
-void HDC::TrackletPlayer::pausetracklet(){
+void QQE::TrackletPlayer::pausetracklet(){
     pause();
 }
-void HDC::TrackletPlayer::playtrackletat(int atindex){
+void QQE::TrackletPlayer::playtrackletat(int atindex){
     //setcountervalue(atindex);
 }
 
-void HDC::TrackletPlayer::setfpsfactor(float factor){
+void QQE::TrackletPlayer::setfpsfactor(float factor){
 
 }
-void HDC::TrackletPlayer::setdirection(PlaybackDirection pb){
+void QQE::TrackletPlayer::setdirection(PlaybackDirection pb){
     pbdirection = pb;
 }
 

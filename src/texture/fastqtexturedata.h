@@ -2,7 +2,7 @@
 #define __FAST_Q_TEXTURE_DATA__
 #include "fasttexturedata.h"
 #include <QImage>
-namespace HDC {
+namespace QQE {
     struct FastQTextureData : public FastTextureData {
 
     	FastQTextureData(QImage*);

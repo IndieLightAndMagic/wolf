@@ -8,10 +8,10 @@
 #include <QMap>
 #include <QList>
 
-HDC::ShaderProgram::ShaderProgram(const char* vertexshaderpath, const char* fragmentshaderpath):ObjId(){
+QQE::ShaderProgram::ShaderProgram(const char* vertexshaderpath, const char* fragmentshaderpath):ObjId(){
 
-    m_vtx_shader = std::make_shared<ShaderSource>(vertexshaderpath, HDC::ShaderType::VTX);
-    m_frg_shader = std::make_shared<ShaderSource>(fragmentshaderpath, HDC::ShaderType::FRG);
+    m_vtx_shader = std::make_shared<ShaderSource>(vertexshaderpath, QQE::ShaderType::VTX);
+    m_frg_shader = std::make_shared<ShaderSource>(fragmentshaderpath, QQE::ShaderType::FRG);
     m_program_shader = std::make_shared<QOpenGLShaderProgram>();
 
     auto vertex_shader_is_valid = m_vtx_shader->IsValid();
@@ -30,7 +30,7 @@ HDC::ShaderProgram::ShaderProgram(const char* vertexshaderpath, const char* frag
     }
 }
 
-HDC::ShaderProgram::~ShaderProgram(){
+QQE::ShaderProgram::~ShaderProgram(){
 
 
 

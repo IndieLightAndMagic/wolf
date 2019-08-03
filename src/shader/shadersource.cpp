@@ -1,11 +1,11 @@
 #include "shader.h"
 
 
-HDC::ShaderSource::ShaderSource(const char* path, HDC::ShaderType shaderType):
-    HDC::AFile(path)
+QQE::ShaderSource::ShaderSource(const char* path, QQE::ShaderType shaderType):
+    QQE::AFile(path)
 {
     
-    m_shader = std::make_shared<QOpenGLShader>(HDC::stype_stype_map[shaderType]);
+    m_shader = std::make_shared<QOpenGLShader>(QQE::stype_stype_map[shaderType]);
 
     auto source = this->data();
     auto ok     = m_shader.get()->compileSourceCode(source);

@@ -5,7 +5,7 @@
 #include <QString>
 
 //100 Days of Code
-namespace HDC {
+namespace QQE {
 
     class Utility {
     public:

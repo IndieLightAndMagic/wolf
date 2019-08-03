@@ -6,14 +6,14 @@
 
 #include "trackletplayer.h"
 #include "heatmap.h"
-namespace HDC {
+namespace QQE {
 
-    class HeatMapPlayer : public HDC::TrackletPlayer, public HDC::HeatMap
+    class HeatMapPlayer : public QQE::TrackletPlayer, public QQE::HeatMap
     {
         Q_OBJECT
         
     public:
-        HeatMapPlayer( const HDC::TrackletDataModel& atdm, QObject *parent = 0);
+        HeatMapPlayer( const QQE::TrackletDataModel& atdm, QObject *parent = 0);
         void updateheatmap(const QVector2D&);
         bool opentrackfile(std::string track_filename) ;
     protected:

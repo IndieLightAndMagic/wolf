@@ -1,5 +1,5 @@
 #include "geometry.h"
-HDC::Geometry::Geometry() : ObjId(){
+QQE::Geometry::Geometry() : ObjId(){
 
 #ifdef __APPLE__
     glGenVertexArrays(1, &glvao);
@@ -10,18 +10,18 @@ HDC::Geometry::Geometry() : ObjId(){
 
 }
 
-void HDC::Geometry::enable(){
+void QQE::Geometry::enable(){
 #ifdef __APPLE__
     glBindVertexArray(glvao);
 #endif
 }
-void HDC::Geometry::disable(){
+void QQE::Geometry::disable(){
 #ifdef __APPLE__
     glBindVertexArray(0);
 #endif
 }
 
-void HDC::PlaneGeometry::resetplane(){
+void QQE::PlaneGeometry::resetplane(){
 
     auto fast_vertices_colors = vertices_colors.data();
     auto fast_indices = indices.data();
@@ -43,30 +43,30 @@ void HDC::PlaneGeometry::resetplane(){
 
 }
 
-HDC::PlaneGeometry::PlaneGeometry() : Geometry() {
+QQE::PlaneGeometry::PlaneGeometry() : Geometry() {
 
 }
 
-void HDC::PlaneGeometry::setwidth(float width){
+void QQE::PlaneGeometry::setwidth(float width){
     vertices_colors[0] = vertices_colors[6] = width;
     vertices_colors[12] = vertices_colors[18] = -width;
 
 }
-const float& HDC::PlaneGeometry::width() const{
+const float& QQE::PlaneGeometry::width() const{
     return vertices_colors[0];
 }
-void HDC::PlaneGeometry::setheight(float height){
+void QQE::PlaneGeometry::setheight(float height){
     vertices_colors[1] = vertices_colors[19] = height;
     vertices_colors[13] = vertices_colors[7] = -height;
 }
-const float& HDC::PlaneGeometry::height() const{
+const float& QQE::PlaneGeometry::height() const{
     return vertices_colors[1];
 }
 
 
 
 
-void HDC::TexturedPlaneGeometry::resetplane(){
+void QQE::TexturedPlaneGeometry::resetplane(){
     auto fast_vertices_colors_uvs = vertices_colors_uvs.data();
     auto fast_indices = indices.data();
     auto vertices_size = vertices_colors_uvs.size() * sizeof(float);
@@ -90,24 +90,24 @@ void HDC::TexturedPlaneGeometry::resetplane(){
     glEnableVertexAttribArray(2);
 
 }
-HDC::TexturedPlaneGeometry::TexturedPlaneGeometry() : PlaneGeometry() {
+QQE::TexturedPlaneGeometry::TexturedPlaneGeometry() : PlaneGeometry() {
 
     resetplane();
 
 }
 
-void HDC::TexturedPlaneGeometry::setwidth(float width){
+void QQE::TexturedPlaneGeometry::setwidth(float width){
     vertices_colors_uvs[0] = vertices_colors_uvs[8] = width;
     vertices_colors_uvs[16] = vertices_colors_uvs[24] = -width;
 }
-const float& HDC::TexturedPlaneGeometry::width() const{
+const float& QQE::TexturedPlaneGeometry::width() const{
     return vertices_colors_uvs[0];
 }
-void HDC::TexturedPlaneGeometry::setheight(float height){
+void QQE::TexturedPlaneGeometry::setheight(float height){
     vertices_colors_uvs[1] = vertices_colors_uvs[25] = height;
     vertices_colors_uvs[17] = vertices_colors_uvs[9] = -height;
 }
-const float& HDC::TexturedPlaneGeometry::height() const{
+const float& QQE::TexturedPlaneGeometry::height() const{
     return vertices_colors_uvs[1];
 }
 

@@ -4,7 +4,7 @@
 #include <QTimer>
 #include <QObject>
 
-namespace HDC{
+namespace QQE{
     class TimedCounter : public QObject {
 
         Q_OBJECT

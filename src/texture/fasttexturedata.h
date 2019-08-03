@@ -1,7 +1,7 @@
 #ifndef __FAST_TEXTURE_DATA__
 #define __FAST_TEXTURE_DATA__
 #include "texturemanager.h"
-namespace HDC {
+namespace QQE {
     struct FastTextureData {
 
 

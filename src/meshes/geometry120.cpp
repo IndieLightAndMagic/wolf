@@ -1,6 +1,6 @@
 #include "geometry120.h"
-HDC::Plane120::Plane120(){}
-void HDC::Plane120::reset(float width, float height){
+QQE::Plane120::Plane120(){}
+void QQE::Plane120::reset(float width, float height){
 
     m_width = width * 0.5;
     m_height = height * 0.5;
@@ -27,7 +27,7 @@ void HDC::Plane120::reset(float width, float height){
     }
 
 }
-void HDC::Plane120::setattrlocation(int attrlocation, const Plane120Attr pattr){
+void QQE::Plane120::setattrlocation(int attrlocation, const Plane120Attr pattr){
     if (pattr == Plane120Attr::vertices){
         vertices_location = attrlocation;
     } else if (pattr == Plane120Attr::colors){
@@ -38,7 +38,7 @@ void HDC::Plane120::setattrlocation(int attrlocation, const Plane120Attr pattr){
         texturecoords_location = attrlocation;
     }
 }
-const int& HDC::Plane120::getattrlocation(const Plane120Attr pattr) const {
+const int& QQE::Plane120::getattrlocation(const Plane120Attr pattr) const {
     if (pattr == Plane120Attr::vertices){
         return vertices_location;
     } else if (pattr == Plane120Attr::normals){
@@ -51,7 +51,7 @@ const int& HDC::Plane120::getattrlocation(const Plane120Attr pattr) const {
     static int error_location{-1}; 
     return error_location;
 }
-const float* HDC::Plane120::getdata(const Plane120Attr pattr) const {
+const float* QQE::Plane120::getdata(const Plane120Attr pattr) const {
     if (pattr == Plane120Attr::vertices){
         return vertices.data();
     } else if (pattr == Plane120Attr::normals){
@@ -63,9 +63,9 @@ const float* HDC::Plane120::getdata(const Plane120Attr pattr) const {
     }
     return nullptr;  
 }
-const float& HDC::Plane120::getwidth () const {
+const float& QQE::Plane120::getwidth () const {
     return m_width;
 }
-const float& HDC::Plane120::getheight () const {
+const float& QQE::Plane120::getheight () const {
     return m_height; 
 }

@@ -6,9 +6,9 @@
 
 #include <vector> 
 
-namespace HDC {
+namespace QQE {
 
-    class Plane120 : public HDC::ObjId {
+    class Plane120 : public QQE::ObjId {
     protected:
         float m_width{1.0f};
         float m_height{1.0f};

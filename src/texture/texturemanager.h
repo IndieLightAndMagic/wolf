@@ -15,7 +15,7 @@
 #include <utility>
 #include <QOpenGLShaderProgram>
 
-namespace HDC {
+namespace QQE {
 
     
 

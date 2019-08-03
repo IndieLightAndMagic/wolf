@@ -2,9 +2,9 @@
 #define __FAST_CLAMPED_TEXTURED_DATA_
 #include "fasttexturedata.h"
 #include <vector>
-namespace HDC{
+namespace QQE{
 
-    struct FastClampedTextureData : public HDC::FastTextureData {
+    struct FastClampedTextureData : public QQE::FastTextureData {
 
         FastClampedTextureData(int, int);
         float *data{nullptr};

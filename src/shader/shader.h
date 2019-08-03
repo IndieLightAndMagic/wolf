@@ -9,7 +9,7 @@
 #include <QOpenGLShaderProgram>
 
 
-namespace HDC {
+namespace QQE {
     
     enum class ShaderType{
         VTX,
@@ -17,16 +17,16 @@ namespace HDC {
         GMT
     };
     
-    static QMap<HDC::ShaderType, QOpenGLShader::ShaderType> stype_stype_map {
-        std::make_pair(HDC::ShaderType::VTX, QOpenGLShader::Vertex),
-        std::make_pair(HDC::ShaderType::FRG, QOpenGLShader::Fragment),
+    static QMap<QQE::ShaderType, QOpenGLShader::ShaderType> stype_stype_map {
+        std::make_pair(QQE::ShaderType::VTX, QOpenGLShader::Vertex),
+        std::make_pair(QQE::ShaderType::FRG, QOpenGLShader::Fragment),
     };
     static QMap<QOpenGLShader::ShaderType, QString> stype_string_map {
         std::make_pair(QOpenGLShader::Vertex, QString("Vertex Shader")),
         std::make_pair(QOpenGLShader::Fragment, QString("Fragment Shader")),
     };
     
-    class ShaderSource : public HDC::AFile{
+    class ShaderSource : public QQE::AFile{
         
         std::shared_ptr<QOpenGLShader>  m_shader{nullptr};
         unsigned int    m_shaderid; 

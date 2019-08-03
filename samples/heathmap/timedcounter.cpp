@@ -1,17 +1,17 @@
 #include "timedcounter.h"
 #include <iostream>
-HDC::TimedCounter::TimedCounter(QObject* parent):QObject(parent){
+QQE::TimedCounter::TimedCounter(QObject* parent):QObject(parent){
 
     ptimer = new QTimer(this);
-    connect(ptimer, &QTimer::timeout, this, &HDC::TimedCounter::tick);
+    connect(ptimer, &QTimer::timeout, this, &QQE::TimedCounter::tick);
 }
-void HDC::TimedCounter::tick(){
+void QQE::TimedCounter::tick(){
 
     m_counter++;
     emit counter_ticked(m_counter);
 
 }
-void HDC::TimedCounter::setfrequency_hz(float hz){
+void QQE::TimedCounter::setfrequency_hz(float hz){
     
     hz = 1 / hz;
     hz *= 1000;
@@ -26,12 +26,12 @@ void HDC::TimedCounter::setfrequency_hz(float hz){
 
     } 
 }
-void HDC::TimedCounter::setperiod(int ms){
+void QQE::TimedCounter::setperiod(int ms){
 
     m_period_ms = ms;
 
 }
-void HDC::TimedCounter::start(int start_value){
+void QQE::TimedCounter::start(int start_value){
 
     if (m_counter_state == CounterState::quieto){
         
@@ -49,7 +49,7 @@ void HDC::TimedCounter::start(int start_value){
 
 }
 
-void HDC::TimedCounter::pause(){
+void QQE::TimedCounter::pause(){
 
     if (m_counter_state == CounterState::quieto){
         
@@ -66,7 +66,7 @@ void HDC::TimedCounter::pause(){
 
 }
 
-void HDC::TimedCounter::unpause(){
+void QQE::TimedCounter::unpause(){
     if (m_counter_state == CounterState::quieto){
         
         ptimer->start(m_period_ms);
@@ -79,16 +79,16 @@ void HDC::TimedCounter::unpause(){
     }
 }
 
-void HDC::TimedCounter::stop(){
+void QQE::TimedCounter::stop(){
     if (m_counter_state == CounterState::andante){
         ptimer->stop();
         m_counter = 0;
     }
 }
-void HDC::TimedCounter::setcountervalue(int countervalue){
+void QQE::TimedCounter::setcountervalue(int countervalue){
     m_counter = countervalue - 1;
 }
-void HDC::TimedCounter::restart(){
+void QQE::TimedCounter::restart(){
     setcountervalue(0);
 }
 

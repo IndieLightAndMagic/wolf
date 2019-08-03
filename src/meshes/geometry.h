@@ -6,9 +6,9 @@
 
 #include <vector> 
 
-namespace HDC {
+namespace QQE {
 
-    class Geometry : public HDC::ObjId {
+    class Geometry : public QQE::ObjId {
     protected:
         unsigned int glvao;
         unsigned int glvbo;
@@ -19,7 +19,7 @@ namespace HDC {
         void disable();
     };
 
-    class PlaneGeometry : public HDC::Geometry{
+    class PlaneGeometry : public QQE::Geometry{
 
     protected:
         std::vector<float> vertices_colors{
@@ -45,7 +45,7 @@ namespace HDC {
 
     };
 
-        class TexturedPlaneGeometry : public HDC::PlaneGeometry {
+        class TexturedPlaneGeometry : public QQE::PlaneGeometry {
 
         protected:
 

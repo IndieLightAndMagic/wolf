@@ -11,7 +11,7 @@
 #include <QColor>
 #include <QSize>
 
-namespace HDC {
+namespace QQE {
     
     struct KTlet{
         unsigned int frame_offset{0};
@@ -27,8 +27,8 @@ namespace HDC {
     };
     struct Entity {
 
-        HDC::KTlet ktlet;
-        HDC::ClsInfo ci; 
+        QQE::KTlet ktlet;
+        QQE::ClsInfo ci;
 
     };
     
@@ -36,7 +36,7 @@ namespace HDC {
     struct TrackletDataModel{
 
         std::map<unsigned int, std::string> classcaptions{};
-        std::map<unsigned int, HDC::Entity> id_entity_map{};
+        std::map<unsigned int, QQE::Entity> id_entity_map{};
         QSize court_size;
         QVector3D court_anchor_point;
         unsigned int max_frame_count{0};

@@ -43,6 +43,7 @@ add_executable(${target}
     ${target_srcs}
     src/util.cpp
     src/objid.cpp
+    src/qqe/main.cpp
     src/scene/scene.cpp
     src/camera/camera.cpp
     src/shader/shader.cpp

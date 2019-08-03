@@ -2,7 +2,7 @@
 #define __INPUTMANAGER_H__
 #include <QObject>
 #include <QKeyEvent>
-namespace HDC {
+namespace QQE {
 
     class InputManager : public QObject
     {

@@ -28,12 +28,12 @@ static j _parse(std::string filename){
 
 }
 
-void HDC::Visitor::Parse(std::string filename){
+void QQE::Visitor::Parse(std::string filename){
 
     _j = _parse(filename);
 
 }
-void HDC::TrackletDataModel::getspeedandacceleration(){
+void QQE::TrackletDataModel::getspeedandacceleration(){
 
     for (auto&[k,e]:id_entity_map){
         auto tracksize = e.ktlet.positions.size();
@@ -64,7 +64,7 @@ void HDC::TrackletDataModel::getspeedandacceleration(){
         }
     }
 }
-void HDC::TrackletDataModel::normalizedata(){
+void QQE::TrackletDataModel::normalizedata(){
 
     auto translation = QVector3D{
         court_anchor_point.x() * court_size.width(),
@@ -89,7 +89,7 @@ void HDC::TrackletDataModel::normalizedata(){
     }
 
 }
-void HDC::TrackletDataModel::getdata(){
+void QQE::TrackletDataModel::getdata(){
 
     auto class_map = _j["metadata"]["class_map"];
     for (auto& [k_,v_] : class_map.items()){

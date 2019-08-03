@@ -3,8 +3,8 @@
 #include <vector>
 #include "fastclampedtexturedata.h"
 
-namespace HDC{
-    struct HeatMap : public HDC::FastClampedTextureData{
+namespace QQE{
+    struct HeatMap : public QQE::FastClampedTextureData{
 
 		float m_steps;
 		int m_sz;

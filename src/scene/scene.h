@@ -7,7 +7,7 @@ class Scene : public OpenGLWindow
     int m_frame{0};
 
 public:
-    HDC::InputManager m_im;
+    QQE::InputManager m_im;
 
     Scene();
 

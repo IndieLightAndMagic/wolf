@@ -1,19 +1,19 @@
 #include "fastclampedtexturedata.h"
 
-HDC::FastClampedTextureData::FastClampedTextureData(int w, int h):HDC::FastTextureData(w,h){
+QQE::FastClampedTextureData::FastClampedTextureData(int w, int h):QQE::FastTextureData(w,h){
 
     resetTexture();
     updateTexture();
 
 }
-void HDC::FastClampedTextureData::resetTexture() {
+void QQE::FastClampedTextureData::resetTexture() {
     data = new float[m_sz]();
     for (auto index = 0; index < m_sz; ++index){
         data[index] = 0.0f;
     }
 
 }
-void HDC::FastClampedTextureData::updateTexture(){
+void QQE::FastClampedTextureData::updateTexture(){
 
     bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)

@@ -34,7 +34,7 @@ static std::map<QImage::Format, std::string> format_map{
 
     };
 
-HDC::FastQTextureData::FastQTextureData(QImage* qimg): FastTextureData(qimg->width(), qimg->height()){
+QQE::FastQTextureData::FastQTextureData(QImage* qimg): FastTextureData(qimg->width(), qimg->height()){
 
     qimage = qimg;
     data = qimg->bits();
@@ -42,14 +42,14 @@ HDC::FastQTextureData::FastQTextureData(QImage* qimg): FastTextureData(qimg->wid
 
 }
 
-HDC::FastQTextureData::FastQTextureData(int w, int h, unsigned int format): FastTextureData(w,h){
+QQE::FastQTextureData::FastQTextureData(int w, int h, unsigned int format): FastTextureData(w,h){
     
     qimage = new QImage(static_cast<int>(m_w), static_cast<int>(m_h), static_cast<QImage::Format>(format));
     data = qimage->bits();
 
 }
 
-void HDC::FastQTextureData::updateTexture(){
+void QQE::FastQTextureData::updateTexture(){
 
     bind();
     // set the texture wrapping parameters
@@ -67,7 +67,7 @@ void HDC::FastQTextureData::updateTexture(){
 
 }
 
-void HDC::FastQTextureData::printtextureinformation(){
+void QQE::FastQTextureData::printtextureinformation(){
     auto& gltxture = gl.txture; 
 
     QImage& rqimage = *(qimage);

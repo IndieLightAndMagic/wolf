@@ -16,7 +16,7 @@ constexpr auto _1meter = 0.01f;
 constexpr auto _1meterpersec__ms__ = _1meter / 1000;
 static auto zSpeedMeterPerMs = 0.000f;
 
-HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):ECS_SYSTEM::Renderer(parent)
+QQE::HeatmapRenderer::HeatmapRenderer(QObject* parent):ECS_SYSTEM::Renderer(parent)
 {
 
     m_ptimer = new QElapsedTimer();
@@ -24,11 +24,11 @@ HDC::HeatmapRenderer::HeatmapRenderer(QObject* parent):ECS_SYSTEM::Renderer(pare
 
 }
 
-HDC::HeatmapRenderer::~HeatmapRenderer()
+QQE::HeatmapRenderer::~HeatmapRenderer()
 {
     delete m_ptimer;
 }
-void HDC::HeatmapRenderer::loadTextureAndWrap(const QString &rTexturePath) {
+void QQE::HeatmapRenderer::loadTextureAndWrap(const QString &rTexturePath) {
 
 
     auto sz = rTexturePath.size();
@@ -46,15 +46,15 @@ void HDC::HeatmapRenderer::loadTextureAndWrap(const QString &rTexturePath) {
             m_soccer_court_texture = nullptr;
 
         }
-        m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
+        m_soccer_court_texture  = new QQE::FastQTextureData(pqimg);
     }
 
 }
 
-void HDC::HeatmapRenderer::paintQtLogo()
+void QQE::HeatmapRenderer::paintQtLogo()
 {
-    auto vertices      = HDC::Plane120::Plane120Attr::vertices;
-    auto texturecoords = HDC::Plane120::Plane120Attr::texturecoords;
+    auto vertices      = QQE::Plane120::Plane120Attr::vertices;
+    auto texturecoords = QQE::Plane120::Plane120Attr::texturecoords;
     
     auto vertexattrlocation = plane.getattrlocation(vertices);
     auto tcoordattrlocation = plane.getattrlocation(texturecoords);
@@ -79,13 +79,13 @@ void HDC::HeatmapRenderer::paintQtLogo()
     program1.disableAttributeArray(vertexattrlocation);
 }
 
-void HDC::HeatmapRenderer::initializeTextures(){
+void QQE::HeatmapRenderer::initializeTextures(){
 
     QImage* pqimg = new QImage(QString::fromStdString(std::string{RESOURCES_DIR} + "/textures/soccer_court_texture.png"));
-    m_soccer_court_texture  = new HDC::FastQTextureData(pqimg);
+    m_soccer_court_texture  = new QQE::FastQTextureData(pqimg);
 
 }
-void HDC::HeatmapRenderer::initialize()
+void QQE::HeatmapRenderer::initialize()
 {
 
 
@@ -107,7 +107,7 @@ void HDC::HeatmapRenderer::initialize()
 
 
 
-void HDC::HeatmapRenderer::render()
+void QQE::HeatmapRenderer::render()
 {
     static auto tFrame = qint64{0};
     static auto tBegin = qint64{0};
@@ -162,14 +162,14 @@ void HDC::HeatmapRenderer::render()
 
 }
 
-void HDC::HeatmapRenderer::createGeometry()
+void QQE::HeatmapRenderer::createGeometry()
 {
     plane.reset(1.05, .68);
-    plane.setattrlocation(program1.attributeLocation("vertex"), HDC::Plane120::Plane120Attr::vertices);
-    plane.setattrlocation(program1.attributeLocation("texcoord"), HDC::Plane120::Plane120Attr::texturecoords);
+    plane.setattrlocation(program1.attributeLocation("vertex"), QQE::Plane120::Plane120Attr::vertices);
+    plane.setattrlocation(program1.attributeLocation("texcoord"), QQE::Plane120::Plane120Attr::texturecoords);
 }
 
-void HDC::HeatmapRenderer::keyPressed(int keypressed_code){
+void QQE::HeatmapRenderer::keyPressed(int keypressed_code){
 
     if (keypressed_code == Qt::Key_Left){
 
@@ -191,28 +191,28 @@ void HDC::HeatmapRenderer::keyPressed(int keypressed_code){
     //qDebug() << "Key Pressed " << keymsg << " " <<__FILE__ << " : " << __LINE__ ;
 
 }
-void HDC::HeatmapRenderer::leftPressed() {
+void QQE::HeatmapRenderer::leftPressed() {
 
     zRotationSpeedDegPerMs = zRotationSpeedDegPerMs <= 0.0f ? _6gradsPerSec__ms__ * 10 : 0.0f;
 
 }
-void HDC::HeatmapRenderer::rightPressed() {
+void QQE::HeatmapRenderer::rightPressed() {
 
     zRotationSpeedDegPerMs = zRotationSpeedDegPerMs >= 0.0f ? -_6gradsPerSec__ms__ * 10 : 0.0f;
 
 }
-void HDC::HeatmapRenderer::upPressed() {
+void QQE::HeatmapRenderer::upPressed() {
 
     zSpeedMeterPerMs = zSpeedMeterPerMs <= 0.0f ? _1meterpersec__ms__ * 10 : 0.0f;
 
 }
-void HDC::HeatmapRenderer::downPressed() {
+void QQE::HeatmapRenderer::downPressed() {
 
     zSpeedMeterPerMs = zSpeedMeterPerMs >= 0.0f ? -_1meterpersec__ms__ * 10 : 0.0f;
 
 }
 
-bool HDC::HeatmapRenderer::event( QEvent* event )
+bool QQE::HeatmapRenderer::event( QEvent* event )
 {
 
     auto et = event->type();

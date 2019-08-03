@@ -1,13 +1,13 @@
 #include "heatmapplayer.h"
 #include <iostream>
 
-HDC::HeatMapPlayer::HeatMapPlayer(const HDC::TrackletDataModel& atdm, QObject* parent):
-HDC::TrackletPlayer(atdm, parent),
-HDC::HeatMap(atdm.court_size.width(), atdm.court_size.height() ){
-    connect(this, &HDC::TrackletPlayer::framechanged, this, &HDC::HeatMapPlayer::updateheatmap);
+QQE::HeatMapPlayer::HeatMapPlayer(const QQE::TrackletDataModel& atdm, QObject* parent):
+QQE::TrackletPlayer(atdm, parent),
+QQE::HeatMap(atdm.court_size.width(), atdm.court_size.height() ){
+    connect(this, &QQE::TrackletPlayer::framechanged, this, &QQE::HeatMapPlayer::updateheatmap);
 
 }
-void HDC::HeatMapPlayer::updateheatmap(const QVector2D& pos){
+void QQE::HeatMapPlayer::updateheatmap(const QVector2D& pos){
 	static auto lastmax = getmax();
 	inc(pos.x(), pos.y());
 

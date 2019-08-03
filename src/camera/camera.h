@@ -5,7 +5,7 @@
 
 #include <QMatrix4x4>
 
-namespace HDC{
+namespace QQE{
 
     class Camera {
 
