@@ -6,7 +6,7 @@
 #include <QString>
 #include <QQuickItem>
 
-namespace HDC{
+namespace QQE{
     class SceneRenderThread;
     class SceneRenderer : public QQuickItem
     {

@@ -7,6 +7,17 @@
 #include <QGuiApplication>
 
 
+class QQE {
+
+private:
+    QQE(){
+
+    }
+public:
+    static QQE*CreateQQE(){
+        
+    }
+}
 
 int main(int argc, char **argv){
 

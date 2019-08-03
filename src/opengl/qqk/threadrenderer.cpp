@@ -4,7 +4,6 @@
 
 
 #include "src/opengl/qqk/threadrenderer.h"
-#include "heatmapscene.h"
 #include "ecs/system/render.h"
 
 #include <QtCore/QMutex>
@@ -19,14 +18,14 @@
 #include <qsgsimpletexturenode.h>
 
 
-QList<QThread *> HDC::SceneRenderer::threads;
+QList<QThread *> QQE::SceneRenderer::threads;
 
 /*
  * The render thread shares a context with the scene graph and will
  * render into two separate FBOs, one to use for display and one
  * to use for rendering
  */
-namespace HDC{
+namespace QQE{
 
     
     class SceneRenderThread : public QThread
@@ -41,7 +40,7 @@ namespace HDC{
         , m_renderer(nullptr)
         , m_size(size)
         {
-            HDC::SceneRenderer::threads << this;
+            QQE::SceneRenderer::threads << this;
         }
 
         QOffscreenSurface *surface;
@@ -58,7 +57,7 @@ namespace HDC{
                 format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
                 m_renderFbo = new QOpenGLFramebufferObject(m_size, format);
                 m_displayFbo = new QOpenGLFramebufferObject(m_size, format);
-                m_renderer = new HDC::HeatmapRenderer();
+                m_renderer = new ECS_SYSTEM::Renderer();
                 m_renderer->initialize();
 
 
@@ -97,7 +96,7 @@ namespace HDC{
             moveToThread(QGuiApplication::instance()->thread());
         }
 
-        ECS_SYSTEM::Renderer* getHeatmapRenderer() {
+        ECS_SYSTEM::Renderer* getRenderer() {
             return m_renderer;
         }
 
@@ -195,14 +194,14 @@ namespace HDC{
 
 
 
-HDC::SceneRenderer::SceneRenderer()
+QQE::SceneRenderer::SceneRenderer()
 : m_renderThread(nullptr)
 {
     setFlag(ItemHasContents, true);
     m_renderThread = new SceneRenderThread(QSize(512, 512));
 }
 
-void HDC::SceneRenderer::ready()
+void QQE::SceneRenderer::ready()
 {
     m_renderThread->surface = new QOffscreenSurface();
     m_renderThread->surface->setFormat(m_renderThread->context->format());
@@ -215,7 +214,7 @@ void HDC::SceneRenderer::ready()
     update();
 }
 
-QSGNode *HDC::SceneRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode *QQE::SceneRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     TextureNode *node = static_cast<TextureNode *>(oldNode);
 
@@ -272,26 +271,26 @@ QSGNode *HDC::SceneRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeDa
     return node;
 }
 
-QString HDC::SceneRenderer::textureName(){
+QString QQE::SceneRenderer::textureName(){
     return m_textureName;
 }
 
-void HDC::SceneRenderer::setTextureName(const QString& textureName){
+void QQE::SceneRenderer::setTextureName(const QString& textureName){
 
     if (textureName == m_textureName){
         return;
     }
     m_textureName = textureName;
-    auto ptrHeatmapRenderer = m_renderThread->getHeatmapRenderer();
+    auto ptrHeatmapRenderer = m_renderThread->getRenderer();
     if (ptrHeatmapRenderer) {
-        ptrHeatmapRenderer->loadTextureAndWrap(textureName);
+        //ptrHeatmapRenderer->loadTextureAndWrap(textureName);
     }
     emit textureNameChanged();
 }
-void HDC::SceneRenderer::keyPressed(int keypressed_code) {
+void QQE::SceneRenderer::keyPressed(int keypressed_code) {
 
-    auto p = m_renderThread->getHeatmapRenderer();
-    p->keyPressed(keypressed_code);
+    //auto p = m_renderThread->getRenderer();
+    //p->keyPressed(keypressed_code);
 
 }
 #include "threadrenderer.moc"

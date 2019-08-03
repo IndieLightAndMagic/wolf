@@ -24,7 +24,7 @@ void ECS_SYSTEM::Renderer::initialize()
 {
 
     initializeOpenGLFunctions();
-    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     
     /*program1.addCacheableShaderFromSourceFile(QOpenGLShader::Vertex, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.vert"));
     program1.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment, QString::fromStdString(std::string{RESOURCES_DIR} + "/shaders/heatmap_t.frag"));
@@ -64,12 +64,12 @@ void ECS_SYSTEM::Renderer::render()
 
     /*zRotation += zRotationSpeedDegPerMs * timeDelta;
     auto zDelta = zSpeedMeterPerMs * timeDelta; 
-    
+    */
     glDepthMask(true);
 
     glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    */
+
     //glEnable(GL_DEPTH_TEST);
 
 

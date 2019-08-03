@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 message(STATUS "-- Trying to build $ENV{SAMPLE_TO_BUILD}")
+
 set(CMAKE_BUILD_TYPE DEBUG)
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -7,10 +8,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-message(STATUS "Cmake binary dir: ${CMAKE_BINARY_DIR}")
-message(STATUS "Cmake current binary dir: ${CMAKE_CURRENT_BINARY_DIR}")
-
 
 function(generatecustommacros)
     add_compile_definitions(RESOURCES_DIR="${CMAKE_SOURCE_DIR}/resources")
@@ -36,10 +33,11 @@ set(3rd_party_target_srcs
     src/3rd/utils/screen/loggingrectangletest.cpp
 
     )
+
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 qt5_add_resources(QT_RESOURCES samples/${target}/qml/heatmap.qrc)
-message(STATUS "A ver a ver: ${QT_RESOURCES}")
-add_executable(${target}
+
+add_executable(${target} 
     ${target_srcs}
     src/util.cpp
     src/objid.cpp
@@ -59,6 +57,7 @@ add_executable(${target}
     src/inputmanager/inputmanager.cpp
     src/texture/fastclampedtexturedata.cpp
     ${3rd_party_target_srcs}
+
     ${QT_RESOURCES}
     )
 target_include_directories(${target} PUBLIC
@@ -92,6 +91,7 @@ else()
         Qt5::Core
         Qt5::Gui
         Qt5::Quick
+
     )
 endif()
 
