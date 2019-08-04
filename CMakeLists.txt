@@ -48,7 +48,7 @@ add_executable(${target}
     src/camera/camera.cpp
     src/shader/shader.cpp
     src/meshes/geometry.cpp
-    src/ecs/system/render.cpp
+        src/ecs/systems/render.cpp
     src/meshes/geometry120.cpp
     src/shader/shadersource.cpp
     src/texture/texturemanager.cpp
