@@ -15,7 +15,14 @@
 
 namespace ECS_SYSTEM{
 
-    class Renderer : public QObject, QOpenGLFunctions
+    class System {
+    public:
+
+        virtual void AddEntity(int entity) = 0;
+        virtual void UpdateSystem() = 0;
+
+    };
+    class Renderer : public QObject, QOpenGLFunctions, ECS_SYSTEM::System
     {
         Q_OBJECT
     public:
@@ -30,6 +37,7 @@ namespace ECS_SYSTEM{
 
     private:
         QElapsedTimer* m_ptimer{nullptr};
+
 
     };
 }
