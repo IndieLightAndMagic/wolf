@@ -4,7 +4,7 @@
 
 
 #include "src/opengl/qqk/threadrenderer.h"
-#include "ecs/system/render.h"
+#include "ecs/systems/render.h"
 
 #include <QtCore/QMutex>
 #include <QtCore/QThread>

@@ -7,8 +7,9 @@
 
 namespace ECS_SYSTEM{
     class System {
-
-    };
+    public:
+        virtual void AddComponent(int componentId) = 0;
+    };    
 }
 
 

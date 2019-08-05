@@ -13,15 +13,10 @@
 #include <src/camera/camera.h>
 #include <src/texture/fastqtexturedata.h>
 
+#include "ecs/System.h"
+
 namespace ECS_SYSTEM{
 
-    class System {
-    public:
-
-        virtual void AddEntity(int entity) = 0;
-        virtual void UpdateSystem() = 0;
-
-    };
     class Renderer : public QObject, QOpenGLFunctions, ECS_SYSTEM::System
     {
         Q_OBJECT
@@ -32,8 +27,10 @@ namespace ECS_SYSTEM{
         virtual void render();
         virtual void initialize();
 
+        void AddComponent(int componentId) override;
+
     protected:
-        virtual bool event(QEvent *event);
+        bool event(QEvent *event) override;
 
     private:
         QElapsedTimer* m_ptimer{nullptr};

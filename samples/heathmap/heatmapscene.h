@@ -13,7 +13,7 @@
 #include <src/meshes/geometry120.h>
 #include <src/camera/camera.h>
 #include <src/texture/fastqtexturedata.h>
-#include "ecs/system/render.h"
+#include "ecs/systems/render.h"
 
 namespace QQE{
 class HeatmapRenderer : public ECS_SYSTEM::Renderer

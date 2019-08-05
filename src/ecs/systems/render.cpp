@@ -6,6 +6,11 @@
 #include <QPaintEngine>
 #include <qmath.h>
 
+void ECS_SYSTEM::Renderer::AddComponent(int componentId){
+
+    
+
+}
 
 ECS_SYSTEM::Renderer::Renderer(QObject* parent):QObject(parent)
 {
