@@ -47,10 +47,12 @@ add_executable(${target}
     src/scene/scene.cpp
     src/camera/camera.cpp
     src/shader/shader.cpp
+    src/ecs/ecsmanager.cpp
     src/meshes/geometry.cpp
     src/ecs/systems/render.cpp
     src/meshes/geometry120.cpp
     src/shader/shadersource.cpp
+    src/ecs/ecsmanagerEntity.cpp
     src/texture/texturemanager.cpp
     src/opengl/qqk/threadrenderer.h
     src/opengl/sys/openglwindow.cpp

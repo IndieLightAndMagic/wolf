@@ -5,40 +5,17 @@
 #ifndef WOLF_ENTITY_H
 #define WOLF_ENTITY_H
 #include <vector>
-namespace ECS {
+#include "Component.h"
 
-    class Component;
-    using WpComponent  = std::weak_ptr<Component>;
-    using WpComponents = std::vector<WpComponent>;
-    
-    using UpComponent = std::unique_ptr<Component>;
-    using SpComponent = std::shared_ptr<Component>;
+namespace ECS_SYSTEM {
 
-    class Component {
-
-    };
-
-    class InformationComponent : public Component {
-
-    };
-
-    class ShaderComponent : public Component {
-
-    };
-
-    class VAOComponent : public Component {
-        
-    };
-
-    class TextureComponent : public Component {
-
-    };
-
+    class Entity;
+    using PEntity = std::weak_ptr<ECS_SYSTEM::Entity>;
     class Entity {
 
     public:
-        InformationComponent info;
-        std::vector<Component*>
+        unsigned int componentInfoId;
+        std::vector<unsigned int> componentIds;
 
     };
 }
