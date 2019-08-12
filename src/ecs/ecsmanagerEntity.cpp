@@ -15,36 +15,24 @@ using m_uid_uid = std::map<unsigned int, unsigned int>;
 
 m_uid_pcomp m_id_pcomponent;
 m_uid_pentt m_id_pntt;
-m_string_uid m_name_id;
+m_string_uid m_entityname_id;
 
 ECS_SYSTEM::ECSManager::id_string ECS_SYSTEM::ECSManager::createEntity(std::string entityName){
 
-    std::mutex suiidmtx;
-    static unsigned long suiid {0x0000000000000000};
-    unsigned long theId;
-    {
-        /* Scoped protection for id */
-        std::lock_guard<std::mutex> lock(suiidmtx);
-        theId = ++suiid;
-
-        if (!entityName.empty()){
-            Q_ASSERT(m_name_id.count(entityName) == 0);
-            m_name_id[entityName] = theId;
-        }
-
-    }
-    m_id_pntt[theId] = std::make_shared<ECS_SYSTEM::Entity>(new ECS_SYSTEM::Entity);
+    auto theId = ECS_SYSTEM::ECSManager::generateId();
+    std::shared_ptr<ECS_SYSTEM::Entity> ptrNewEntity (new ECS_SYSTEM::Entity());
+    m_id_pntt[theId] = ptrNewEntity;
     return std::make_pair(theId, entityName);
 
 }
 bool ECS_SYSTEM::ECSManager::renameEntity(unsigned int entityId, std::string newName) {
 
-    Q_ASSERT(m_name_id.count(newName) == 0);
+    Q_ASSERT(m_entityname_id.count(newName) == 0);
     Q_ASSERT(m_id_pntt.count(entityId) == 1);
     auto stringtofoq = std::string{};
-    for(auto&kv:m_name_id) if (kv.second == entityId) stringtofoq = kv.first;
-    if (!stringtofoq.empty()) m_name_id.erase(stringtofoq);
-    m_name_id[newName] = entityId;
+    for(auto&kv:m_entityname_id) if (kv.second == entityId) stringtofoq = kv.first;
+    if (!stringtofoq.empty()) m_entityname_id.erase(stringtofoq);
+    m_entityname_id[newName] = entityId;
     return true;
 
 }
@@ -53,7 +41,7 @@ ECS_SYSTEM::ECSManager::id_string ECS_SYSTEM::ECSManager::copyEntity(unsigned in
 
     auto [newEntityId, newEntityName] = createEntity();
 
-    for(auto&kv:m_name_id){
+    for(auto&kv:m_entityname_id){
 
         if(kv.second == entityId){
 

@@ -11,7 +11,11 @@
 namespace ECS_SYSTEM {
 
     class ECSManager {
+        static unsigned long suiid;
     public:
+        static const unsigned long generateId();
+
+
         using id_string = std::tuple<unsigned int, std::string>;
         using v_id_string = std::vector<id_string>;
         using v_id = std::vector<unsigned int>;
