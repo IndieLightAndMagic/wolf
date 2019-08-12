@@ -22,11 +22,18 @@ generatecustommacros()
 
 set(target $ENV{SAMPLE_TO_BUILD})
 function(get_target_sources)
+    
     file(GLOB_RECURSE target_srcs RELATIVE ${CMAKE_SOURCE_DIR} samples/${target}/*.cpp)
     set(target_srcs ${target_srcs} PARENT_SCOPE)
     foreach(target_src ${target_srcs})
         message(STATUS ${target_src})
     endforeach()
+    file(GLOB collader_srcs src/3rd/collader/*.cpp)
+    set(collader_srcs ${collader_srcs} PARENT_SCOPE)
+    foreach(collader_src ${collader_srcs})
+        message(STATUS ${collader_src})
+    endforeach()
+    
 endfunction()
 
 get_target_sources()
@@ -36,11 +43,14 @@ set(3rd_party_target_srcs
     src/3rd/utils/screen/loggingrectangletest.cpp
 
     )
+find_package(tinyxml2 REQUIRED)
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 qt5_add_resources(QT_RESOURCES samples/${target}/qml/heatmap.qrc)
+
 message(STATUS "A ver a ver: ${QT_RESOURCES}")
 add_executable(${target}
     ${target_srcs}
+    ${collader_srcs}
     src/util.cpp
     src/objid.cpp
     src/qqe/main.cpp
@@ -76,26 +86,30 @@ target_include_directories(${target} PUBLIC
     ${CMAKE_SOURCE_DIR}/src/opengl/qqk    
     ${CMAKE_SOURCE_DIR}/src/inputmanager
     ${CMAKE_SOURCE_DIR}/src/3rd/utils/screen
+    ${CMAKE_SOURCE_DIR}/src/3rd/collader
+    
     /usr/local/include
     ) 
 
+target_link_libraries(${target} PRIVATE
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Quick
+    tinyxml2::tinyxml2
+)
 if (APPLE)
     message(STATUS "Yes, Apple")
     target_link_libraries(${target} PRIVATE
         Qt5::Core
         Qt5::Gui
         Qt5::Quick
+        tinyxml2::tinyxml2
         "-framework DiskArbitration"
         "-framework IOKit" 
         "-framework OpenGL" 
         "-framework AGL"
         )
 else()
-    target_link_libraries(${target} PRIVATE
-        Qt5::Core
-        Qt5::Gui
-        Qt5::Quick
-    )
 endif()
 
 target_compile_definitions(${target} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
