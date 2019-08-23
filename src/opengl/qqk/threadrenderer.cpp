@@ -6,15 +6,15 @@
 #include "src/opengl/qqk/threadrenderer.h"
 #include "ecs/systems/render.h"
 
-#include <QtCore/QMutex>
-#include <QtCore/QThread>
+#include <QMutex>
+#include <QThread>
 
-#include <QtGui/QOpenGLContext>
-#include <QtGui/QOpenGLFramebufferObject>
-#include <QtGui/QGuiApplication>
-#include <QtGui/QOffscreenSurface>
+#include <QOpenGLContext>
+#include <QOpenGLFramebufferObject>
+#include <QGuiApplication>
+#include <QOffscreenSurface>
 
-#include <QtQuick/QQuickWindow>
+#include <QQuickWindow>
 #include <qsgsimpletexturenode.h>
 
 
@@ -27,7 +27,7 @@ QList<QThread *> QQE::SceneRenderer::threads;
  */
 namespace QQE{
 
-    
+
     class SceneRenderThread : public QThread
     {
         Q_OBJECT
@@ -293,4 +293,29 @@ void QQE::SceneRenderer::keyPressed(int keypressed_code) {
     //p->keyPressed(keypressed_code);
 
 }
+void QQE::SceneRenderer::loadCollada(QString resourceName) {
+
+    qInfo() << "load Collada! : " << resourceName;
+    auto& resourceToBeLoaded = resourceName;
+    auto resourceUrl = QUrl(resourceToBeLoaded);
+    auto resourcePath = QDir(resourceUrl.path());
+    auto resourceAbsolutePath = resourcePath.absolutePath();
+    auto resourceAbsolutePathString = resourceAbsolutePath.toStdString();
+    qInfo() << "Resource to be loaded: " << resourceToBeLoaded;
+    qInfo() << "Resource path: " << resourcePath;
+    qInfo() << "Resource Absolute Path: " << resourceAbsolutePath;
+    auto ptrResourceAbsolutePathString = resourceAbsolutePathString.data();
+
+    pVisitor = new QQE::ColladaVisitor();
+    auto colladaFile = new QFile("/tmp/wolf/models/default.dae");
+    if ( !colladaFile->open(QIODevice::ReadOnly | QIODevice::Text) ){
+        qInfo() << "Load XML File Problem";
+    } else {
+        qInfo() << "Everything went ok.....";
+        pVisitor->LoadColladaDocument(colladaFile);
+    }
+
+}
+
+
 #include "threadrenderer.moc"

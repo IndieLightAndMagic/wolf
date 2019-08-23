@@ -9,7 +9,7 @@
 #include <QLibraryInfo>
 #include <QDirIterator>
 
-
+#include "collader.h"
 #include "loggingrectangletest.h"
 
 
@@ -75,6 +75,7 @@ int main(int argc, char **argv){
         view.show();
 
         LoggingRectangle::install(view, "drawer.loggingRectangle");
+
         execReturn = app.exec();
 
     }

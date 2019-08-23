@@ -51,10 +51,18 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Dialogs 1.1
+import SceneGraphRendering 1.0
 import "3rd"
 
 Item {
 
+    SceneRender {
+        id: theglscene
+        Component.onCompleted : {
+            console.log("Scene Done!!!")
+            loadCollada("qrc:models/default.dae")
+        }
+    }
     Drawer {
         id: drawer
         objectName: "drawer"
@@ -69,7 +77,7 @@ Item {
             id: loggingRectangle
             objectName: "loggingRectangle"
             anchors.fill: parent
-            bordercolor: "green"
+            bordercolor: "blue"
         }
     }
    

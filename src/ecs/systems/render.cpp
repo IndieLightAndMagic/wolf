@@ -18,6 +18,10 @@ ECS_SYSTEM::Renderer::Renderer(QObject* parent):QObject(parent)
     m_ptimer = new QElapsedTimer();
     m_ptimer->start();
 
+
+    /* Load here something */
+    
+
 }
 
 ECS_SYSTEM::Renderer::~Renderer()

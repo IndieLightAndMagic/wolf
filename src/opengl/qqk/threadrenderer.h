@@ -6,6 +6,9 @@
 #include <QString>
 #include <QQuickItem>
 
+
+#include "collader.h"
+
 namespace QQE{
     class SceneRenderThread;
     class SceneRenderer : public QQuickItem
@@ -19,8 +22,9 @@ namespace QQE{
         
         QString textureName();
         virtual void setTextureName(const QString& textureName);
+        
         Q_INVOKABLE void keyPressed(int keypressed_code);
-
+        Q_INVOKABLE void loadCollada(QString resourceName);
 
     signals:
         void textureNameChanged(); 
@@ -34,6 +38,8 @@ namespace QQE{
     private:
         SceneRenderThread *m_renderThread;
         QString m_textureName;
+        QQE::ColladaVisitor* pVisitor{nullptr};
+
     };
 
 }
